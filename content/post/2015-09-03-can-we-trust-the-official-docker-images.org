@@ -1,0 +1,49 @@
+#+TITLE: Can we really trust the official Docker images?
+#+DATE: 2015-09-03 03:53:22 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: rant security software
+#+KEYWORDS: docker security images official
+
+Yeap, this is another rant on the security practices of Docker users.
+Like we didn't have [[https://titanous.com/posts/docker-insecurity][enough]] of [[http://www.banyanops.com/blog/analyzing-docker-hub/][those]] already.
+
+I recently revamped the CI system we use at my workplace. I ended up
+using a combination of [[http://phabricator.org/][Phabricator]], [[https://jenkins-ci.org/][Jenkins]], [[https://www.docker.com/][Docker]] and the [[https://docs.docker.com/registry/][Docker
+registry]], but more on this on another blogpost. Since I made heavy use
+of Docker for all of the above, I started poking around the
+Dockerfiles that are used to create the 'official' Docker images for a
+bunch of projects. I *didn't like* what I saw.
+
+I generally expect downloads for software to be either:
+
+#+BEGIN_EXAMPLE
+    a) signed using a trusted key
+    b) if not signed, at least downloadble through `https`
+
+#+END_EXAMPLE
+
+if both of the above are missing, I refuse to download said
+software. It still surprises me that widely used software like nw.js
+offer [[https://github.com/nwjs/nw.js/issues/3228/][none of the above]].
+
+It's sad to see the same thing happening with official Docker images.
+
+[[https://github.com/docker-library/mongo/blob/3e6585721fc78b156a5ce832cf9bb282bbf833ab/3.1/Dockerfile][This is an example of a good Dockerfile]], a Debian repo (hosted by
+Mongo) is used to download MongoDB and the .debs are signed using a
+trusted key.  Moreover, [[https://github.com/tianon/gosu/][gosu]] is also verified using gpg. Note: this
+means the gosu developer must be trusted to not backdoor his software,
+otherwise you have to verify the download in some other way, like a
+sha256sum.
+
+[[https://github.com/carlossg/docker-maven/blob/882a21728d702dad08279afe6b6bf9fa4b8bfe18/jdk-8/Dockerfile][This]] and [[https://github.com/aws/aws-eb-glassfish-dockerfiles/blob/aafcfc5e812dfb9b998105d3ca9da1b7f10664e1/4.1-jdk8/Dockerfile][this]] are examples of what I consider insecure Dockerfiles. In
+the first example, =archive.apache.org= works with SSL just fine, why
+not use it by default? If the certificate of the site isn't valid -as
+it appears to be in the second link (SHA1 cert?)- just download the
+file from multiple sources, get its sha256sum and use it to verify the
+download.
+
+All in all, while I believe that Docker is an amazing tool, I don't
+think a lot of its users are taking security seriously or into
+consideration at all. Personally, I wouldn't trust the official Docker
+images before taking a look at their respective Dockerfile and
+verifying that everything is to my taste.
