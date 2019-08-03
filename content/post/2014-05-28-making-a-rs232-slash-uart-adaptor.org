@@ -1,0 +1,29 @@
+#+TITLE: Making a RS-232/UART adaptor
+#+DATE: 2014-05-28 22:54:33 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: hardware
+#+Keywords: rs232 max232 max3232 serial console
+
+A couple of months ago I wanted to experiment with the serial console
+of an old router I had laying around. Not wanting to buy a =UART= to
+ =RS-232= adaptor, I decided to make one myself. After all, I had some
+spare [[http://www.maximintegrated.com/en/products/interface/transceivers/MAX3232.html][MAX3232]] left over from a previous project (for which I still
+haven't blogged).
+
+I just followed the schematic provided by the datasheet and 15 minutes
+of soldering later, this was the end result.
+
+{{< figure src="/images/rs232-1.jpg" title="Top view" >}}
+
+{{< figure src="/images/rs232-2.jpg" title="Bottom view" >}}
+
+Gotta love these cute little perfboards!
+
+I've tested it both with a RapPI and the aforementioned router and it
+works great. I was able to get a serial console on the router using
+the serial headers on the pcb. The manufacturer had even marked the
+TX/RX pin holes, so there was no need for me to go [[http://www.devttys0.com/2012/11/reverse-engineering-serial-ports/][serial hunting]].
+
+Now, I'm waiting for some FTDI FT232-RL chips to arrive to make a USB
+adaptor instead of a RS-232 one. I know you can buy one on ebay for 3
+bucks, but where is the fun in that?
