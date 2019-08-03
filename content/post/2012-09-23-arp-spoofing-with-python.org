@@ -1,0 +1,18 @@
+#+TITLE: Arp spoofing with Python
+#+DATE: 2012-09-23 21:32:43 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software security
+#+KEYWORDS: python arp arp spoofing arp poisoning
+
+I decided to reinvent the wheel by making an ARP spoofer in python
+using raw packets, thinking it would be a nice practice.
+
+What is [[https://en.wikipedia.org/wiki/Address_Resolution_Protocol][ARP]], [[https://en.wikipedia.org/wiki/ARP_spoofing][ARP spoofing/poisoning]], ARP cache?? How do they work and
+why should we care? Since all of these things have been written and
+explained before, in a better way than I could explain them, [[http://www.grc.com/nat/arp.htm/][here you go]].
+
+You can find the script [[https://github.com/Erethon/ArPois.py][here]]. It's more like a proof of concept than a
+fully working program, since I haven't really tested it in more than
+two computers, so I don't know if it'll work for sure. Its purpose is
+purely instructional. The script is licensed under the MIT license so
+you are free to change/modify it to your heart's content.
