@@ -1,0 +1,32 @@
+baseURL = "https://blog.erethon.com/"
+languageCode = "en-us"
+title = "Erethon's Corner"
+theme = "hugo-htp"
+
+[params]
+author = "Dionysis Grigoropoulos"
+description = "Personal blog of Dionysis Grigoropoulos (Erethon/dgrig)"
+
+[permalinks]
+post = "/blog/:year/:month/:day/:title/"
+blog = "/blog/:year/:month/:day/:title/"
+
+[[menu.main]]
+        Name = "Home"
+        URL = "https://erethon.com"
+        weight = 1
+
+[[menu.main]]
+        Name = "Blog"
+        URL = "/"
+        weight = 10
+
+[[menu.main]]
+        Name = "GitHub"
+        URL = "https://github.com/erethon"
+        weight = 20
+
+[[menu.main]]
+        Name = "About"
+        URL = "https://about.erethon.com"
+        weight = 30
