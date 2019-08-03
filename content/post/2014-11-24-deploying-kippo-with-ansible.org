@@ -1,0 +1,66 @@
+#+TITLE: Deploying Kippo with Ansible
+#+DATE: 2014-11-25 14:38:06 +0200
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software security honeypot
+#+KEYWORDS: ansible kippo ssh honeypot digital ocean
+
+I've been running some instances of [[https://github.com/desaster/kippo][Kippo]] for quite some while now
+with great results. I recently wrote an [[http://www.ansible.com/][Ansible]] playbook to automate
+the process of deploying Kippo hosts and also make it scalable. You
+can find the playbook on [[https://github.com/erethon][my GitHub page]], specifically [[https://github.com/erethon/kippo-ansible][here]].
+
+In a nutshell, the playbook will deploy a central database for all the
+Kippo hosts to log incoming attacks and then deploy a number of Kippo
+hosts. You can specify which repo to clone Kippo from or do ad-hoc
+file modifications to files in the repo. For example, I've modified
+some commands like =wget=.
+
+A couple of weeks ago, GitHub announced its [[https://education.github.com/pack][Student Pack]], giving 100$
+of credit on [[https://www.digitalocean.com/][DigitalOcean]], which I promptly grabbed. Two nights ago, I
+decided to use the credit on building a small cluster of SSH
+honeypots, consisting of twelve Kippo hosts. Of course, the whole
+project was orchestrated using Ansible.
+
+I created thirteen VMs (droplets in DO terms) using the [[http://docs.anskble.com/digital_ocean_module.html][Digital Ocean
+ansible module]], twelve for the Kippo hosts and one for the logging
+database. I, also, ran a couple of ad-hoc Ansible commands to further
+configure some settings inside the VMs, and finally used [[https://github.com/Erethon/dotfiles/blob/master/bin/ssh-mult][ssh-multi]]
+(which I've talked about in my [[/blog/2014/11/13/my-tmux-config/][tmux config post]]) to make sure
+everything was configured properly.
+
+** Results
+:PROPERTIES:
+:CUSTOM_ID: results
+:END:
+
+It's been a little over 48 hours since I set this up, so let's see
+some early statistics. I used an
+[[https://github.com/Erethon/Kippo-log.sh][old script of mine]] to
+extract these.
+
+#+BEGIN_EXAMPLE
+    Total login attempts: 212589 Total unique passwords tried: 17080
+
+#+END_EXAMPLE
+
+That means a little under 4.5k attacks per hour, or 74 attacks per
+minute, or 1.2 attacks per second with only twelve sensors online. The
+sensors were spread across the DO network, so I would get different IP
+ranges and also geographical diversity.
+
+Unfortunately, I didn't get any new samples, just random variants of
+Elknot, much like the one [[http://blog.malwaremustdie.org/2014/05/linux-reversing-is-fun-toying-with-elf.html][MalwareMustDie analyzed in the past]]. I'll
+probably increase the number of sensors soon enough, which brings me
+to my next point.
+
+I love the simplicity of Ansible and the ease of adding new hosts to a
+deployment, once you've written a playbook. All I have to do now to
+add more hosts in my Kippo "cluster" is:
+
+#+BEGIN_EXAMPLE
+    ansible-playbook -i new_hosts -t kippo site.yml
+
+#+END_EXAMPLE
+
+and only the Kippo tasks will run, installing and setting up Kippo,
+ready to attract and log more attacks.
