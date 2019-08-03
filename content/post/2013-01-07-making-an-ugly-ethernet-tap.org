@@ -1,0 +1,39 @@
+#+TITLE: Making an ugly Ethernet tap
+#+DATE: 2013-01-07 00:12:56 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: hardware security
+#+KEYWORDS: hardware "Ethernet tap"
+
+A long time ago, I saw [[http://hakshop.myshopify.com/products/throwing-star-lan-tap][this in the Hak5 store]]. After reading about it
+in [[http://ossmann.blogspot.gr/2011/02/throwing-star-lan-tap.html][mossmann's blog]], I found somewhat interesting that using this
+easily built device you can [[https://youtu.be/drJWxMLrpE0][HACK THE PLANET]].
+
+An ethernet tap is a passive device used to monitor traffic between
+two hosts using a third one. For more info on network taps read [[https://en.wikipedia.org/wiki/Network_tap][here]].
+
+The idea behind it is very simple, but in order to understand it we
+must first understand how data is transmitted through the ethernet
+cable. The ethernet cable, commonly called [[https://en.wikipedia.org/wiki/Category_5_cable][Cat 5]] contains four pairs
+of twisted wires. 100BASE-TX (fast ethernet) only uses two pairs of
+these wires, one pair for transmitting data (TX) and one for receiving
+(RX). So, in order to intercept the data sent from one of the hosts,
+we just need to connect the host’s TX line with our RX one. Likewise,
+to intercept incoming data to the host, we need to connect the host’s
+RX line with our RX line.
+
+Note that we can’t connect both the host’s TX and RX in the same RX
+line, since fast ethernet is [[https://en.wikipedia.org/wiki/Full-duplex#Full-duplex][full duplex]]. To overcome this we need to
+use two taps, one for the received data and one for the transmitted.
+
+For more details on how to make one, read these two posts: [[http://www.enigmacurry.com/articles/building-an-ethernet-tap/][#1]] [[http://www.winsnort.com/index.php?module=Pages&func=display&pageid=8][#2]]
+
+After a bit of soldering, this is what I ended up with.
+
+{{< figure src="/images/tap1.jpg" title="Ethernet tap top view" >}}
+{{< figure src="/images/tap2.jpg" title="Ethernet tap bottom view" >}}
+
+The two ports near the euro coin are to be connected on the pc and the router,
+while the other two ports are for intercepting the traffic. As stated
+previously, one is for the transmitted data and the other for the received. To
+use them both at once, you need either a pc with two network cards or an
+ethernet to usb adapter.
