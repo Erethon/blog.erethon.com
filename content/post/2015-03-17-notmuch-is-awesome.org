@@ -1,0 +1,22 @@
+#+TITLE: NotMuch is awesome
+#+DATE: 2015-03-17 08:18:56 +0200
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software workflow mail
+#+KEYWORDS: email notmuch mutt
+
+In one of my previous posts, I explained my [[http://blog.erethon.com/blog/2015/02/27/my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters/][email setup in
+detail]]. Since then I've added one more piece of software on the
+"stack". It's called [[http://notmuchmail.org/][NotMuch]] and it's an email indexer.
+
+After email is saved locally, thanks to [[http://offlineimap.org/][offlineimap]], it gets indexed
+by NotMuch in order to be searchable. NotMuch supports [[http://notmuchmail.org/initial_tagging/][tags]], uses
+[[http://xapian.org/][Xapian]] for searches which means it supports [[http://notmuchmail.org/searching/][stemming]] and is super
+quick and lightweight.
+
+I've integrated mutt with NotMuch using the =notmuch-mutt= package on
+Debian, [[https://github.com/honza/mutt-notmuch-py][mutt-notmuch-py]] (although this can be done in many simpler
+ways) and a couple of [[https://github.com/Erethon/dotfiles/blob/3253f954b8e9497e512c4c16191a0f49dd33f376/.muttrc#L65-L66][lines on my .muttrc]]. I use =/= to search all of
+my emails when I'm on the index view of mutt and =I= to display a
+whole thread once I find the particular email I'm looking for.
+
+Give NotMuch a try, after all it's not much of an effort to set it up :)

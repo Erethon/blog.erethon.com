@@ -1,0 +1,80 @@
+#+TITLE: My mail setup using Mutt/OfflineIMAP/imapfilter
+#+DATE: 2015-02-27 19:46:52 +0200
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software workflow email
+#+KEYWORDS: mutt offlineimap imapfilter mail
+
+=Update 17/03/2015:= I'm also using NotMuch now, for more info check
+out [[http://blog.erethon.com/blog/2015/03/17/notmuch-is-awesome/][this post]].
+
+=Update 2/6/2015:= I've added msmtp to the mix, check out [[http://blog.erethon.com/blog/2015/06/02/using-msmtp-to-handle-mail-delivery][my new post
+about it]].
+
+This is part of a series of posts where I describe my workflow and OS
+setup.
+
+I use email *a lot* both in work and my daily life, so I want/need to
+have a lot of control on my mail. I use IMAP for getting my email for
+all my accounts and SMTP to send mails.
+
+My mail client of choice is [[http://www.mutt.org/][Mutt]], which is a fully featured text based
+(terminal) MUA. Mutt has a nice interface (supports colors), it can
+read the =maildir= mailbox format (more on that later), uses an
+external editor for writing email (I use Vim), supports gpg/pgp,
+etc. In short, it's not lacking any features compared to a GUI client.
+
+You can use Mutt to connect to an IMAP server and have Mutt fetch your
+mail, but I prefer to use [[http://offlineimap.org/][OfflineIMAP]] which is written in
+Python. OfflineIMAP syncs my mails from multiple remote servers to the
+local filesystem in maildir format. It also supports syncing between
+IMAP servers but I don't need that kind of functionality. The
+configuration file of OfflineIMAP is simple, clean, powerful and
+intuitive if you've used Python before.
+
+Depending on the machine I'm working on, I only sync specific IMAP
+folders. Here is the part of my =.offlineimaprc= file responsible for
+selecting the folders to be sync'ed.
+
+#+BEGIN_EXAMPLE
+    folderfilter = lambda folder: folder in ['INBOX',
+                                             'synnefo',
+                                             'synnefo-devel',
+                                             ...
+                                             'ganeti',
+                                             'ganeti-devel']
+
+#+END_EXAMPLE
+
+As always you can find my [[https://github.com/Erethon/dotfiles][dotfiles]] on my [[https://github.com/Erethon][GitHub account]].
+
+There is one more piece of software involved on my email setup and
+that is [[https://github.com/lefcha/imapfilter][imapfilter]], a utility to filter/sort emails on the remote IMAP
+server. It's written in a combination of C and Lua and its
+configuration file is using Lua too.  You can filter mails based on a
+number of different fields like =CC=, =To=, =From=, =Subject=,
+etc. There is not much more to say about it actually, it does one job
+and it does it well and fast.
+
+Here is a diagram of the above setup (created with asciio):
+
+#+BEGIN_EXAMPLE
+                               Mutt sends mail using SMTP
+                  .------------------------<-------------------------------
+                  |                                                       ^
+                  |                                                       |
+                  v                                                       |
+             .-,(  ),-.                                                   |
+          .-(          )-.        .-------------.     .--------.      .------.
+         (  Mail Servers  )<----->. OfflineIMAP .---->. ~/mail .<-----. Mutt .
+          '-(          ).-'       '-------------'     '--------'      '------'
+              '-.( ).-'        Fetch mails on ~/mail                 Read mails
+                  ^            and sync their status                 from ~/mail
+                  |            with the remote server
+                  |
+                  |
+           .------------.
+           . imapfilter .
+           '------------'
+    imapfilter constantly filtering mails
+
+#+END_EXAMPLE

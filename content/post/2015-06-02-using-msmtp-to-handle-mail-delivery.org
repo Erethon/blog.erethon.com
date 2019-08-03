@@ -1,0 +1,29 @@
+#+TITLE: Using msmtp to handle mail delivery
+#+DATE: 2015-06-02 03:53:22 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software workflow mail
+#+KEYWORDS: email msmtp mutt
+
+Following the example of [[http://greg.kh.usesthis.com/][GKH]] and others, I've added one more piece of
+software on [[http://blog.erethon.com/blog/2015/02/27/my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters/][my email setup and workflow]]. That piece is [[http://msmtp.sourceforge.net/][msmtp]], a very
+simple and lightweight SMTP client, that integrates really well with
+the rest of my setup.
+
+At its core, msmtp does one thing. It gets mail from a MUA -in my case
+mutt- and relays it to a remote SMTP server. Its strength lies in its
+[[http://msmtp.sourceforge.net/doc/msmtprc.txt][configuration file]].  All of its options can be set per account, which
+means, that it's easy to achieve complex tasks. E.g., you can have two
+accounts use no proxy, a couple more use a remote machine through a
+SOCKS proxy and a super private one [[http://msmtp.sourceforge.net/doc/msmtp.html#Using-msmtp-with-Tor][use TOR]].
+
+Another thing I really like about it, is the "fine tuning" it allows
+you to do in regards with TLS. It gives you the ability to [[http://msmtp.sourceforge.net/doc/msmtp.html#Transport-Layer-Security][pin TLS
+certificates to each account]] or even set the minimum number of
+Diffie-Hellman prime bits for TLS sessions.
+
+There are also some scripts based on msmtp that allow you to queue
+emails if you don't have internet access, e.g. when on a plane, review
+them later on and send them once you're connected again.
+
+All in all, if any of the above sound useful to you, give msmtp a
+try. I promise you won't regret it.

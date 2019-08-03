@@ -1,0 +1,42 @@
+#+TITLE: My email Server Setup
+#+DATE: 2015-03-11 20:52:37 +0200
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software workflow mail
+#+KEYWORDS: postfix dovecot mail server sieve spf txt dns
+
+Wanting to have more control over my email, I decided to setup my own
+mail server. I thought I had a pretty good understanding of how mail
+works, considering my [[http://blog.erethon.com/blog/2015/02/27/my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters/][mutt/offlineimap/imapfilter setup]], but I must
+say I was pleasantly surprised while setting everything up.
+
+For my setup I decided to go with a typical postfix/dovecot
+installation. I used a Debian KVM machine from [[http://prometeus.net][Prometeus]], which is
+based in Italy and, as far as I understand, is under the Italian
+jurisdiction, with 512MB RAM and a 25GB SSD which ought to be enough
+for my needs.
+
+I use [[http://www.postfix.org/][postfix]] as my MTA with [[http://www.postfix.org/VIRTUAL_README.html][virtual mailboxes and accounts]] and of
+course TLS (self-signed cert) where applicable.  [[http://www.dovecot.org/][Dovecot]] is used as an
+IMAP server, I don't like POP3, and it's what postfix uses to
+authenticate users that want to send an email. Postfix forwards
+incoming mail to dovecot, dovecot filters the mail using [[https://en.wikipedia.org/wiki/Sieve_(mail_filtering_language)][Sieve]] and
+stores it on the corresponding mailbox. I'm using the [[https://en.wikipedia.org/wiki/Maildir][Maildir]] format
+to store the emails.
+
+On outgoing mails, postfix uses [[http://www.pcre.org/][pcre]] to block/hide/modify headers that
+are leaking information about the sender.
+
+I didn't know about the existence of [[https://en.wikipedia.org/wiki/Sender_Policy_Framework][SPF]] or [[https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail][DKIM]] initially, but after
+a bit of reading, I decided to only implement SPF due to its
+simplicity. I've currently set it to =~all=. If the need arises, I'll
+take another look on DKIM.
+
+The server has been running for a couple of days without any
+problems. I haven't received any spam mail so far and [[http://www.fail2ban.org/wiki/index.php/Main_Page][fail2ban]] has
+only blocked a couple of IPs. If I start getting spam, I'll look into
+setting up [[https://spamassassin.apache.org/][spam-assassin]].
+
+All in all, it's been fun and a great learning experience so far. I
+suggest you give it a try.
+
+PS: This whole post is a big [[https://en.wikipedia.org/wiki/Operations_security][OPSEC]] fail.
