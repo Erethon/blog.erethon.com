@@ -1,0 +1,17 @@
+#+TITLE: Octropress here I come!
+#+DATE: 2014-05-28 01:31:11 +0300
+#+TAGS: octopress static-site-generator
+#+KEYWORDS: octropress
+
+I decided to port my blog to [[http://octopress.org/][Octopress]] and move away from Wordpress
+after all these years. The reason for this is twofold:
+
+- I've really gotten used to working with vim, git, github and the
+  surrounding workflow.
+- Static site generators are all the rage currently, so who am I to miss
+  out?
+
+Why Octopress and not something based on Python like [[http://docs.getpelican.com/en/3.3.0/][Pelican]] or
+[[http://getnikola.com/][Nikola]]? I simply decided to do something that will get me out of my
+comfort zone and also teach me something new. I already know how to
+use venv, let's see what RVM has to offer.
