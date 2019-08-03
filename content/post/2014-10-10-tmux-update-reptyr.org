@@ -1,0 +1,50 @@
+#+TITLE: Updating tmux without killing active sessions
+#+DATE: 2014-10-10 17:53:02 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software
+#+KEYWORDS: tmux tmuxninator reptyr
+
+I've been using [[http://tmux.sourceforge.net/][tmux]] for a while, and even though I didn't like it at
+first, now I'm in love with it. I'm mostly using it as a GNU Screen
+alternative, but I don't use some of its fancy features like tabs,
+mainly because my window manager takes care of multiple terminal
+windows for me.
+
+After a while, I got bored of starting a tmux session and configuring
+it every time, so I decided to give [[https://github.com/tmuxinator/tmuxinator][tmuxinator]] a try. The tmuxinator
+docs clearly stated that ~tmux >= 1.8~ was needed, but I was using
+tmux =version 1.6=. I downloaded the latest stable tmux version from
+upstream, compiled it, installed it and tried to run it. I was greeted
+with this message:
+
+#+BEGIN_EXAMPLE
+    protocol version mismatch (client 8, server 6)
+
+#+END_EXAMPLE
+
+What happened is that I had some tmux sessions still running using the
+1.6 version. The obvious, and only, solution that came to my mind was
+to kill all running tmux sessions. Problem was, one of those sessions
+had my [[http://www.irssi.org/][Irssi]] stuff open and, since I have yet to properly setup an
+irssi config file, I would have to reconnect to all servers,
+re-authenticate, rejoin all open channels, etc. Ain't nobody got time
+for that.
+
+Enter [[https://github.com/nelhage/reptyr][reptyr]]. Copying reptyr's description:
+
+#+BEGIN_EXAMPLE
+    reptyr is a utility for taking an existing running program and
+    attaching it to a new terminal. Started a long-running process
+    over ssh, but have to leave and don't want to interrupt it? Just
+    start a screen, use reptyr to grab it, and then kill the ssh
+    session and head on home.
+
+#+END_EXAMPLE
+
+So, all I had to do was open a screen, detach the irssi processes from
+tmux, reattach them to screen using reptyr, kill all running tmux
+processes, restart the tmux server and, finally, reattach the irssi
+processes to tmux. Much to my surprise, it worked out flawlessly.
+
+Now all that's left, is to populate my ~/.tmuxinator config files and
+push them to my [[https://github.com/erethon/dotfiles][dotfiles]].
