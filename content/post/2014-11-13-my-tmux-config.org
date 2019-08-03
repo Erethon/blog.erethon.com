@@ -1,0 +1,217 @@
+#+TITLE: My tmux config and a small tmux primer
+#+DATE: 2014-11-13 23:48:20 +0200
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software workflow
+#+KEYWORDS: tmux primer config clusterssh pdf status bar
+
+It's been a little over a month since I started using tmux. Below,
+I'll try to explain most of my =.tmux.conf=, a bit of my current
+workflow using [[http://awesome.naquadah.org/][awesome]] + tmux and various cool stuff you can do with
+tmux. My latest =.tmux.conf= can be found on my [[https://github.com/Erethon/dotfiles][dotfiles repo on
+GitHub]].
+
+** Tmux config file
+:PROPERTIES:
+:CUSTOM_ID: tmux-config-file
+:END:
+
+#+BEGIN_EXAMPLE
+    unbind C-b set -g prefix C-a
+
+#+END_EXAMPLE
+
+As most people, I'm using =C-a= as my bind key.
+
+#+BEGIN_EXAMPLE
+    bind-key a send-prefix
+
+#+END_EXAMPLE
+
+On nested tmux sessions, I use =C-a a= to send commands to the second
+level tmux instance. Another popular choice is =C-f=, but it feels
+weird to me.
+
+#+BEGIN_EXAMPLE
+    bind-key C-a last-window
+
+#+END_EXAMPLE
+
+This is an old habit from screen, using =C-a C-a= to go to last active
+window.
+
+#+BEGIN_EXAMPLE
+    bind r source-file ~/.tmux.conf
+
+#+END_EXAMPLE
+
+Use =C-a r= to reload tmux configuration on the running session.
+
+#+BEGIN_EXAMPLE
+    bind-key -r j select-pane -D bind-key -r k select-pane -U bind-key
+    -r H select-pane -L bind-key -r L select-pane -R
+
+#+END_EXAMPLE
+
+I'm using =C-a j/k= to move down/up in panes and =C-a H/L= to move
+left/right. The =-r= flag means the key can be repeated multiple times
+without having to press =C-a= again, e.g., =C-a j j= will move the
+cursor two panes down.
+
+#+BEGIN_EXAMPLE
+    bind-key -r l next-window bind-key -r h previous-window
+
+#+END_EXAMPLE
+
+Same as above =C-a l/h= for window navigation right/left.
+
+#+BEGIN_EXAMPLE
+    bind-key -r '=' resize-pane -U 5 bind-key -r '-' resize-pane -D 5
+    bind-key -r '<' resize-pane -L 5 bind-key -r '>' resize-pane -R 5
+
+#+END_EXAMPLE
+
+An easy way to resize panes.
+
+#+BEGIN_EXAMPLE
+    bind-key m command-prompt -p "[ man page ]" "split-window 'exec man %%'"
+
+#+END_EXAMPLE
+
+This is one of my favorites that I picked up on #tmux on freenode.
+ =C-a m= will open a prompt and ask for a man page to open a new bottom
+pane.
+
+This is it in action. {{< figure src="/images/tmux_man.gif" >}}
+
+#+BEGIN_EXAMPLE
+    bind-key "'" split-window -h
+
+#+END_EXAMPLE
+
+I like to use =C-a '= and =C-a "= for my horizontal/vertical splits.
+
+#+BEGIN_EXAMPLE
+    bind-key v copy-mode
+
+#+END_EXAMPLE
+
+Tmux has an amazing copy mode to scroll back up or copy text. The
+default way to enter said copy mode is =C-a [=, which I've remapped to
+=C-a v=.
+
+#+BEGIN_EXAMPLE
+    bind-key -t vi-copy 'v' begin-selection
+
+#+END_EXAMPLE
+
+To start selecting text the default key is =Space=, which again I've
+remapped to =v= to be in sync with vi.
+
+#+BEGIN_EXAMPLE
+    bind -t vi-copy y copy-pipe 'xclip -in > /dev/null'
+
+#+END_EXAMPLE
+
+When text is yanked in copy mode, it only exists in the context of the
+current session. The above remaps =y= to yank the selected text in
+copy mode /and/ also save it on my clipboard using =xclip=.
+
+#+BEGIN_EXAMPLE
+    bind-key p paste-buffer
+
+#+END_EXAMPLE
+
+Remap =C-a p= to paste buffer instead of the default =C-a ]=.
+
+#+BEGIN_EXAMPLE
+    setw -g mode-keys vi
+
+#+END_EXAMPLE
+
+Enable vi mode-keys, highly useful when selecting text in copy mode.
+
+Here's a quick demo showcasing the above, using vi's =gg= and =$= to
+move the cursor around, =C-a v= to enter copy mode and =y=/=C-a p= to
+yank and paste text.
+
+{{< figure src="/images/copy_mode.gif" >}}
+
+#+BEGIN_EXAMPLE
+    set -g set-titles on set -g set-titles-string '#(whoami)@#h -- #S'
+
+#+END_EXAMPLE
+
+Renames window titles on awesome's status bar.
+
+#+BEGIN_EXAMPLE
+    set -g status-utf8 on set -g status-bg colour241 set -g status-fg
+    white set -g status-interval 60 set -g status-left-length 90 set
+    -g status-right-length 60 set -g status-left
+    "#[fg=Green]#(whoami)#[fg=white]::#[fg=yellow]#h" set -g
+    status-justify left set -g status-right 'Session: #[fg=Cyan]#S -
+    #[fg=white]Uptime:#[fg=Cyan]\ #(uptime | cut -d" " -f 4-5 | tr -d
+    ,) - #[fg=white]Bat: [\ #[fg=Cyan]#(acpi | cut -d" " -f
+    4-5)#[fg=white]]'
+
+#+END_EXAMPLE
+
+This is my tmux status bar config. It's pretty self-explanatory, the
+most interesting part is the last line where I use =acpi= to get the
+charge level of the battery and remaining charging time.
+
+#+BEGIN_EXAMPLE
+    set -g default-terminal "screen-256color"
+
+#+END_EXAMPLE
+
+Set the default terminal to use.
+
+#+BEGIN_EXAMPLE
+    set -g base-index 1 set -g pane-base-index 1
+
+ #+END_EXAMPLE
+
+Start counting windows and panes from one and not zero.
+
+#+BEGIN_EXAMPLE
+    set -g history-limit 10000
+
+ #+END_EXAMPLE
+
+The default setting is to save 2000 lines of history per pane, I've
+changed this to 10000.
+
+** Using tmux as a pdsh/clusterssh alternative
+:PROPERTIES:
+:CUSTOM_ID: using-tmux-as-a-pdshclusterssh-alternative
+:END:
+
+I normally use [[http://ansible.com][ansible]] to run ad-hoc commands
+in multiple hosts, but there are times when I want a quick and dirty
+solution or want to (cleanly) see the output of a command to a number
+of hosts. A lot of people use clusterssh to achieve the above, but I
+don't really like its use of xterm and the way it arranges windows,
+plus it semi-conflicts with awesome.
+
+What I do instead, is run a script that opens a new tmux pane for
+every host, ssh to each host and set =synchronize-panes= on. With
+synchronize-panes, everything that is typed on one pane, is
+automatically sent to all panes in the same window. You can find the
+script [[http://github.com/erethon/dotfiles/tree/master/bin/ssh-multi][here]].
+
+Here's a gif of it in action.
+
+Or not, my netbook couldn't handle the gif creation, here's a pic
+instead with 7 panes active and ssh'ed.
+
+{{< figure src="/images/ssh-multi.gif" >}}
+
+** End of part 1 (??)
+:PROPERTIES:
+:CUSTOM_ID: end-of-part-1
+:END:
+
+That's all for now, hopefully there's gonna be a part two where I
+explain how I use tmux in conjunction with awesome.
+
+PS. All the gifs in this page were created with [[https://github.com/icholy/ttygif][ttygif]].
