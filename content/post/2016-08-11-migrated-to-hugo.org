@@ -1,0 +1,43 @@
+#+TITLE: Migrating to Hugo
+#+DATE: 2016-08-11
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software workflow
+#+KEYWORDS: hugo octropress
+
+A bit over two years ago I [[https://blog.erethon.com/blog/2014/05/28/octopress-here-i-come/][blogged about migrating to Octopress]] from
+Wordpress, this time I'll blog about migrating to [[https://gohugo.io/][Hugo]] from Octopress.
+
+I started messing around with Hugo because I was experimenting with Go
+and wanted to take a look at a simple and complete Go project. I ended
+up liking the simplicity of setting up a new site and decided to try
+porting my blog to it.
+
+I /really/ liked the original Octopress theme and I've done a number
+of modifications to it. Some were simple CSS color changes, others
+were about removing any external dependencies, e.g., Jquery and Google
+fonts.  Thus, it was important to me that I can find a similar theme
+for Hugo.  Thankfully, [[https://parsiya.net/][Parsia Hakimian]] had already ported the [[https://github.com/parsiya/Hugo-Octopress][original
+Octopress theme toHugo]]. A [[https://github.com/parsiya/Hugo-Octopress/pull/15][couple]] of public [[https://github.com/parsiya/Hugo-Octopress/pull/18][edits]] later -plus some
+private ones- and I had everything setup just the way I like it!
+
+Migrating my old posts was a breeze, I didn't end up using the [[https://gohugo.io/commands/hugo_import_jekyll/][import
+jekyll]] command, instead I used a bit of zsh and sed
+magic. Unfortunately, I did this a couple of months ago and it's long
+gone from my shell history.  Moving the static content was just a cp
+away.
+
+What I didn't notice at the time of the migration, was that Octopress
+by default (I think), uses only the first four words of a post's title
+to create the URL for it. Hugo uses all of them, thus I ended up with
+a couple of posts with different URLs. I noticed this a bit late and
+was too bored to fix it ASAP. Either way, a couple of days later
+Google had updated its search results and contained the new URLs. I
+know and care about [[https://en.wikipedia.org/wiki/Link_rot][linkrot]], but I cba to fix it at the moment.
+
+All in all, it was a simple and fast migration and I find the end
+result clean and simple. I enjoy not having to [[https://github.com/imathis/octopress/pull/1693][mess around with a
+Rakefile]], or worrying about if a git pull on the upstream project will
+mess up everything.
+
+If you're looking for a simple and easily extensible static site
+generator, give Hugo a try.
