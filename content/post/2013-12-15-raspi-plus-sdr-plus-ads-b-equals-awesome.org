@@ -1,0 +1,52 @@
+#+TITLE: Raspi + SDR + ADS-B = awesome
+#+DATE: 2013-12-15 01:23:17 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: SDR
+#+KEYWORDS: ADS-B SDR raspi raspberry dump1090
+
+A lot of people have combined a RasPi and a SDR dongle to get a low
+power consumption ADS-B tracker.  [[https://twitter.com/tomaszmiklas][Tomasz Miklas]] has created an image
+for the Raspberry Pi, that has everything that is needed to run your
+own aircraft tracking "service" already set up. I've finally had a
+chance to experiment with it and this will be my short review.
+
+First of all, I have to say I'm really sorry to Tomasz, because he
+send me the image at the 10th of October to test it out before
+releasing it publicly and I'm posting this two months later. Sorry
+mate.
+
+Tomasz, has a [[http://www.ctrl-alt-del.cc/2013/10/virtual-radar-raspberry-pi-and-rtl-sdr.html][well written post explaining how the image works]] , so
+I'll skip the details. All tests were performed using a dongle with a
+R820T chip and the stock omnidirectional antenna. Since I moved
+recently, I didn't have the time to construct a proper antenna, yet
+even with such an antenna the result were pretty good.
+
+So, you download the image, =dd= it to a SD card, plug your SDR
+dongle, power it on, point your browser to the IP the RasPi obtained
+through DHCP and ... and everything simply works out of the box. At
+least it did for me.
+
+I was really surprised by how lightweight the whole setup was. After
+one and a half hours of uptime, two clients connected to the server
+and, receiving messages from two planes, the RasPi reported that it
+only used 30 megs of RAM and the CPU was pinned at 35% the whole time,
+with 4-5% of it being htop itself. The process using the CPU was of
+course dump1090, which does all the heavy lifting. Unfortunately, due
+to the time I tested the image (4 AM) and my location, there weren't
+many planes (two simultaneously at max), so I don't know how dump1090
+behaves under a lot of load/traffic.
+
+As mentioned above, I was using the stock antenna that came with the
+SDR dongle, but I was still able to get a signal from planes that were
+72km away on average! On some of my previous tests under Windows and
+ADSB#, I only got 28km of range. A lot of things have changed since
+then though, mainly my new house and my antenna placement, or perhaps
+the old one was a [[http://en.wikipedia.org/wiki/Faraday_cage][Faraday cage]]? Either way, for the time being, I'll
+leave the RasPi running and further report on its performance after a
+bit of testing.
+
+If you own a RasPi and a SDR dongle, give the image a try. It may not
+be something you haven't seen or done already, but it certainly is the
+easiest way to monitor ADS-B traffic, at least to my knowing. I know,
+I'll be keeping a copy of the image in a SD card because it's so
+handy.
