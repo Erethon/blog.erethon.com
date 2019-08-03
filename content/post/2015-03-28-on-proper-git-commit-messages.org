@@ -1,0 +1,50 @@
+#+TITLE: On proper git commit messages and frequent git pushes
+#+DATE: 2015-03-28 15:37:51 +0200
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: rant software
+#+KEYWORDS: git commit message
+
+Note: this is a rant on how people use git.
+
+When I was introduced to git, I was told I should read this [[http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html][great post
+on git commit messages]] by [[http://tpo.pe/][Tim Pope]]. Ever since, I've been trying to
+follow that system in all of my commits
+across all projects.
+
+Yesterday, I decided to switch from [[http://awesome.naquadah.org/][awesome]] to [[http://dwm.suckless.org/][dwm]]. I tried to apply
+one of the [[http://dwm.suckless.org/patches/][available dwm patches]], only to notice it doesn't work with
+the latest version of dwm. So, I decided to have a look at the source
+and try to troubleshoot it myself. Running git log I was faced with
+this commit history:
+
+#+BEGIN_EXAMPLE
+    cdec978 - applied Lukas' focus suggestion at startup, thanks (1 year, 7 months ago)
+    ...
+    d83454f - applied Peters two patches, please test hg tip, if nothing breaks this is 5.9 (3 years, 9 months ago)
+    27b0142 - applied Garys patch in a slightly modified way (3 years, 9 months ago)
+    867ba36 - applied Nicolas Capit's patch as interim solution until the multiscreen support is reworked in 6.0 (3 years, 9 months ago)
+
+#+END_EXAMPLE
+
+This is just an excerpt, but these commits messages provide no
+information on what was changed, how it affects the code base or any
+valuable input of any kind.
+
+In the end, I'll probably use =git bisect= to troubleshoot this issue,
+but it would be nice and helpful if I could get some extra information
+from the commit history.
+
+=Update: for the record, the bug was in my config.h after all.=
+
+Another common pitfall I see often, is that people don't realise that
+git is decentralized. Being decentralized means, you can code on your
+computer, use =git add= - =git commit=, test everything and once
+you're satisfied with the output and are *SURE* that everything works
+as expected, then *AND ONLY* then, push to the upstream
+repo. Otherwise, you end up with multiple commits for something that
+could be squashed in a single commit.
+
+On big projects like the Linux kernel or QEMU, you'll often see
+patches that are sent multiple times before being merged, just to
+address the above issues. Unfortunately, this doesn't seem to be a big
+deal for a lot of newer and smaller projects.
