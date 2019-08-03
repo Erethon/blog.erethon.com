@@ -1,0 +1,120 @@
+#+TITLE: How I do my Computing
+#+DATE: 2017-02-19
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software workflow
+#+KEYWORDS: workflow
+
+This is a long time coming post that I've kept postponing (pun
+intended) for ages.
+
+I enjoy browsing [[https://usesthis.com/][The Setup]] and I always longed for an easy way to
+share the way I do my computing with friends, besides [[https://github.com/erethon/dotfiles][linking them my
+dotfiles]]. This blog post is supposed to fill that void. A lot of this
+info is already documented in my private Emacs wiki, this is a more
+lengthy representation of it.
+
+As a side note, this post will be a huge opsec failure, but hey,
+obscurity isn't security, right?
+
+** Workstations
+:PROPERTIES:
+:CUSTOM_ID: workstations
+:END:
+
+I have two computers I use on a regular basis, a laptop and a desktop.
+The [[https://www.acer.com/ac/en/IL/content/model/NX.G18ET.004][laptop]] is my daily go to computer, while the desktop gets used
+once a week, when I feel I need a bigger screen/beefier machine. The
+laptop is running Debian Jessie, always updated and using a backported
+kernel, while the desktop is running OpenBSD-stable.
+
+I use mutt to read emails and a mixture of [offlineimap/smtp/notmuch
+as described [[https://erethon.com/blog/2015/06/02/using-msmtp-to-handle-mail-delivery/][here]].  Archiving is done using [[http://archivemail.sourceforge.net/][archivemail]] and archived
+emails end up on [[https://tarsnap.com][Tarsnap]] and/or scp'ed on some private servers.
+
+I use both Vim and Emacs to edit text. Vim is used for all of my email
+editing and most of my code editing needs. Emacs covers all of my
+org-mode stuff, lisp/clojure coding and random blocks of text like
+this blog post. I'm currently trying to force myself to use Emacs
+exclusively.
+
+I maintain a number of org-mode documents which I use as a personal
+wiki, diary, agenda, task manager/tracker platform.
+
+My browser of choice is Firefox LTS alongside a number of plugins.
+Namely:
+
+- uBlock Origin
+- https everywhere
+- NoScript (always blocking Javascript from *all* domains)
+- Pentadactyl
+- FoxyProxy
+
+I've also disabled a large number of features which I find privacy
+intrusive and a huge security nightmare, such as *WebRTC*, *Service
+Workers* and *Local Storage*. I wish we could have a modern browser
+(security wise) with a lot of these fancy new features ripped off.
+
+To read my RSS feeds I use [[http://newsbeuter.org/][Newsbeutter]], a simple curses RSS reader
+that's lightweight and gets the job done.
+
+To chat with friends, colleagues, random people on the internet I like
+to use [[https://mcabber.com/][mcabber]] for XMPP and [[https://weechat.org/][weechat]] inside a tmux session for IRC. In
+the past I experimented with bouncers, but in the end I prefered the
+simpler setup. SSH and tmux suffice :)
+
+My window manager is [[http://dwm.suckless.org/][dwm]], a really barebones and lightweight tilling
+WM. I used to use AwesomeWM, but dwm is more than enough for my needs
+and in a faction of the size. For terminal emulation I use urxvt and
+always live inside multiple tmux sessions, both remote and local.
+
+I try doing all of my development remotely, on servers on the
+internet, but some stuff I do locally. In both cases, I use
+virtualenvs when working on Python projects and a mixture of
+containers/VMs for more isolation on other stuff. If this wasn't
+apparent already, I try to keep a minimal and clean system.
+
+I use [[https://www.unbound.net/][unbound]] as a local DNS and blackhole a number of
+ad-serving/tracking domains. My =/etc/resolv.conf= has the immutable
+attribute set, which is always cumbersome for public WIFI hotspots
+that implement a captive portal.
+
+On both systems (laptop and desktop) I've setup a pretty restrictive
+firewall with lots of logging using [[http://ferm.foo-projects.org/][Ferm]] in Debian and of course pf in
+OpenBSD.
+
+** Servers
+:PROPERTIES:
+:CUSTOM_ID: servers
+:END:
+
+I maintain a number of servers running lots of services, some are for
+private use, others are for friends and some are semi-public. Most of
+them are KVM VMs, a small number are OpenVZ containers and some are
+physical machines. Most are running Debian Jessie and a couple of them
+are OpenBSD based.
+
+All of them are managed using Ansible in push mode, while for the
+Debian ones I'm also using [[https://debops.org][DebOps]].
+
+I use [[http://grafana.org/][Grafana]] to plot graphs about metrics concerning these
+machines. Data collection is done using [[https://collectd.org/][collectd]] and the data backend
+is [[https://www.influxdata.com/time-series-platform/influxdb/][InfluxDB]].
+
+** Networking
+:PROPERTIES:
+:CUSTOM_ID: networking
+:END:
+
+Most of the aforementioned machines are connected using [[https://www.tinc-vpn.org/][Tinc]] and use
+that connection for any 'private' communication they need to do, like
+the collectd/influxdb messages. Some services only listen on private
+addresses, so they're available only through the VPN.
+
+On home, I have a [[http://www.tp-link.com/us/products/details/TL-WDR3600.html][TP-Link WDR3600]] flashed with [[https://openwrt.org/][OpenWRT]] as my
+router/gateway. I use a VLAN for my computers and a separate VLAN for
+guests. The DNS on the router blackholes a number of ad serving
+domain, so all of the devices connected on my network are ad free.
+
+I use socks proxies over SSH as a quick and dirty VPN solution most of
+the time. I've experimented with [[https://github.com/cjdelisle/cjdns][cjdns]] a bit and I would like to join
+the [[https://dn42.net/Home][dn42 network]] once I get a bit of free time.
