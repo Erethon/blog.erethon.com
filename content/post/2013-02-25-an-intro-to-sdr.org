@@ -1,0 +1,67 @@
+#+TITLE: An intro to SDR
+#+DATE: 2013-02-25 01:27:38 +0300
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: SDR
+#+KEYWORDS: SDR ADS-B ADSB# SDR# rtl2832u r820t fc0013
+
+For the past two months I've been reading about [[http://en.wikipedia.org/wiki/Software-defined_radio][SDR]] and everything
+related to radio telecommunications. For those that don't know what
+SDR is (and are too bored to click the previous link), Software
+Defined Radio is a system that implements hardware subsystems of a
+typical radio in software. People have been designing their own SDRs
+with [[http://en.wikipedia.org/wiki/Fpga][FPGAs]] for quite some time now, but in the last year there has
+been a huge "revolution". It turns out that a lot of cheap USB digital
+TV tuners based on the Realtek RTL2832U chip can be tuned at a wide
+range of frequencies.
+
+For a list of supported devices you can check [[http://sdr.osmocom.org/trac/wiki/rtl-sdr][this page]]. I've bought
+two devices to experiment with, one is an [[http://dx.com/p/mini-dvb-t-digital-tv-usb-2-0-dongle-with-fm-dab-remote-controller-92096][EzTV 645 using the FC0013
+chip]], while the other one is using the Rafael Micro R820T chip (bought
+it from ebay for about 8 euro). I mainly bought them to experiment
+with [[http://en.wikipedia.org/wiki/Automatic_dependent_surveillance-broadcast][ADS-B]] and NOAA weather satellites. Due to university assignments
+I didn't have the time for the latter, but I've spent some mornings
+watching airplanes taking on and off from a nearby airport. Other
+interesting things to listen to are: [[http://en.wikipedia.org/wiki/Air_traffic_control][ATC]], [[http://en.wikipedia.org/wiki/Automatic_Terminal_Information_Service][ATIS]], [[http://www.youtube.com/watch?v=ZFkk6rkCX40][pager traffic]], car
+keyfobs and anything else that is above in your chip range. As
+mentioned earlier, due to the lack of time, for the time being I've
+only experimented with ADS-B traffic.
+
+I've done all my testing in Windows 7 using [[http://sdrsharp.com/][SDR#]] and [[http://sdrsharp.com/index.php/a-simple-and-cheap-ads-b-receiver-using-rtl-sdr][ADSB#]] in
+conjunction with [[http://www.virtualradarserver.co.uk/][Virtual Radar Server]]. So far, using the stock antenna
+with both dongles, the one with the R820T is performing way better
+than the FC0013 one. There is less noise and it's better at picking
+signals from afar. Moreover, it has a better tuning range, although it
+differs from dongle to dongle and it depends more or less on your
+luck.
+
+I live fairly close to an airport so I get a good signal of any plane
+taking on or off. The maximum range I've achieved with the R820T
+dongle and stock antenna (omnidirectional) is 28km. I've checked the
+results I get against [[http://www.flightradar24.com/][flightradar24.com]] and they are spot on. One
+feature of ADSB# I like is the ability to share your findings with
+servers that accept ADS-B traffic, like contributing to
+flightradar24.com.
+
+I won't go in more details at the moment, since I'm tight on time, but
+for those of you that are interested in getting a SDR capable dongle,
+do some research first. Not all dongles have what is called an esd
+protection diode. As its name implies, it's a diode (a passive
+component allowing current to flow in one direction only, like a check
+valve) that protects against electrostatic discharge. A lot of people
+have "fried" their dongles because they didn't have aid diodes. By
+leaving the antenna outside, the wind can create static charge on the
+antenna and fry the chip inside the dongle. Both of my dongles came
+with those diodes, but if you plan on buying one, read some comments
+first or if buying from ebay ask the seller for a picture of the
+dongle. The diodes are the ittle black things I've circled in red near
+the antenna connector.
+
+For those of you that want more info on ADS-B I suggest watching [[http://www.youtube.com/watch?v=CXv1j3GbgLk][this
+amazing talk]] by [[https://twitter.com/ihackedwhat][Render Man]] [[http://www.renderlab.net/][(http://www.renderlab.net)]].
+
+{{< figure src="/images/eztv6451.jpg" title="EzTV645 esd diode" >}}
+
+{{< figure src="/images/eztv6452.jpg" title="EzTV645 dongle view" >}}
+
+{{< figure src="/images/r820t3.jpg" title="Esd diodde and R820T chip"
+>}}
