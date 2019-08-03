@@ -1,0 +1,62 @@
+#+TITLE: Plotting room temperature and humidity using Prometheus, Grafana and a DHT11 sensor
+#+DATE: 2018-07-22
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software metrics
+#+KEYWORKDS: prometheus raspi dht11 dht22
+
+Last week we installed an airconditioning unit in our house and
+yesterday a [[https://akizukidenshi.com/download/ds/aosong/DHT11.pdf][DHT11 humidity and temperature]] sensor arrived that I had
+ordered in the past from ebay and had totally forgotten about it. So,
+I got the idea to monitor the temperature and humidity in the room, to
+see how well the airconditioning unit works.
+
+What better way to do this than use Prometheus, Grafana and a spare
+[[https://www.raspberrypi.org/products/raspberry-pi-zero-w/][Raspverry Pi Zero W]] I had lying around.
+
+** Architecture
+My prometheus server runs on a docker container, which in turn runs on
+a KVM, which in turn (squared) runs on a physical host I maintain at
+online.net. I use a VPN to connect all of my hosts and [[https://github.com/prometheus/node%255Fexporter][node_exporter]]
+is configured to only listen on the VPN interface.
+
+I initially planned on using a cheap NodeMCU/esp8266 board to
+interface with the sensor and write a simple exporter in the
+prometheus format. I quickly scraped that idea because I’m using [[https://en.wikipedia.org/wiki/Network%255Faddress%255Ftranslation][NAT]]
+at home and I would either have do port forwarding or have my router
+by a part of the VPN and assign IPs in the VPN address space.
+
+I opted for the simpler solution, use a Raspberry Pi and just have it
+be a client to the VPN. This also meant I got to test [[https://debops.org/][DebOps]] on armv6
+based devices.
+
+** Implementation
+
+The implementation was easier than I expected. I run my DebOps-related
+playbooks, modified some parts to work on armv6, soldered some male
+pin headers to the raspi and connected the sensor to power/ground and
+a GPIO pin.
+
+To interface with the sensor, I used a [[https://github.com/adafruit/Adafruit%255FPython%255FDHT][python library by Adafruit]] and
+for exporting the metrics I used the [[https://github.com/prometheus/client%255Fpython][official python prometheus
+client]]. Nothing fancy here, just hardcoded some glue code and had it
+run automatically on startup.
+
+#+BEGIN_EXAMPLE
+from prometheus_client import start_http_server, Gauge
+import Adafruit_DHT
+
+t = Gauge('temperature', 'Temperature')
+h = Gauge('humidity', 'Humidity')
+
+start_http_server(9222)
+while True:
+    humidity, temperature = Adafruit_DHT.read_retry(11, 4)
+    t.set(temperature)
+    h.set(humidity)
+
+#+END_EXAMPLE
+
+Here is a screenshot showcasing the end result plotted in Grafana,
+where you can clearly see when we turned on/off the AC unit.
+
+{{< figure src="/images/graph.png" >}}
