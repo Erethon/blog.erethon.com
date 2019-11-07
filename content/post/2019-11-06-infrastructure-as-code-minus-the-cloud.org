@@ -1,0 +1,135 @@
+#+TITLE: Infrastructure as Code without using the cloud
+#+DATE: 2019-11-06
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software infrastructure
+#+KEYWORDS: terraform packer ansible DebOps qemu kvm
+
+One of my favorite conversations I had with a colleague back in early
+2015 was about Ansible, the future of provisioning VMs, pets vs
+cattles, Infrastructure as Code and the ways an organization can make
+sure that an administrator isn't leaving behind a backdoor when they
+leave the organization. We had that discussion on the day they gave
+their one month notice and announced they'll be leaving the company.
+
+Ever since then, I've been thinking more and more about how
+Infrastructure as Code is the only good solution about this problem
+that's "easily" attainable. Given a good (and safe) starting point,
+i.e. a git repository with signed and properly reviewed commits, one
+should be able to recreate their infrastructure. This is of course
+assuming we're dealing with FOSS only (where again everything is
+verified and trusted) and we're not trying to solve a problem as
+described in [[https://www.archive.ece.cmu.edu/~ganger/712.fall02/papers/p761-thompson.pdf][Reflections on Trusting Trust]].
+
+Here is how I'm trying to tackle IaC now for my own *non-cloud* based
+infrastructure and the things I tried in the past.
+
+** In the past
+I started using Ansible in 2013 for configuration management instead
+of managing config files by hand and clusterssh'ing around hosts. Back
+then my infrastructure consisted of cheap OpenVZ VPSes and some KVM
+VMs. None of the providers I used provided an API to provision hosts
+and thus IaC only meant config management back then for my needs.
+
+This changed in 2016 when I started renting a physical host via
+[[https://www.online.net/en][online.net]] and wanted to isolate workloads on that host. I decided to
+use Docker and KVM to achieve that. Starting and stopping Docker
+containers was easy enough using the Ansible module. Even though
+managing them over their lifetime, updating images, managing volumes,
+etc became a pain point without a scheduler, I was contented all of
+the above was committed and versioned in a git repo.
+
+Provisioning KVM VMs on the other hand was a completely different
+story. Due to my past work experience with [[http://www.ganeti.org/][Ganeti]] and [[https://www.synnefo.org/][Synnefo]] I
+briefly considered using Ganeti, but I decided it was overkill and
+ended up using [[https://libvirt.org/][libvirt]] instead.
+
+In order to make things reproducible and committable, I hand crafted
+[[https://libvirt.org/formatdomain.html][libvirt XML]] files and used [[https://libvirt.org/sources/virshcmdref/html/][Virsh]] to interact with libvirt. Editing XML
+by hand isn't fun and I would often end up copy-pasting files without
+being sure if they would work or not, until trying them out. As an
+added bonus, I never setup PXE and [[https://wiki.debian.org/DebianInstaller/Preseed][preseeding]] thinking it would be
+hard, so I would boot a VM from the installation iso, port forward VNC
+via ssh on my local computer, use vncviewer locally and install the OS
+remotely.
+
+As a result of all of the above, I dreaded having to setup a new VM
+and despite the fact that everything was committed in a repo, it was
+hardly reproducible or even readable.
+
+** Enter Terraform
+I'm not sure what the state of Ansible's [[https://docs.ansible.com/ansible/latest/modules/virt_module.html][libvirt module]] was back then,
+but we were using Ansible to provision VMs in Rackspace (via the
+[[https://docs.ansible.com/ansible/latest/modules/os_server_module.html][OpenStack]] module) at work and it felt like a dirty hack to me. The
+lack of state meant that I was always afraid that a bad playbook run
+could delete servers that weren't meant to be deleted.
+
+By summer of 2018, we gave [[https://www.terraform.io/][Terraform]] in AWS a try at work and I liked
+the way it handled state, so I decided to use it for my infra as
+well. Thankfully, there was already a [[https://github.com/dmacvicar/terraform-provider-libvirt][provider for libvirt]] that worked
+for most of my usecases.
+
+At first, I [[https://github.com/Erethon/ansible-debops-infrastructure/commit/fe7d44ebde82475b1fe5f6a228d66eeeefdcaaeb#diff-2bf032f4b27d656974534ac66b457a58][put all the resources in a single file per "environment"]],
+but that was clunky and meant there was a lot of code
+duplication. Eventually, after getting more familiar with Terraform, I
+organized the [[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/terraform/modules/libvirt_host/main.tf][basic resources into a module]] and the code is now
+[[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/terraform/infrastructure/production/main.tf][cleaner and maintainable]].
+
+During the development of said module, I created and destroyed
+multiple VMs over long periods of time, without ever feeling uncertain
+or afraid about what might happen in the rest of the
+infrastructure. I'm also using this exact module in my desktop
+computer to provision both long running VMs and one-off VMs to test
+packages, run untrusted code, etc. The ease of running VMs locally has
+replaced Docker for me.
+
+** Packer for bootstraping my base images
+Even after using Terraform, I stil had the issue of VNCing into the VM
+to install the OS the first time it booted. One solution would be to
+use ready made images, but I decided to roll my own in the name of
+knowing exactly what's running in the them and how to alter them.
+
+HashiCorp once again comes to the rescue thanks to [[https://www.packer.io/][Packer]], which has
+support for building images via Qemu.
+
+I use both Debian and OpenBSD and creating images for those two OSes
+is just a [[https://github.com/erethon/packer-images][git clone]] and `packer build` away now!
+
+** Configuration Management
+Libvirt + Terraform + Packer only take care of the provisioning of the
+infra, configuration management is still needed for the VMs.
+
+Early boot config management is taken care by [[https://cloudinit.readthedocs.io/en/latest/][cloud-init]], for which
+templates are injected if needed at will by the [[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/terraform/modules/libvirt_host/main.tf#L15][aforementioned
+Terraform module]]. Later stages are handled by Ansible.
+
+In particular, I make heavy use of [[https://docs.debops.org/en/master/][DebOps]], a collection of Ansible
+roles that are highly opinionated and tailored to work well
+together. It makes things easy, from [[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/ansible/inventory/host_vars/spinny/ferm.yml][managing specific host firewall
+rules]] all the way to writing roles that [[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/ansible/roles/synapse/defaults/main.yml#L3][depend on other DebOps roles
+to automagically setup apt repos]].
+
+** Next steps
+Not everything is in a state I'm satisfied with yet. My end goal is to
+be able to recreate all VMs and configuration in a new physical host,
+quickly after cloning the repo and with minimal effort.
+
+One such area that can be better automated, is service and host
+discovery. As an example, I've got a VM that runs [[https://prometheus.io/][Prometheus]] and
+[[https://grafana.com/][Grafana]] for metrics, monitoring and alerting. Currently, when I create
+a new VM, I need to also update Prometheus so it can monitor that
+VM. [[https://www.consul.io/][Consul]] can take care of this, but I haven't decided yet if this is
+a path I want to take or if this should be handled in another layer
+(via Terraform or Ansible for example).
+
+Another example would be to automatically update DNS entries when
+creating/deleting VMs. Again, Consul can handle DNS, but there is also
+the option of using the [[https://www.terraform.io/docs/providers/dns/index.html][Terraform DNS provider]] to update PowerDNS.
+
+** Conclusion
+My key take away from the above when it comes to Infrastructure as
+Code, is that it takes time and discipline to achieve. Moreover,
+technology evolves fast and things I considered good enough, quickly
+became an operational burden.
+
+Maybe in a couple of years time Kubernetes will have become the one
+true scheduler and will make all of the above obsolete :)
