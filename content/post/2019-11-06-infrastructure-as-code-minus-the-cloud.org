@@ -9,16 +9,16 @@ One of my favorite conversations I had with a colleague back in early
 cattles, Infrastructure as Code and the ways an organization can make
 sure that an administrator isn't leaving behind a backdoor when they
 leave the organization. We had that discussion on the day they gave
-their one month notice and announced they'll be leaving the company.
+their one month notice and announced their resignation.
 
 Ever since then, I've been thinking more and more about how
 Infrastructure as Code is the only good solution about this problem
 that's "easily" attainable. Given a good (and safe) starting point,
 i.e. a git repository with signed and properly reviewed commits, one
-should be able to recreate their infrastructure. This is of course
-assuming we're dealing with FOSS only (where again everything is
-verified and trusted) and we're not trying to solve a problem as
-described in [[https://www.archive.ece.cmu.edu/~ganger/712.fall02/papers/p761-thompson.pdf][Reflections on Trusting Trust]].
+should be able to recreate their infrastructure. This is assuming
+we're dealing with FOSS only (where again everything is verified and
+trusted) and we're not trying to solve a problem as described in
+[[https://www.archive.ece.cmu.edu/~ganger/712.fall02/papers/p761-thompson.pdf][Reflections on Trusting Trust]].
 
 Here is how I'm trying to tackle IaC now for my own *non-cloud* based
 infrastructure and the things I tried in the past.
@@ -26,11 +26,11 @@ infrastructure and the things I tried in the past.
 ** In the past
 I started using Ansible in 2013 for configuration management instead
 of managing config files by hand and clusterssh'ing around hosts. Back
-then my infrastructure consisted of cheap OpenVZ VPSes and some KVM
+then, my infrastructure consisted of cheap OpenVZ VPSes and some KVM
 VMs. None of the providers I used provided an API to provision hosts
-and thus IaC only meant config management back then for my needs.
+and, thus, IaC only meant config management for my needs.
 
-This changed in 2016 when I started renting a physical host via
+This changed in 2016, when I started renting a physical host via
 [[https://www.online.net/en][online.net]] and wanted to isolate workloads on that host. I decided to
 use Docker and KVM to achieve that. Starting and stopping Docker
 containers was easy enough using the Ansible module. Even though
@@ -39,18 +39,18 @@ etc became a pain point without a scheduler, I was contented all of
 the above was committed and versioned in a git repo.
 
 Provisioning KVM VMs on the other hand was a completely different
-story. Due to my past work experience with [[http://www.ganeti.org/][Ganeti]] and [[https://www.synnefo.org/][Synnefo]] I
-briefly considered using Ganeti, but I decided it was overkill and
+story. Due to my past work experience with [[http://www.ganeti.org/][Ganeti]] and [[https://www.synnefo.org/][Synnefo]], I
+briefly considered using Ganeti but I decided it was overkill and
 ended up using [[https://libvirt.org/][libvirt]] instead.
 
 In order to make things reproducible and committable, I hand crafted
 [[https://libvirt.org/formatdomain.html][libvirt XML]] files and used [[https://libvirt.org/sources/virshcmdref/html/][Virsh]] to interact with libvirt. Editing XML
-by hand isn't fun and I would often end up copy-pasting files without
-being sure if they would work or not, until trying them out. As an
-added bonus, I never setup PXE and [[https://wiki.debian.org/DebianInstaller/Preseed][preseeding]] thinking it would be
-hard, so I would boot a VM from the installation iso, port forward VNC
-via ssh on my local computer, use vncviewer locally and install the OS
-remotely.
+by hand wasn't fun or my cup of tea, and I would often end up
+copy-pasting files without being sure if they would work or not, not
+until trying them out. As an added bonus, I never setup PXE or
+[[https://wiki.debian.org/DebianInstaller/Preseed][preseeding]], thinking it would be hard, instead I would boot a VM from
+the installation ISO, port forward VNC via ssh on my local computer,
+use vncviewer locally and install the OS remotely.
 
 As a result of all of the above, I dreaded having to setup a new VM
 and despite the fact that everything was committed in a repo, it was
@@ -83,7 +83,7 @@ packages, run untrusted code, etc. The ease of running VMs locally has
 replaced Docker for me.
 
 ** Packer for bootstraping my base images
-Even after using Terraform, I stil had the issue of VNCing into the VM
+Even after using Terraform, I still had the issue of VNCing into the VM
 to install the OS the first time it booted. One solution would be to
 use ready made images, but I decided to roll my own in the name of
 knowing exactly what's running in the them and how to alter them.
@@ -105,31 +105,31 @@ Terraform module]]. Later stages are handled by Ansible.
 In particular, I make heavy use of [[https://docs.debops.org/en/master/][DebOps]], a collection of Ansible
 roles that are highly opinionated and tailored to work well
 together. It makes things easy, from [[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/ansible/inventory/host_vars/spinny/ferm.yml][managing specific host firewall
-rules]] all the way to writing roles that [[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/ansible/roles/synapse/defaults/main.yml#L3][depend on other DebOps roles
-to automagically setup apt repos]].
+rules]] all the way to writing roles that
+[[https://github.com/Erethon/ansible-debops-infrastructure/blob/a65c60538bb4ceeae233b183bb85611c6d610841/ansible/roles/synapse/defaults/main.yml#L3][depend on other DebOps roles to automagically setup apt repos]].
 
 ** Next steps
 Not everything is in a state I'm satisfied with yet. My end goal is to
 be able to recreate all VMs and configuration in a new physical host,
 quickly after cloning the repo and with minimal effort.
 
-One such area that can be better automated, is service and host
+One area that can be better automated is service and host
 discovery. As an example, I've got a VM that runs [[https://prometheus.io/][Prometheus]] and
 [[https://grafana.com/][Grafana]] for metrics, monitoring and alerting. Currently, when I create
-a new VM, I need to also update Prometheus so it can monitor that
-VM. [[https://www.consul.io/][Consul]] can take care of this, but I haven't decided yet if this is
-a path I want to take or if this should be handled in another layer
-(via Terraform or Ansible for example).
+a new VM, I need to also update Prometheus to monitor said VM. [[https://www.consul.io/][Consul]]
+can take care of this, but I haven't decided yet if this is a path I
+want to take or if this should be handled in another layer (via
+Terraform or Ansible for example).
 
 Another example would be to automatically update DNS entries when
 creating/deleting VMs. Again, Consul can handle DNS, but there is also
 the option of using the [[https://www.terraform.io/docs/providers/dns/index.html][Terraform DNS provider]] to update PowerDNS.
 
 ** Conclusion
-My key take away from the above when it comes to Infrastructure as
-Code, is that it takes time and discipline to achieve. Moreover,
-technology evolves fast and things I considered good enough, quickly
-became an operational burden.
+My take away, when it comes to Infrastructure as Code, is that it
+takes time and discipline to achieve. Technology evolves fast, and
+things we considered good enough in the past can quickly become an
+operational burden.
 
-Maybe in a couple of years time Kubernetes will have become the one
-true scheduler and will make all of the above obsolete :)
+Maybe in a couple of years time, Kubernetes will have become the one
+true scheduler and will make all of the above obsolete. :)
