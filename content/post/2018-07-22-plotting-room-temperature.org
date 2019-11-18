@@ -21,7 +21,7 @@ is configured to only listen on the VPN interface.
 
 I initially planned on using a cheap NodeMCU/esp8266 board to
 interface with the sensor and write a simple exporter in the
-prometheus format. I quickly scraped that idea because I’m using [[https://en.wikipedia.org/wiki/Network%255Faddress%255Ftranslation][NAT]]
+prometheus format. I quickly scraped that idea because I'm using [[https://en.wikipedia.org/wiki/Network%255Faddress%255Ftranslation][NAT]]
 at home and I would either have do port forwarding or have my router
 by a part of the VPN and assign IPs in the VPN address space.
 

@@ -17,11 +17,11 @@ cable. The ethernet cable, commonly called [[https://en.wikipedia.org/wiki/Categ
 of twisted wires. 100BASE-TX (fast ethernet) only uses two pairs of
 these wires, one pair for transmitting data (TX) and one for receiving
 (RX). So, in order to intercept the data sent from one of the hosts,
-we just need to connect the host’s TX line with our RX one. Likewise,
-to intercept incoming data to the host, we need to connect the host’s
+we just need to connect the host's TX line with our RX one. Likewise,
+to intercept incoming data to the host, we need to connect the host's
 RX line with our RX line.
 
-Note that we can’t connect both the host’s TX and RX in the same RX
+Note that we can't connect both the host's TX and RX in the same RX
 line, since fast ethernet is [[https://en.wikipedia.org/wiki/Full-duplex#Full-duplex][full duplex]]. To overcome this we need to
 use two taps, one for the received data and one for the transmitted.
 

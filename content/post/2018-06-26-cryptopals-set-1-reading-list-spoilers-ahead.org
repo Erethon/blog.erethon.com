@@ -5,11 +5,11 @@
 #+KEYWORDS: cryptopals
 
 ** Intro
-I’ve decided to Go through (this will make sense in a bit) the
+I've decided to Go through (this will make sense in a bit) the
 [[https://cryptopals.com/][Cryptopals Challenges]] in order to get more familiar with crypto
-related concepts and Golang (^_^), which I’m using to solve the
-problems. The code I’ve written for solving the challenges is
-published in[[https://github.com/erethon/matasano-cryptopals-go][ this git repo]] and I’ll be documenting any helpful
+related concepts and Golang (^_^), which I'm using to solve the
+problems. The code I've written for solving the challenges is
+published in[[https://github.com/erethon/matasano-cryptopals-go][ this git repo]] and I'll be documenting any helpful
 resources on this blog.
 
 ** Problems one and two
@@ -17,7 +17,7 @@ The first two problems are pretty much a hello world version of
 string/hex/byte manipulation, no fancy reading needed.
 
 ** Problems three and four
-Problem three requires the use of [[https://en.wikipedia.org/wiki/Frequency%255Fanalysis][frequency analysis]], something I’ve
+Problem three requires the use of [[https://en.wikipedia.org/wiki/Frequency%255Fanalysis][frequency analysis]], something I've
 implemented in the past as part of CTFs, but this time I had to pair
 it with a simple scoring function to break single byte repeating
 XOR. Cool!
@@ -33,8 +33,8 @@ pop up.
 
 First, the [[https://en.wikipedia.org/wiki/Hamming%255Fdistance][Hamming distance]] is introduced as a concept and then is
 used to find the length of the XOR key. My first implementation of the
-key-length finding algorithm didn’t work as expected and I felt I
-didn’t get why it should or shouldn’t work, so more reading was
+key-length finding algorithm didn't work as expected and I felt I
+didn't get why it should or shouldn't work, so more reading was
 required. Dave Hull has a really [[https://trustedsignal.blogspot.com/2015/07/cracking-repeating-xor-key-crypto.html][informative post about this topic]] on
 their blog, that helped me clear things up.
 
@@ -46,6 +46,6 @@ In problems seven and eight, [[https://en.wikipedia.org/wiki/Block%255Fcipher][b
 reading upon them and their [[https://en.wikipedia.org/wiki/Block%255Fcipher%255Fmode%255Fof%255Foperation][common nodes of operations]] was needed for
 me.
 
-For problem eight in particular, I enjoyed reading FiloSottile’s [[https://blog.filippo.io/the-ecb-penguin/][blog
-post on the ECB penguin]] , a picture I’ve seen in the past but never
+For problem eight in particular, I enjoyed reading FiloSottile's [[https://blog.filippo.io/the-ecb-penguin/][blog
+post on the ECB penguin]] , a picture I've seen in the past but never
 really thought about why this happens.

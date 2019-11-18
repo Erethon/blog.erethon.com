@@ -7,7 +7,7 @@
 Three months ago I installed Kippo in a low end VPS of mine. About a
 month after that, I got bored of manually checking kippo everyday so I
 made a small script to automate the process. Fast forward another two
-months and here we’re.
+months and here we're.
 
 In three months time, I had 122.487 bruteforce attempts from 339
 different IPs. Of said attempts, 130 were successful on finding the
@@ -23,16 +23,16 @@ logged out after seeing the results of =/proc/cpuinfo=. I guess people
 know about Kippo and recognize it by =/proc/cpuinfo=. After noticing
 that, I changed mine – something I suggest everyone to do as Kippo by
 default is easily identified.  There were a few hits where people
-thought it’s an actual server and not a honeypot and tried downloading
-some of their tools. I disabled =wget= but made it look like it’s
-there, so it was funny seeing them figuring out why they can’t
+thought it's an actual server and not a honeypot and tried downloading
+some of their tools. I disabled =wget= but made it look like it's
+there, so it was funny seeing them figuring out why they can't
 download their files.
 
-Unfortunately, I haven’t come across any new web shell; only some IRC
+Unfortunately, I haven't come across any new web shell; only some IRC
 bots, so nothing interesting to post about there.
 
-Of the 122.487 previously mentioned attempts, I’ve gathered 30.048
-unique passwords (around 29.500 if you don’t count extra whitespace)
+Of the 122.487 previously mentioned attempts, I've gathered 30.048
+unique passwords (around 29.500 if you don't count extra whitespace)
 and 8.525 usernames. I run both of the lists containing passwords and
 usernames against pipal. By far (49.12%) the most used username is
 root followed by test (0.8%).
