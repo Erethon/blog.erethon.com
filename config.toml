@@ -6,7 +6,8 @@ theme = "hugo-htp"
 [params]
 author = "Dionysis Grigoropoulos"
 description = "Sharing my thoughts on Decentralization, Security and Operations."
-footer = '<a xmlns:cc="http://creativecommons.org/ns#" href="https://erethon.com" property="cc:attributionName" rel="cc:attributionURL">Dionysis Grigoropoulos</a> - Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. <p> <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and the <a target="_blank" href="https://github.com/erethon/hugo-HackThePlanet-theme/">Hugo-HackThePlanet</a> theme.'
+avatar = "/images/avatar.png"
+footer = '<a xmlns:cc="http://creativecommons.org/ns#" href="https://erethon.com" property="cc:attributionName" rel="cc:attributionURL">Dionysis Grigoropoulos</a> - Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. <p><p>Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and the <a target="_blank" href="https://github.com/erethon/hugo-HackThePlanet-theme/">Hugo-HackThePlanet</a> theme.</p>'
 
 [permalinks]
 post = "/blog/:year/:month/:day/:title/"
