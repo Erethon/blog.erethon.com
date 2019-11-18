@@ -5,20 +5,21 @@ theme = "hugo-htp"
 
 [params]
 author = "Dionysis Grigoropoulos"
-description = "Personal blog of Dionysis Grigoropoulos (Erethon/dgrig)"
+description = "Sharing my thoughts on Decentralization, Security and Operations."
+footer = '<a xmlns:cc="http://creativecommons.org/ns#" href="https://erethon.com" property="cc:attributionName" rel="cc:attributionURL">Dionysis Grigoropoulos</a> - Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. <p> <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and the <a target="_blank" href="https://github.com/erethon/hugo-HackThePlanet-theme/">Hugo-HackThePlanet</a> theme.'
 
 [permalinks]
 post = "/blog/:year/:month/:day/:title/"
 blog = "/blog/:year/:month/:day/:title/"
 
 [[menu.main]]
-        Name = "Home"
-        URL = "https://erethon.com"
-        weight = 1
-
-[[menu.main]]
         Name = "Blog"
         URL = "/"
+        weight = -1
+
+[[menu.main]]
+        Name = "About"
+        URL = "https://about.erethon.com"
         weight = 10
 
 [[menu.main]]
@@ -27,6 +28,6 @@ blog = "/blog/:year/:month/:day/:title/"
         weight = 20
 
 [[menu.main]]
-        Name = "About"
-        URL = "https://about.erethon.com"
+        Name = "Mastodon"
+        URL = "https://libretooth.gr/erethon"
         weight = 30
