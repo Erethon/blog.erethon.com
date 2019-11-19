@@ -9,6 +9,8 @@ software on [[http://blog.erethon.com/blog/2015/02/27/my-mail-setup-using-mutt-s
 simple and lightweight SMTP client, that integrates really well with
 the rest of my setup.
 
+# more
+
 At its core, msmtp does one thing. It gets mail from a MUA -in my case
 mutt- and relays it to a remote SMTP server. Its strength lies in its
 [[http://msmtp.sourceforge.net/doc/msmtprc.txt][configuration file]].  All of its options can be set per account, which

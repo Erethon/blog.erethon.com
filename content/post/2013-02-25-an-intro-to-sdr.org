@@ -14,6 +14,8 @@ been a huge "revolution". It turns out that a lot of cheap USB digital
 TV tuners based on the Realtek RTL2832U chip can be tuned at a wide
 range of frequencies.
 
+# more
+
 For a list of supported devices you can check [[http://sdr.osmocom.org/trac/wiki/rtl-sdr][this page]]. I've bought
 two devices to experiment with, one is an [[http://dx.com/p/mini-dvb-t-digital-tv-usb-2-0-dongle-with-fm-dab-remote-controller-92096][EzTV 645 using the FC0013
 chip]], while the other one is using the Rafael Micro R820T chip (bought

@@ -10,6 +10,8 @@ of an old router I had laying around. Not wanting to buy a =UART= to
 spare [[http://www.maximintegrated.com/en/products/interface/transceivers/MAX3232.html][MAX3232]] left over from a previous project (for which I still
 haven't blogged).
 
+# more
+
 I just followed the schematic provided by the datasheet and 15 minutes
 of soldering later, this was the end result.
 

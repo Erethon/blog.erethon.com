@@ -4,13 +4,14 @@
 #+TAGS: cryptopals
 #+KEYWORDS: cryptopals
 
-** Intro
 I've decided to Go through (this will make sense in a bit) the
 [[https://cryptopals.com/][Cryptopals Challenges]] in order to get more familiar with crypto
 related concepts and Golang (^_^), which I'm using to solve the
 problems. The code I've written for solving the challenges is
-published in[[https://github.com/erethon/matasano-cryptopals-go][ this git repo]] and I'll be documenting any helpful
+published in [[https://github.com/erethon/matasano-cryptopals-go][this git repo]] and I'll be documenting any helpful
 resources on this blog.
+
+# more
 
 ** Problems one and two
 The first two problems are pretty much a hello world version of

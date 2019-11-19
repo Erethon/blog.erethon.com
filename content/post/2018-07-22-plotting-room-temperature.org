@@ -13,6 +13,8 @@ see how well the airconditioning unit works.
 What better way to do this than use Prometheus, Grafana and a spare
 [[https://www.raspberrypi.org/products/raspberry-pi-zero-w/][Raspverry Pi Zero W]] I had lying around.
 
+# more
+
 ** Architecture
 My prometheus server runs on a docker container, which in turn runs on
 a KVM, which in turn (squared) runs on a physical host I maintain at

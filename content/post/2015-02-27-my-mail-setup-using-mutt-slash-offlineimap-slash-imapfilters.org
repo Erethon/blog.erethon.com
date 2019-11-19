@@ -13,6 +13,8 @@ about it]].
 This is part of a series of posts where I describe my workflow and OS
 setup.
 
+# more
+
 I use email *a lot* both in work and my daily life, so I want/need to
 have a lot of control on my mail. I use IMAP for getting my email for
 all my accounts and SMTP to send mails.

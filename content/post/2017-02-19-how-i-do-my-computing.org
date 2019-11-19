@@ -13,6 +13,8 @@ dotfiles]]. This blog post is supposed to fill that void. A lot of this
 info is already documented in my private Emacs wiki, this is a more
 lengthy representation of it.
 
+# more
+
 As a side note, this post will be a huge opsec failure, but hey,
 obscurity isn't security, right?
 

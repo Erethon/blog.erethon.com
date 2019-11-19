@@ -6,6 +6,8 @@
 It's been [[http://blog.erethon.com/blog/2014/11/25/deploying-kippo-with-ansible/][over a month since I set up twelve Kippo hosts]] using my
 [[https://github.com/erethon/kippo-ansible][Ansible playbook]], time to get some stats.
 
+# more
+
 #+BEGIN_EXAMPLE
     Total Login Attempts: 4279170
     Total Unique IPs: 5439

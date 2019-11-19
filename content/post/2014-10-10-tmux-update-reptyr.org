@@ -10,6 +10,8 @@ alternative, but I don't use some of its fancy features like tabs,
 mainly because my window manager takes care of multiple terminal
 windows for me.
 
+# more
+
 After a while, I got bored of starting a tmux session and configuring
 it every time, so I decided to give [[https://github.com/tmuxinator/tmuxinator][tmuxinator]] a try. The tmuxinator
 docs clearly stated that ~tmux >= 1.8~ was needed, but I was using

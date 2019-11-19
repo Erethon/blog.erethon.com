@@ -9,6 +9,8 @@ with great results. I recently wrote an [[http://www.ansible.com/][Ansible]] pla
 the process of deploying Kippo hosts and also make it scalable. You
 can find the playbook on [[https://github.com/erethon][my GitHub page]], specifically [[https://github.com/erethon/kippo-ansible][here]].
 
+# more
+
 In a nutshell, the playbook will deploy a central database for all the
 Kippo hosts to log incoming attacks and then deploy a number of Kippo
 hosts. You can specify which repo to clone Kippo from or do ad-hoc

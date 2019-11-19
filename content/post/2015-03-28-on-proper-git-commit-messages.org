@@ -8,8 +8,9 @@ Note: this is a rant on how people use git.
 
 When I was introduced to git, I was told I should read this [[http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html][great post
 on git commit messages]] by [[http://tpo.pe/][Tim Pope]]. Ever since, I've been trying to
-follow that system in all of my commits
-across all projects.
+follow that system in all of my commits across all projects.
+
+# more
 
 Yesterday, I decided to switch from [[http://awesome.naquadah.org/][awesome]] to [[http://dwm.suckless.org/][dwm]]. I tried to apply
 one of the [[http://dwm.suckless.org/patches/][available dwm patches]], only to notice it doesn't work with

@@ -10,6 +10,8 @@ for the Raspberry Pi, that has everything that is needed to run your
 own aircraft tracking "service" already set up. I've finally had a
 chance to experiment with it and this will be my short review.
 
+# more
+
 First of all, I have to say I'm really sorry to Tomasz, because he
 send me the image at the 10th of October to test it out before
 releasing it publicly and I'm posting this two months later. Sorry

@@ -12,6 +12,8 @@ and wanted to take a look at a simple and complete Go project. I ended
 up liking the simplicity of setting up a new site and decided to try
 porting my blog to it.
 
+# more
+
 I /really/ liked the original Octopress theme and I've done a number
 of modifications to it. Some were simple CSS color changes, others
 were about removing any external dependencies, e.g., Jquery and Google

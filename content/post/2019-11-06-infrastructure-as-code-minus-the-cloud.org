@@ -11,6 +11,8 @@ sure that an administrator isn't leaving behind a backdoor when they
 leave the organization. We had that discussion on the day they gave
 their one month notice and announced their resignation.
 
+# more
+
 Ever since then, I've been thinking more and more about how
 Infrastructure as Code is the only good solution about this problem
 that's "easily" attainable. Given a good (and safe) starting point,

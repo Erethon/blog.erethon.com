@@ -9,6 +9,8 @@ mail server. I thought I had a pretty good understanding of how mail
 works, considering my [[http://blog.erethon.com/blog/2015/02/27/my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters/][mutt/offlineimap/imapfilter setup]], but I must
 say I was pleasantly surprised while setting everything up.
 
+# more
+
 For my setup I decided to go with a typical postfix/dovecot
 installation. I used a Debian KVM machine from [[http://prometeus.net][Prometeus]], which is
 based in Italy and, as far as I understand, is under the Italian

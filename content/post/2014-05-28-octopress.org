@@ -15,3 +15,5 @@ Why Octopress and not something based on Python like [[http://docs.getpelican.co
 [[http://getnikola.com/][Nikola]]? I simply decided to do something that will get me out of my
 comfort zone and also teach me something new. I already know how to
 use venv, let's see what RVM has to offer.
+
+# more
