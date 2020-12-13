@@ -32,3 +32,8 @@ blog = "/blog/:year/:month/:day/:title/"
         Name = "Mastodon"
         URL = "https://libretooth.gr/@erethon"
         weight = 30
+
+[[menu.main]]
+        Name = "RSS Feed"
+        URL = "https://blog.erethon.com/index.xml"
+        weight = 40
