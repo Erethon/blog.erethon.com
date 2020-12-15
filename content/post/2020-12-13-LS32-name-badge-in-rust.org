@@ -1,0 +1,96 @@
+#+TITLE: LS32 LCD name badge + Rust
+#+DATE: 2020-12-13
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS: software
+#+KEYWORDS: rust ls32 lcd name badge 36c3
+
+During [[https://events.ccc.de/congress/2019/wiki/index.php/Main_Page][36c3 last year]] the [[https://fossasia.org/][FOSSASIA]] assembly was selling some cheap bluetooth LCD
+name badges and I got one as to have something to fiddle with during the night
+at the hotel. There were a couple of demo units in the assembly and the people
+selling the badges encouraged everyone to try pairing their phones (via
+bluetooth) to the demo units before purchasing, as some phones weren't able to
+pair with the badges. When I was next in line to purchase one, I was asked if I
+wanted to try one of the demo units in case it doesn't work and I replied
+something along the line "If it doesn't work, I'll make it work", which made
+people in the line laugh. As it turns out, neither of the two phones I had
+access to paired with the badge, so it came down to figuring out how this thing
+worked and what other ways there were to program it.
+
+# more
+
+* Badge identification and making it work on OpenBSD while on 36c3
+The badge is most likely [[https://www.alibaba.com/product-detail/Flashing-custom-programmable-Scrolling-led-name_60723177266.html][this one]], but it came without a CD, packaging or USB
+cable. 11x44 single color LEDs (red in my case), two buttons and a micro USB
+port is all we get.
+
+Plugging the badge into a computer makes it light up and start charging with a
+cute animation of a battery and a coffee mug. Running dmesg we get:
+
+#+BEGIN_SRC
+input: LSicroelectronics LS32 Custm HID as
+/devices/pci0000:00/0000:00:01.2/usb1/
+1-1/1-1:1.0/0003:0416:5020.001B/input/input32
+
+hid-generic 0003:0416:5020.001B: input,hidraw0:
+USB HID v1.10 Device [LSicroelectronics LS32 Custm HID]
+on usb-0000:00:01.2-1/input0
+#+END_SRC
+
+and usb-devices:
+
+#+BEGIN_SRC
+P:  Vendor=0416 ProdID=5020 Rev=00.00
+S:  Manufacturer=LSicroelectronics
+S:  Product=LS32 Custm HID
+#+END_SRC
+
+which was enough information to go searching for software that would potentially
+allow me to program the badge from the USB port. When searching I found out that
+older displays were using a USB-to-Serial mode to be programmed, while the one I
+had purchased, exposed itself as a HID device. Eventually I ran into this [[https://github.com/jnweiger/led-name-badge-ls32][python
+project on GitHub]] that according to the README should work with my device. Now
+my only problem was that I only had my OpenBSD laptop with me and the project
+didn't work out of the box with it. Unfortunately, it's been almost a year since
+then and I don't recall what changes I had to make for it to work, but based on
+some chat logs from back then it seems that:
+
+- I made some small changes to the hidapi library (something along the lines of [[https://github.com/libusb/hidapi/pull/31][this]] iirc) to work in OpenBSD (and pyhidapi?)
+- Configured the kernel without uhidev support or something close to that (not sure if this was needed after changing the hidapi lib)
+
+This was enough to make it work and have scrolling text on the badge!
+
+{{< figure src="/images/ls32-badge.gif" title="libreops.cc scrolling on the LCD badge" >}}
+
+By that point it was almost 3AM, so I went to bed in order to wake up for the
+next day of CCC.
+
+* Rust + HIDAPI
+During December of 2019, the excellent [[https://oxide.computer/podcast/][On the Metal podcast]] was airing and I
+didn't miss a single episode, so when I got back from CCC I was eager to develop
+something using Rust and in particular work on something "low-level", after
+listening to so many interesting hacking stories.
+
+The state of Rust for embedded development seemed pretty good at the time, but I
+didn't have a particular project in mind that would benefit from it, so I
+decided to scratch my own itch and write a CLI to program the LED display. This
+task wasn't particulalry low-level, but it would invole communicating with
+hardware and that was good enough for me at the time.
+
+Using [[https://github.com/libusb/hidapi][HIDAPI]] as the core library for the HID interfacing made things easy and
+thankfully there was already a [[https://crates.io/crates/hidapi][Rust bindings implementation]], so the only thing
+left for me to do was to figure out what kind of messages the display expects
+and create them in Rust. Once again, people are awesome and [[http://nilhcem.com/iot/reverse-engineering-bluetooth-led-name-badge][Gautier Mechling had
+reverse engineered the protocol already]] and documented it.
+
+I wrote a really quick and dirty Rust library and an executable that takes some
+arguments (the message to show, the brightness of LEDs, if the LEDs should blink
+or not, etc) and :tada: I could program the display with code I wrote myself and
+also learned some Rust while doing it! I then abandoned the project and Rust for
+the next 12 months ^_^.
+
+* rc3 and future hacking
+As the days for [[https://events.ccc.de/2020/09/04/rc3-remote-chaos-experience/#english][rc3 draw near]] and since I'm remembering the fun I had in 36c3,
+I've decided to [[https://github.com/erethon/ls32-hid-lib][publish the Rust library]] (I still have a number of bugs to fix,
+features and documentation to add, etc) as a way to rekindle my hacking
+spirit. Tomorrow (after a bit of cleaning up) I plan on releasing the CLI
+program as well, so stay tuned.
