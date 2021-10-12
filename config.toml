@@ -2,6 +2,7 @@ baseURL = "https://blog.erethon.com/"
 languageCode = "en-us"
 title = "Erethon's Corner"
 theme = "hugo-htp"
+paginate = 30
 
 [params]
 author = "Dionysis Grigoropoulos"

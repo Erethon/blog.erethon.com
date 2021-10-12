@@ -4,6 +4,10 @@
 #+TAGS: rant software
 #+KEYWORDS: git commit message
 
+=Edit: This post was written many years ago. Back then I was a lot more=
+=strict on how other people did things and I now understand this was a mistake.
+I'm leaving this post here as a reminder of past mistakes.=
+
 Note: this is a rant on how people use git.
 
 When I was introduced to git, I was told I should read this [[http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html][great post
@@ -19,11 +23,12 @@ and try to troubleshoot it myself. Running git log I was faced with
 this commit history:
 
 #+BEGIN_EXAMPLE
-    cdec978 - applied Lukas' focus suggestion at startup, thanks (1 year, 7 months ago)
-    ...
-    d83454f - applied Peters two patches, please test hg tip, if nothing breaks this is 5.9 (3 years, 9 months ago)
-    27b0142 - applied Garys patch in a slightly modified way (3 years, 9 months ago)
-    867ba36 - applied Nicolas Capit's patch as interim solution until the multiscreen support is reworked in 6.0 (3 years, 9 months ago)
+    cdec978 - applied Lukas' focus suggestion at startup, thanks
+    d83454f - applied Peters two patches, please test hg tip,
+              if nothing breaks this is 5.9
+    27b0142 - applied Garys patch in a slightly modified way
+    867ba36 - applied Nicolas Capit's patch as interim solution until the
+              multiscreen support is reworked in 6.0
 
 #+END_EXAMPLE
 
