@@ -1,0 +1,105 @@
+#+TITLE: What a malicious matrix homeserver admin can do
+#+DATE: 2022-07-13
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS[]: matrix security
+#+KEYWORDS: matrix synapse homeserver
+
+I run my own [[https://en.wikipedia.org/wiki/Matrix_(protocol)][Matrix homeserver]] that I share with friends and family. Ever since
+I started working for Element back in February of 2020, I've learned a lot more
+about the Matrix protocol and what's possible to do with it. During a
+conversation with a few privacy minded friends that use my HS (HomeServer), I
+pointed out that the admin of a homeserver has a lot of power over their
+accounts and that they as users explicitly trust the admin. In this post, I want
+to explore and document the ways a malicious admin can mess with the privacy of a
+Matrix account. Note: malicious admin in this case can also mean a hacked admin.
+
+# more
+
+I'll talk specifically about [[https://github.com/matrix-org/synapse/][Synapse]], because that's the homeserver
+implementation I'm most familiar with, but the same arguments should apply to
+both [[https://github.com/matrix-org/dendrite][Dendrite]] and [[https://conduit.rs/][Conduit]], since they're not implementation specific but about
+the protocol itself. Moreover, I'll approach this from the perspective of a
+group of people, where everyone is using a homeserver they trust and they trust
+everyone in the rooms they participate, but one of the users is on a malicious
+homeserver.
+
+* Passive information gathering
+There's a lot of passive information gathering a malicious admin can do just by
+querying the Synapse database and this can happen retroactively. Some of the
+(meta)data include:
+
+- Chat history of any unencrypted room (duh!)
+- Information about the users of their homeserver (duh!), like devices, IPs, etc.
+- Reactions to end-to-end-encrypted (e2ee) messages, because reactions aren't
+  encrypted.
+- Room related metadata (even for e2ee rooms), room participants and their
+  avatars/nicks, the room topic, power levels, number of messages people sent
+  and when, etc.
+- URL previews of shared links (if enabled on a per room setting)
+
+* Active attacks
+A malicious admin can perform active attacks against their users and the rooms they
+participate in if they want. Some of them might be easy to spot from the
+client's perspective, others might not.
+
+** Messing with rooms
+Matrix has the notion of [[https://matrix.org/docs/guides/implementing-stateres/][state events]] which are the events that specify what a
+room looks like. They specify which users are part of the room, which users are
+banned, the power levels of users, the name and the topic of the room,
+etc. These events aren't e2ee and so, a malicious admin can both read them and
+send their own events by impersonating a user of their homeserver. This can
+mainly lead to social engineering attacks. I'll list a few ways to social
+engineer and exploit people, as there are multiple ways to do so. I'll be using
+@victim:example.com as the account the malicious admin is impersonating.
+
+- React to messages as the user being impersonated. The malicious admin won't know
+  the content of the message they're reacting to, but they'll be able to see
+  others' reactions to it.
+- Set the room topic to an attacker controlled URL. Every participant in the
+  room, regardless of homeserver, will see this as being set by
+  `@victim:example.com`, a user they personally trust. A drive-by attack or a
+  leak of the IP address of third party users is possible this way.
+- Invite accounts into the room. The newly joined account won't be able to read
+  past e2ee messages, but any messages sent after they joined will be visible
+  given the default settings of most clients.
+- Kick and ban people out of the room, which isn't that bad in itself, but can be
+  disruptive. Similarly, they can increase the power level of other users in the
+  room.
+- Send [[https://spec.matrix.org/v1.1/client-server-api/#mroomtombstone][tombstone events]], marking the room as being replaced for most clients and
+  prevent further message sending to it.
+
+In general, a room admin has multiple ways to destroy or mess up a room
+completely, to the point that the only solution is to re-create the room from
+scratch.
+
+** Messing with the user's devices
+The above attacks can be performed simply by impersonating users without adding
+any new devices to their account. However, a malicious admin can simply add a new
+device on a user's account, thus allowing the sending and receiving of e2ee
+messages.
+
+In most clients, this will show up as an unverified device, resulting in a red
+shield icon to be added in the room to showcase the presence of the unverified
+device. My personal experience is that most people, even privacy minded tech
+savvy ones, simply ignore this for various reasons. I'm guilty of ignoring this
+as well. There's however a per session and per room setting to disable your
+client from sending messages to unverified devices, if one wants to be completely
+safe.
+
+In most cases, the attacked user will get a popup in their client that a new
+unverified device was added. There are ways to circumvent this by not reporting
+this new device to the user, however I don't know if encryption will continue
+working properly for the user in this case.
+
+* Summary
+You can't prevent a malicious admin from reading the various (meta)data or
+irreversibly messing up a room, if the user on their homeserver has sufficient
+power levels. You can, however, prevent them from reading e2ee messages, if
+everyone follows proper device hygiene and doesn't send messages to unverified
+sessions.
+
+A possible solution for this type of problems would be for peer-to-peer (p2p)
+Matrix to become a reality. In a p2p setup, a device (like a mobile phone) acts
+as both a client and a server at the same time. This completely removes the
+third party admin from the picture, effectively making the users the admins of
+their own homeserver!
