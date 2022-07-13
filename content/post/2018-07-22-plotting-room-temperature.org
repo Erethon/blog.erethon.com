@@ -16,16 +16,16 @@ What better way to do this than use Prometheus, Grafana and a spare
 # more
 
 ** Architecture
-My prometheus server runs on a docker container, which in turn runs on
-a KVM, which in turn (squared) runs on a physical host I maintain at
+My prometheus server runs in a docker container, which in turn runs in
+a KVM, which in turn (squared) runs in a physical host I maintain at
 online.net. I use a VPN to connect all of my hosts and [[https://github.com/prometheus/node%255Fexporter][node_exporter]]
 is configured to only listen on the VPN interface.
 
 I initially planned on using a cheap NodeMCU/esp8266 board to
 interface with the sensor and write a simple exporter in the
 prometheus format. I quickly scraped that idea because I'm using [[https://en.wikipedia.org/wiki/Network%255Faddress%255Ftranslation][NAT]]
-at home and I would either have do port forwarding or have my router
-by a part of the VPN and assign IPs in the VPN address space.
+at home and I would either have to do port forwarding or have my router
+be a part of the VPN and assign IPs in the VPN address space.
 
 I opted for the simpler solution, use a Raspberry Pi and just have it
 be a client to the VPN. This also meant I got to test [[https://debops.org/][DebOps]] on armv6
