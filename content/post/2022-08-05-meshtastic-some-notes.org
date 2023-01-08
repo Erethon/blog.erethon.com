@@ -1,0 +1,128 @@
+#+TITLE: Meshtastic: Quick review and some notes
+#+DATE: 2022-08-05
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS[]: hardware offgrid lora
+#+KEYWORDS: meshtastic offgrid lora messenger reticulum
+
+A friend recently introduced me to the [[https://meshtastic.org/][Meshtastic]] project, an open source
+"platform" for creating long range, off-grid, mesh networks for short messages
+based on [[https://en.wikipedia.org/wiki/LoRa][LoRa]]. After playing with the hardware and the software for a few days,
+here are my thoughts on it and notes on how it works.
+
+# more
+
+* What is Meshtastic
+The [[https://meshtastic.org/docs/about#what-is-meshtastic][Meshtastic website]] describes the project as an off-grid, encrypted
+communications platform of open source software running on affordable radios. I
+think this is pretty accurate, but it needs some explaining.
+
+I see Meshtastic as the ecosystem that defines a protocol to create a mesh
+network over LoRa, plus the required software to implement the protocol, plus
+the hardware needed, plus the firmware for this hardware. Except for the
+hardware, the above are open source projects, released under the GPLv3. The
+software includes: the [[https://github.com/meshtastic/Meshtastic-protobufs][protocol buffers]] definitions, a [[https://github.com/meshtastic/Meshtastic-python][Python CLI and API]] to
+communicate to Meshtastic devices, [[https://github.com/meshtastic/Meshtastic-device][firmware for various devices]], Android
+[[https://github.com/meshtastic/Meshtastic-Android][companion app]] to interact with devices, etc. Development happens [[https://github.com/meshtastic][in a GitHub org
+in public]]. My understanding is that the protocol is mainly defined by the
+protobuf implementation and the mesh algorithm is defined [[https://meshtastic.org/docs/developers/Firmware/mesh-alg][here]].
+
+** What is LoRa
+LoRa, often seen as LoRa PHY, is a **proprietary/patented** radio communication
+technique and specifies the physical layer of the standard. A separate layer
+build on top of LoRa called LoRaWAN that adds support for higher level APIs is
+often used for IoT devices. Meshtastic uses only the **LoRa PHY** layer.
+
+LoRa uses the [[https://en.wikipedia.org/wiki/ISM_radio_band][ISM band]], which doesn't require a license to operate on under
+specific conditions, so everyone can use this band and transmit to it, even
+encrypted messages.
+
+LoRa has been reverse engineered and various GNU Radio implementations of it
+have been developed ([[https://github.com/rpp0/gr-lora][receive only]], [[https://github.com/tapparelj/gr-lora_sdr][transceiver]]). For more information on LoRa,
+I recommend watching [[https://www.youtube.com/watch?v=NoquBA7IMNc][this talk]] from [[https://twitter.com/embeddedsec][Matt Knight]].
+
+** Hardware
+This is the [[https://meshtastic.org/docs/category/supported-hardware][list of officially supported hardware]]. Some of them are development
+boards for which the Meshtastic project wrote a custom firmware for and
+converted them into Meshtastic devices. The rest are hardware projects build
+specifically targeting Meshtastic as a use case. More devices that are in
+development stages exist, but are not part of the above list as they're not
+"production ready".
+
+Most devices aren't open source hardware. Published schematics in the form of
+PDFs (with no license files) exist for a few of the commercial devices. For the
+community designed devices, usually full CAD/schematic files are
+provided. However, since LoRa is patented, I believe a truly open device for now
+is impossible to get.
+
+The most popular device, the [[https://meshtastic.org/docs/hardware/supported/tbeam][TTGO T-Beam]], is powered by an ESP32 for BLE and
+Wi-Fi, a SX1276 for LoRa, has a 0.96 inch OLED display, a NEO-6m GPS receiver,
+a SMA antenna connector, a 18650 cell for battery power and a USB port. The USB
+port can charge the battery, act as an API interface to communicate with the
+device and flash new firmware to the device.
+
+** Software
+There are three ways to interact with most boards, via BLE, via Wi-Fi or via the
+USB port. I tried all three and everything worked out of the box. The [[https://github.com/meshtastic/Meshtastic-Android][Android
+application]] is easy to use and pretty bare bones. It also has a debug log
+interface that makes it easy to troubleshoot issues in case any arise. The
+Python CLI app was also very intuitive to use, but I didn't get to use it much
+since BLE was easier to use.
+
+** Encryption
+The Meshtastic documentation has a [[https://meshtastic.org/docs/developers/Firmware/encryption][page dedicated on their encryption
+scheme]]. I'm not a cryptography expert, but I've [[https://blog.erethon.com/blog/2018/06/26/cryptopals-set-1-reading-list-spoilers-ahead/][dabbled in cryptography a bit]],
+so here's what my understanding of it is.
+
+It uses a **symmetric** AES256 cipher, with the key being derived from the
+Channel name. This means, that all nodes in the mesh use the same key and a
+single node compromise will reveal the key. Since the same key is used throught
+the session, a leaked key can decrypt all past and future messages (i.e there's
+no [[https://en.wikipedia.org/wiki/Forward_secrecy][Perfect Forward Secrecy]]). Encryption is hardware accelerated on ESP32 based
+boards.
+
+For an off-the-grid emergency messenger this sounds fine to me, not everything
+needs to be perfect. I'm not sure if the baud rate of the mesh network allows
+for more advanced encryption schemes (assymetric ciphers) in the first place.
+
+* User Experience
+The user experience has been stellar for me and is something that I highly value
+nowadays. The software made me feel that even a non-techie user will be able to
+figure this out.
+
+As an example, when I turned on the T-Beam board for the first time and paired
+it over BLE with a smartphone, the application performed an automatic
+over-the-air update of the installed firmware on the board, without me having to
+do anything!
+
+* Range
+Together with the friend that introduced me to the project, we performed various
+tests in an urban environment, specifically in one very dense area in Athens,
+Greece. Athens is often referred as "concrete city" by the locals, due to the
+fact that all buildings are made of cement. Cement is very good at absorbing
+radio signals, so I didn't expect to get great range results, but I was
+pleasantly surprised.
+
+Our first test was with both nodes inside our apartment buildings. We live
+about 650 meters (0.4 miles) apart, but the nodes were able to communicate and
+contact each other!
+
+The max range we managed to get was 1.25km (0.77 miles) between two nodes on a
+small uphill. I have the feeling that if one of the notes is in higher
+elevation, even without direct line of sight, the range can be increased by a
+lot. In close ranges (<300m), communication was spotless and worked all the time
+without issues.
+
+* Next steps
+** More range tests
+I want to perform more range tests, some especially long ones but with direct
+line of sight from the top of a mountain. I, also, would like to give different
+antennas a try, since all of the tests performed so far were with a small build-in
+omni-directional antenna.
+
+** Reticulum/Rnode
+[[https://reticulum.network/][Reticulum]], a cryptography based networking protocol for local and wide area
+networks, has support for LoRa based devices. Specifically, it supports the same
+[[https://github.com/markqvist/rnode_firmware#supported-hardware][TTGO T-Beam device]], so I would like to see how other projects behave on the same
+hardware. Reticulum has the advantage that it supports [[http://reticulum.network/crypto.html][modern cryptography]] and
+allows combining of different networks adapters, i.e. a LoRa device with an
+Ethernet one.
