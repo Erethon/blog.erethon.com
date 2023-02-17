@@ -1,0 +1,63 @@
+#+TITLE: More notes on Meshtastic and its v2.0 update
+#+DATE: 2023-01-08
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS[]: hardware offgrid lora
+#+KEYWORDS: meshtastic offgrid lora messenger reticulum
+
+In a [[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][previous post]] I documented my experience with the [[https://meshtastic.org/][Meshtastic]] project and
+one of the TTGO T-Beam boards. Since then, I've experimented more with meshtastic
+and its capabilities, while the new version 2.0 of the project got released, so
+some updated notes are in order!
+
+# more
+
+* Version 2.0
+On November 1st 2022, the [[https://meshtastic.org/2.0][version 2.0]] of the project was released. According to
+the documentation, a lot of things got updated, with changes to better facilitate
+bigger networks, better meshing, faster messaging, more hardware options,
+etc. I suggest you read the release notes and changelog(s) for a complete list
+of the changes, but here's some highlights I noticed.
+
+- In version 1.3 support for analog sensors (i.e. DHT11/DHT22) was
+  removed. Going forward, sensors needed to use I2C to work. This made the
+  codebase cleaner and smaller in size (I think), so it's a welcome change. The
+  2.0 version added support for more sensors and also auto-detection capabilities.
+- Added JSON messages for the MQTT feature.
+- A new web based (i.e. via your browser) [[https://flasher.meshtastic.org][flasher is available]] to flash boards
+  via USB. It worked out of the box for me with Chromium packaged under
+  Debian 11. This makes it easy to update your firmware version with a nice UX.
+
+I also noticed the Android application was performing better than it did in the
+past and there's support for more mapping services (i.e. openstreetmap). All in
+all, the project looks and feels more polished.
+
+* Range tests
+Over the last two weeks, together with the friend that introduced me to the
+project, we performed some range tests using the latest versions of the
+firmware. All tests were performed using the TTGO T-Beam v1.1 boards (Semtech
+SX1276) with stock antennas on the EU_868 band and the `LONG_FAST` modem
+preset. There are newer boards out there with better LoRa chips today.
+
+The tl;dr is that as long as there's line of sight or something close to line of
+sight (a small hill between us wasn't a problem when one of us was elevated),
+communication works flawlessly. So far, we've tested up to 13km (8.07 miles) with
+a small hill in the way and it always worked. At 13km we got a SNR of -11.5 and
+a RSSI of -127, however the communication was pretty good and we were able to
+have a proper IM-like experience.
+
+The most impressive part was that we were able to communicate in a distance of
+3.5km with one board being on a balcony on the second floor of a block of flats
+and the other one being on ground level. But this time, there was no line of
+sight between the two boards. Using the `LONG_FAST` modem preset, message
+delivery wasn't working reliably. Changing the modem preset to 'LONG_SLOW',
+improved our message delivery to around 80%.
+
+{{< figure src="/images/tbeam-penteli.jpg" title="T-beam board on top of the Penteli mountain. There's an arrow pointing at the location of the other T-Beam." >}}
+
+* Next steps
+I plan on buying a NanoVNA to build a couple of antennas and test things
+again. The first test should be a quarter wave ground plane antenna, as I've seen
+a lot of people have build those with good results.
+
+As stated previously, I want to experiment with the [[https://reticulum.network/][Reticulum]] network on these
+devices to see what's possible with a more complex network architecture.
