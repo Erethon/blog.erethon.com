@@ -39,3 +39,20 @@ blog = "/blog/:year/:month/:day/:title/"
         Name = "RSS Feed"
         URL = "https://blog.erethon.com/index.xml"
         weight = 40
+
+[mediaTypes]
+  [mediaTypes.'text/micron']
+    suffixes = ['mu']
+
+[outputs]
+  home = ['HTML', 'RSS', 'MICRON']
+  page = ['HTML', 'MICRON']
+
+[outputFormats]
+  [outputFormats.Micron]
+    name = 'MICRON'
+    isPlainText = true
+    mediaType = 'text/micron'
+    protocol = ''
+    path = '/micron/'
+    permalinkable = true
