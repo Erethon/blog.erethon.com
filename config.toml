@@ -15,6 +15,7 @@ disablereferrer = true
 [permalinks]
 post = "/blog/:year/:month/:day/:title/"
 blog = "/blog/:year/:month/:day/:title/"
+log = "/log/:year/:month/:day/:title/"
 
 [[menu.main]]
         Name = "Blog"

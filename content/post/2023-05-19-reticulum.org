@@ -1,0 +1,145 @@
+#+TITLE: Introduction to Reticulum
+#+DATE: 2023-05-19
+#+AUTHOR: Dionysis Grigoropoulos
+#+TAGS[]: hardware offgrid lora reticulum
+#+KEYWORDS: reticulum offgrid lora rnode
+
+In my last two posts [[[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][1]], [[{{% ref 2023-01-08-meshtastic-part-2.org %}}][2]]] about Meshtrastic, I mentioned how I wanted to
+experiment with [[https://reticulum.network][Reticulum]]. Now, I'm excited to share my experience and provide
+an introduction to the project!
+
+# more
+
+* What is Reticulum
+The Reticulum website provides a very rough explanation of what Reticulum is and
+what it does. To quote parts of it:
+
+#+BEGIN_SRC
+Reticulum is the cryptography-based networking stack
+for building local and wide-area networks with readily
+available hardware. Reticulum can continue to operate
+even in adverse conditions with very high latency and
+extremely low bandwidth.
+
+The vision of Reticulum is to allow anyone to operate
+their own sovereign communication networks, and to make
+it cheap and easy to cover vast areas with a myriad of
+independent, interconnectable and autonomous
+networks. Reticulum is Unstoppable Networks for The
+People.
+
+Reticulum is not one network. It is a tool for building
+thousands of networks. Networks without kill-switches,
+surveillance, censorship and control.
+#+END_SRC
+
+Lots of important keywords here, let's explain what it all means.
+
+- _Cryptography based_: Reticulum is end-to-end-encrypted (e2ee), this means
+  that only the sender and the receiver of a packet can read the contents of
+  said packet. This also means that the source of a packet cannot be
+  impersonated.
+- _Readily available hardware_: Reticulum is made to work over a wide range of
+  [[https://reticulum.network/manual/interfaces.html][transport protocols and mediums]], from link local address or AX.25 KISS frames
+  to I2P tunnels and LoRa PHY packets. The hardware that's supported ranges from
+  ethernet or wifi devices to HF/VHF/UHF/etc radios and development boards with
+  LoRa chips.
+- _Interconnectable and autonomous_: Reticulum networks and devices can be
+  connected to other Reticulum networks or remain independed. The devices can be
+  part of a mesh or have strict and predetermined topographies.
+
+If you're still feeling lost, the gist of it is that Reticulum is a tool, in
+particular, a set of APIs/specs that help you build cryptography based networks
+over various mediums.
+There's a [[https://github.com/markqvist/Reticulum][reference implementation of the network stack]] written in Python, along
+with [[https://github.com/markqvist/RNode_Firmware][firmware for LoRa devices]], a computer [[https://github.com/markqvist/NomadNet][application for messaging and page
+browsing]], a mobile [[https://github.com/markqvist/Sideband][application]] and so much more.
+
+I want to highlight the fact that this isn't a single network, but a tool to
+create multiple networks over different mediums. Having said that, there's
+currently a small testnet that works over the public internet and I2P tunnels
+as a way for people to easily run experiments.
+
+* Features, usecases and examples
+The reticulum website has extensive documentation on every aspect of the system
+and explanation on how things work. It's really good. I recommend reading parts
+of it to get a better grip on what's possible. Here are the features and work
+that blew my mind:
+
+- Devices can request resources from other parts of the network without
+  identifying themselves first. Revealing your identity to the other end is up
+  to you.
+- Different networks that use different transports can be easily connected with
+  each other. For example, connecting a network with three LoRa nodes to the
+  testnet that uses TCP/IP, only requires a single of those LoRa nodes to be
+  able to communicate with the testnet. The rest of the nodes or the testnet are
+  gonna use said node as a "router".
+- A side effect of the above point, and the way Reticulum works, is that devices
+  can move across the world, even change their network interfaces or medium and
+  still be accessible once they find a way to rejoin the network.
+- [[https://unsigned.io/rnode/][RNode]]. RNode deserves a blog post on its own. It's a firmware for various LoRa
+  development boards that enables them to act like a swiss army knife for
+  LoRa. From sniffing LoRa traffic all the way to being an interface for
+  Reticulum. Moreover, they're able to self-host the RNode software and
+  replicate it to other devices, making it easy to create more RNodes in the
+  field.
+
+* My Reticulum journey so far
+My understanding of the stack isn't complete yet. I've contributed some bug
+fixes to the codebase or documentation changes, but there's still a lot to learn
+and figure out. Some of the cool things I've tried so far include:
+
+I've spun up some nodes on the testnet. These include both Debian hosts and
+OpenBSD ones for testing the build-in encryption primitives (instead of using
+OpenSSL).
+
+Next, I connected my laptop to the testnet over LoRa. WiFi on my laptop was
+turned off and its only means of networking was by using a RNode connected to
+it. My desktop, which was connected to the testnet via the public internet also
+had a RNode device attached and acted as the "router" for the laptop. Here's a
+webm of my laptop connecting to a BBS-like service over LoRa.
+
+{{< webm src="/images/bbs-lora.webm" >}}
+
+It's not easy to spot it in the video, but this is bi-directional. I'm making
+requests to the BBS service over LoRa and the BBS replies back to me. This uses
+[[https://github.com/acehoss/rnsh][rnsh]] and the BBS is a service hosted on the testnet by [[https://github.com/acehoss][acehosh]], who developed
+rnsh.
+
+Next, I tried replicating what Mark (the creator of Reticulum) [[http://unsigned.io/articles/2018_06_30_15-kilometre-ssh-link-with-rnode.html][did here]]. He used
+RNodes to SSH over LoRa, without using Reticulum but plain LoRa PHY. However,
+messing around with ax25 seemed a bit too troublesome to me. Rnsh on the other
+hand, claimed it could provide a ssh/telnet like experience over Reticulum. So,
+I grabbed my laptop and headed for the nearby mountain while my desktop was
+still connected to the testnet over TCP/IP and had a RNode attached.
+
+Once I was near the top, I turned on the laptop, attached the RNode and tried
+accessing my desktop. It worked on the very first try! Almost *1.7 kilometers*
+away from my apartment, without a clear line of sight, since one of the RNodes
+was inside a concrete apartment. It just worked, like radio sorcery! And it
+wasn't just rnsh that worked. I was able to access the testnet, as well as other
+people from the testnet were able to access files on my laptop node.
+
+* Next steps and work in progress
+Life hasn't been kind to me for the past few months, thus some Reticulum related
+projects I've started were left in limbo. I do want and plan to continue working
+on them, I just don't know when I'll be able to spent more time on them.
+
+- I tried adding support for Micron, a custom markup language used for hosting
+  pages with links in Reticulum/NomadNet to my [[https://github.com/Erethon/hugo-HackThePlanet-theme][custom Hugo theme]]. I need to iron
+  out some bugs and document it to NomadNet/elsewhere.
+- I started developing a parser for Reticulum packets in Rust. This ended up
+  being a [[https://github.com/Erethon/reticulum-packet-rs][library that can parse packets]] and a [[https://github.com/Erethon/reticulum-packet-viewer][small CLI utility]] that can print
+  them out using the library. I used this while learning both Rust and how
+  Reticulum works. I've got a bunch of external feature requests for what the
+  library and the CLI should do, some of these are already implemented, but I
+  haven't completed the work yet. Personally, I would love to find the time to
+  extend the library to a proper Reticulum library for Rust, that can both parse
+  and create packets.
+
+* Future of Reticulum
+I haven't followed the project closely in the last two months, but it seems to
+be gaining a lot of popularity! If you can, please [[https://unsigned.io/][support Mark]], the main
+developer behind Reticulum, since it's obvious he's spent so much time and
+effort in this very polished piece of software/hardware/stack that is free for
+all of us to use!
