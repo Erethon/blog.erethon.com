@@ -4,7 +4,7 @@
 #+TAGS[]: hardware offgrid lora reticulum
 #+KEYWORDS: reticulum offgrid lora rnode
 
-In my last two posts [[[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][1]], [[{{% ref 2023-01-08-meshtastic-part-2.org %}}][2]]] about Meshtrastic, I mentioned how I wanted to
+In my last two posts [[[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][1]], [[{{% ref 2023-01-08-meshtastic-part-2.org %}}][2]]] about Meshtastic, I mentioned how I wanted to
 experiment with [[https://reticulum.network][Reticulum]]. Now, I'm excited to share my experience and provide
 an introduction to the project!
 
@@ -45,7 +45,7 @@ Lots of important keywords here, let's explain what it all means.
   ethernet or wifi devices to HF/VHF/UHF/etc radios and development boards with
   LoRa chips.
 - _Interconnectable and autonomous_: Reticulum networks and devices can be
-  connected to other Reticulum networks or remain independed. The devices can be
+  connected to other Reticulum networks or remain independent. The devices can be
   part of a mesh or have strict and predetermined topographies.
 
 If you're still feeling lost, the gist of it is that Reticulum is a tool, in
@@ -78,7 +78,7 @@ that blew my mind:
   can move across the world, even change their network interfaces or medium and
   still be accessible once they find a way to rejoin the network.
 - [[https://unsigned.io/rnode/][RNode]]. RNode deserves a blog post on its own. It's a firmware for various LoRa
-  development boards that enables them to act like a swiss army knife for
+  development boards that enables them to act like a Swiss army knife for
   LoRa. From sniffing LoRa traffic all the way to being an interface for
   Reticulum. Moreover, they're able to self-host the RNode software and
   replicate it to other devices, making it easy to create more RNodes in the
@@ -103,7 +103,7 @@ webm of my laptop connecting to a BBS-like service over LoRa.
 
 It's not easy to spot it in the video, but this is bi-directional. I'm making
 requests to the BBS service over LoRa and the BBS replies back to me. This uses
-[[https://github.com/acehoss/rnsh][rnsh]] and the BBS is a service hosted on the testnet by [[https://github.com/acehoss][acehosh]], who developed
+[[https://github.com/acehoss/rnsh][rnsh]] and the BBS is a service hosted on the testnet by [[https://github.com/acehoss][acehoss]], who developed
 rnsh.
 
 Next, I tried replicating what Mark (the creator of Reticulum) [[http://unsigned.io/articles/2018_06_30_15-kilometre-ssh-link-with-rnode.html][did here]]. He used
