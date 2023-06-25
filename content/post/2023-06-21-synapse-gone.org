@@ -1,0 +1,217 @@
+
+#+TITLE: What happens when a Matrix server disappears?
+#+DATE: 2023-06-21
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: matrix synapse
+#+KEYWORDS: matrix synapse database
+
+Ever since I started using [[https://en.wikipedia.org/wiki/Matrix_(protocol)][Matrix]], I always wondered what would happen if a
+Matrix homeserver got deleted and then recreated, without any data on the
+database. Would the federated servers complain a lot about it? Would federated
+rooms work once the server was recreated and started federating again? I
+never had the chance or time to properly investigate this.
+
+Well, that is until the hardware node that hosted my Matrix database died.
+
+# more
+
+* How did it come to this?
+I've been renting a dedicated server from online.net since 2016, using their
+cheapest offering. I then spun up multiple KVM based virtual machines via
+Terraform for my various usecases, while having everything defined as
+Infrastructure as Code in a git repo. This is documented in an [[{{% ref 2019-11-06-infrastructure-as-code-minus-the-cloud.org %}}][older post of
+mine]] alongside my [[https://github.com/erethon/ansible-debops-infrastructure/][IaC repo]]. You should check them out ;)
+
+I had setup two VMs for Matrix. One was hosting Element-web and the Synapse
+Python implementation, and the other one was hosting the Postgres
+database. Everything was defined as code via Ansible and, specifically, via the
+[[https://docs.debops.org/en/stable-3.0/][DebOps]] collection of roles.
+
+Initially, everything was backed up one way or another. However, over time, the
+Matrix server and its database ended up taking more space than I had planed, so
+I made two decisions.
+
+- I stopped backing up the local media files uploaded by the users of my
+   homeserver.
+- I setup a replica for the database in a different hardware host in Hetzner
+   and, at the same time, stopped taking weekly snapshot of the database.
+
+I know that replication isn't a backup. I've setup both [[https://github.com/wal-e/wal-e][wal-e]] and later [[https://github.com/wal-g/wal-g][wal-g]] in
+my profesional career as proper Postgres point-in-time-recovery backups, but
+this was something I wasn't willing to do yet for my Matrix setup. At least, not
+until I had an object storage solution (like [[https://min.io/][min.io]]) running at home.
+
+Eventually, the Hetzner server became too old to keep paying for it, and I
+upgraded to a newer one, but never setup the replication again. It was always in
+the back of my mind, but I never got around to it because other things in life
+took priority.
+
+At the end of the day, the Matrix server was only used by me, family, friends
+and maybe friends-of-friends. In the extreme case that there was data loss, they
+would be understanding. I was running this for fun after all, it wasn't used
+professionally in any way.
+
+* Server goes boom
+One fine evening, the hardware server and the VMs simply stopped responding to
+network packets. This wasn't unheard of, during the last ~7 years I remember two
+times that something happened to the datacenter and the server had lost
+conectivity, so I figured it was something similar. After 30 minutes of not
+seing an update on the status page of online.net, I tried rebooting the server
+via their hardware management interface. I got back an error, so I opened a
+support ticket with them.
+
+Within a couple of minutes they had replied and the verdict was in. The server
+experienced a hardware failure, but the SSD was fine. However, they informed me
+they wouldn't be able to perform any operations on it, because the server chasis
+was shared with other customers and getting access to the disk meant they would
+have to power off all the servers in the rack. Initially this sounded a bit
+weird to me, it was a dedicated server after all. However, thinking more about
+it and having seen how compact and custom the DCs for both online.net and
+Hetzner are, it kinda made sense.
+
+It took me about 30 minutes to calm down and start bringing services back
+online. This consisted mainly of running Terraform, waiting for Ansible to
+finish running the playbooks and uploading backups of other things to the new
+server. Within a couple of hours, most of the public facing services were back
+online on a new hardware server and VMs combo in a different provider (Hetzner).
+
+It was now time to figure out what to do with the Matrix service.
+
+* Just yolo it
+I decided that it wasn't worth trying to recover from a very old backup. It made
+more sense to just start from a clean slate and see what works and what
+doesn't. I created two new VMs, ran Ansible and voila! I had a new Matrix
+server, complete with a new TLS cert, behind a proxy, a dedicated database, a
+hosted version of Element-web, etc. Except that the database was empty and
+Synapse logs were full of messages about other homeservers sending us events for
+rooms we weren't part of. This looked like my cup of fun!
+
+I created a new user, making sure to use my old MXID, and I logged in to my new
+account on element-web. As I expected however, everything was gone. My user
+wasn't participating in any rooms, nor had any DMs open or an avatar set or any
+user settings. This makes sense, since all of this state was stored in the now
+empty database.
+
+Creating non-federating rooms worked, with users on my local homeserver being
+able to exchange messages. Trying to federate with other servers though, proved
+a bit hard. That's because most servers had given up on trying to connect to my
+server and blacklisted it, as it was offline for a couple of hours. Eventually,
+all remote servers removed my server from their blacklist and re-connected.
+
+* Heisenstate
+So, local rooms worked fine, but what about federated rooms?  What does the
+state of the room looks like to remote severs, compared to the state in my
+server?
+
+From a remote server's perspective, nothing has changed about my server. It just
+happened to go offline for some amount of time and it still participates in all
+of the rooms it participated before. As such, the remote servers continue to
+send events to my server about what's happening in those rooms.
+
+From my server's perspective however, no local user is participating in all
+those federated rooms that these pesky remote servers keep spamming it with
+events! Synapse logs all these requests as:
+
+#+BEGIN_SRC
+synapse.federation.federation_server - 458 - INFO - PUT-2617627
+- Ignoring PDU for unknown room_id: !XXXXXXXXX:XXXXXXXX.XXX
+#+END_SRC
+
+This means that we're in a weird twillight state, where remote servers think
+we're participating in a room, but we don't know anything about those rooms and,
+moreover, we ignore what we're being told about them.
+
+* "Fixing" the mess
+The simplest fix I could think of was to rejoin all the rooms manually. In
+theory, my server would send a `join room` state event, the remote servers would
+update the membership state for my user and my server would pull all the history
+about the room from the remote servers. I tried it and... it worked perfectly
+for public rooms! To other Element users, the only visible thing that something
+was different, would be a change in my device list and a change in my profile
+picture when I joined a room.
+
+What about non-public rooms? Or what about figuring out all the old public rooms
+I was in? Or the rooms other local users were part of?
+
+In order to figure out which rooms I and my users should join, I came up with a
+stupid plan. All I had to do was look at the Synapse logs for any room IDs my
+server was getting events for but ignored. This would only happen for rooms the
+local users weren't part of yet. After a day, I had a list of ~150 affected
+rooms.
+
+In the end, I generated a list of matrix.to links with the corresponding `via`
+parameter set and just started clicking through them, one by one. And to my
+surprise, this worked great, even for private rooms and DM rooms.
+
+Of course, I couldn't read the history in encrypted rooms since my client didn't
+have the keys for old messages. Likewise, I couldn't join rooms I wasn't part of
+in the first place, like private federated rooms other local users were part
+of. But they could once their user was re-created locally.
+
+This experience felt very magical and weird at the same time. On one hand,
+federation worked as expected, the room history was distributed amongst all the
+participating servers and I was able to pull it and continue talking from where
+I was left. On the other, no remote user had a way to figure out that something
+bad had happened on my end. This meant that, they could be talking in a private
+DM room with a user on my server and if that user hadn't rejoined the DM room:
+
+- The local user would never be notified about messages in that room.
+- The remote user wouldn't ever know that the local user had no way to learn
+   about this room. From their point of view, it would look like the local user
+   just ignored them.
+
+Unfortunately, this happened to one user of my server that had a lot of 1:1
+conversations with people on other homeservers. To make matters worse, they were
+together in a bunch of other rooms, so it looked like they only ignored them in
+some specific rooms.
+
+* Security implications
+From the moment I re-joined a private room and realized that the other
+participants weren't aware of what had happened, I started thinking if this was
+a potential attack vector.
+
+Generally, for protocols like Matrix, XMPP or email that depend on DNS to work,
+if a malicious actor can control the target's DNS records, it's game over. They
+can take full control of the domain and, from there, can easily impersonate
+their target on any of the above protocols.
+
+From a user's perspective this is no different than using a homeserver run by a
+malicious admin. I explored this scenario in [[{{% ref 2022-07-13-matrix-homeserver-admin.org %}}][a previous blog post]] and I believe
+the same safeguard applies here as well. In order to be safe from bad actors
+that have control over the DNS infrastructure, the only option is to set your
+client to never send messages to unverified devices. This is a huge PITA and I
+don't believe I know anyone that has this setting enabled.
+
+However, this won't prevent metadata leakage. Let's assume an attacker has
+control of the DNS infrastructure and they briefly (say for five minutes) set
+our domain to point to an IP they control. They can, in that timeframe, get the
+most recent state of all federated rooms simply by asking remote homeservers
+about it. The federated homeservers will see that our server is part of the room
+and happily share the state with the attacker. Then, the attacker can switch
+back the DNS records and, in most cases, no one would have figured this ever
+happened.
+
+This isn't any ground breaking attack, the same problem exists for any protocol
+that uses DNS. This is why you need to be monitoring and alerting for unplanned
+DNS record changes of your domains.
+
+Where this differs from email or XMPP is that, by design, Matrix homeservers will
+keep the history of rooms and gladly share it over federation with servers that
+ask for it (and have the permissions to view it). This, unfortunately, is a big
+potential metadata issue.
+
+Public Service Announcement: If you had ever setup Matrix on a domain, make sure
+you keep control of that domain. Otherwise, in the future people might be able
+to get a lot of metadata about your past federated chat rooms, even inactive
+ones. The caveat here is that the attacker needs to know the ID of a room for
+this to work, but it's easy to figure out room IDs if there's **any** kind of
+event in a room. Leaving rooms before you kill your Matrix homeserver will
+prevent this.
+
+Edit: Part of this is documented in the [[https://spec.matrix.org/v1.7/server-server-api/#security-considerations][Server-to-Server Matrix API]]. Thank you
+[[https://github.com/turt2live][Travis]] for pointing this out.
+
+* What a wild ride this was
+The security implications of this has made me more paranoid about metadata in
+Matrix. However, this was a fun and learning experience for me, as I got a very
+good reason to dive deeper into the Matrix (white-)rabbit hole.
