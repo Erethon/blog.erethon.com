@@ -1,0 +1,39 @@
+#+TITLE: October 2023 updates
+#+DATE: 2023-11-02
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: log reticulum lora
+#+KEYWORDS: fosscomm reticulum
+
+Updates on some of the things I've been up to during October 2023.
+
+# more
+
+* FOSSCOMM2023
+
+I gave a talk at [[https://2023.fosscomm.gr/en/][FOSSCOMM2023]], a Greek conference that took place in Crete. It's
+mostly centered around FOSS and all things Open. The talk was about LoRa,
+Meshtastic and Reticulum. Slides and sources can be found [[https://github.com/Erethon/presentations/blob/main/fosscomm2023/][here]].
+
+In order to properly test the Reticulum meshing capabilities, together with some
+friends we setup a small mesh network in Athens, Greece that worked over LoRa.
+Reticulum performed great and we were able to communicate in distances over 13km
+and even have a shell session using [[https://github.com/acehoss/rnsh][RNSH]].
+
+* Contributions/Code
+
+On the [[https://reticulum.network/][Reticulum]] ecosystem, I fixed some minor bugs [[[https://github.com/markqvist/LoRaMon/pull/3][1]], [[https://github.com/acehoss/rnsh/pull/27][2]]] in LoRaMon and RNSH.
+
+For my [[https://github.com/erethon/ansible-debops-infrastructure/][personal infra]] there have been a lot of changes. I've repuprosed some RPi
+4s that were idle at home and setup a small k3s cluster to more easily test
+various IoT related software locally. I also finally committed all the [[https://github.com/erethon/ansible-debops-infrastructure/][Ansible
+and Terraform changes]] needed after my [[/blog/2023/06/21/what-happens-when-a-matrix-server-disappears/][previous hardware node died]].
+
+* Beepy
+
+My replacement [[https://beepy.sqfmi.com/][Beepy]] arrived in the mail, after my original unit (one of the
+first batch of 50 units sent to "hackers" to try them out) failed due to a
+fault on the power/charging part of the board. This is a common issue for some
+units that seems to have been fixed in the latest board revision.
+
+I've only experimented with it for a couple hours max, but in November I'll
+spent more time testing it with Reticulum and SDR related projects.
