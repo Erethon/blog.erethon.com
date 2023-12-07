@@ -1,0 +1,82 @@
+#+TITLE: November 2023 updates
+#+DATE: 2023-12-07
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: log
+#+KEYWORDS: monthly updates
+
+November was a bit of a slow month, but here are some updates on the things I
+worked on.
+
+# more
+
+* 37c3
+I'll be attending [[https://events.ccc.de/congress/2023/infos/startpage.html][37c3]] in Hamburg in December. I submitted a talk that was
+unfortunately rejected. Here's the proposal as it was submitted.
+
+#+BEGIN_SRC
+title: Around the RF world in 60 minutes
+
+Subtitle: A dive into the radio frequency signals around us
+
+Summary:
+In this talk, we'll review some of the wireless protocols and signals produced
+and consumed by our modern tech devices and infrastructure around us.
+Furthermore, we'll explore the privacy and security implications of some of
+these protocols.
+
+Description:
+During the presentation, we'll have a quick introduction on the glossary of
+wireless data transmissions, just enough to have a common understanding for
+what's coming next. From there, we'll explore some of the RF signals
+surrounding us daily, from old school analog radio all the way to modern
+communication stacks like Wi-Fi, BLE, LoRa, ZigBee, etc.
+
+For some of these protocols, like BLE (Bluetooth Low Energy), ZigBee and
+others, we'll dive deeper into the privacy implications of using them. From
+smartwatches beaconing our location to IoT sensors leaking information.
+Additionally, we'll expand on the hardware needed to interact with these
+protocols.
+#+END_SRC
+
+I invested quite some time and research for this, mainly on protocols I wasn't
+familiar with, like ZigBee. Since the proposal was rejected, I've slowed down on
+the research part, but it's a talk I would love to give in the future, so I'll
+keep working on it.
+
+I'm also trying to setup a [[https://github.com/markqvist/Reticulum/discussions/386][community meet for Reticulum]] during 37c3; if you're
+interested in this, please comment on the linked discussion!
+
+* Upstream contributions and personal projects
+
+I ran into a DebOps bug for which I submitted a [[https://github.com/debops/debops/pull/2445][PR]]. Other than that, I didn't do
+a lot of work for upstream projects, since I mostly worked on my personal infra
+during November.
+
+I added two VMs on my dedicated host in Hetzner. One to use as a new mail
+server for multiple domains and the other to host [[https://github.com/knadh/listmonk][Listmonk]]. I want to use
+Listmonk to provide a newsletter for my blog for people that prefer to get
+updates over email instead of RSS.
+
+Moreover, I setup [[https://www.home-assistant.io/][Home Assistant]] in my in-house [[https://k3s.io/][k3s]] cluster to serve as the
+playground for all the ZigBee experiments I'm working on. The user experience of
+Home Assistant, and the simplicity of it, is amazing. Exporting ZigBee data to
+the Prometheus format is so effortless, it even replaced my [[{{% ref 2018-07-22-plotting-room-temperature.org %}}][old custom solution
+for reading sensor data]].
+
+In other news, I [[https://github.com/Erethon/ansible-debops-infrastructure/commit/dd2a9011c6dd8137a7e1b129dc0f7358b0f206a1#diff-b4277ebbb6ed05c6a4328dcbe59e8afb6a8286a0bc48f4db6c3a7b1ac820a27dR19-R27][added support]] for [[https://github.com/matrix-org/matrix-spec-proposals/pull/1929][MSC1929]] in my matrix homeserver and [[https://github.com/Erethon/hugo-HackThePlanet-theme/commit/71f413ac908d0b2b5434f61be478d58b340afa1b][updated
+my blog theme]] to make it easier on the eyes.
+
+* NixOS
+
+I've been reading and hearing great things about Nix and NixOS for many years
+now from various friends and online sources. I finally gave in and decided to
+give it a try after reading [[https://git.madhouse-project.org/algernon/telchar.org][Algernon's literate NixOS config]].
+
+There are some great ideas in NixOS, and I'm keen on trying to create a [[https://www.qubes-os.org/][Qubes
+OS]]-like setup in NixOS. I've only spent a few hours with this setup, but it
+seems it will be easier to achieve this with Nix instead of trying to use Debian
+and Terraform to do it.
+
+I have to confess that I like what I'm seeing so far in NixOS and I want to
+spend more time experimenting with it. Maybe, after ~10 years of using Debian
+and OpenBSD exclusively it's time for a change :)
