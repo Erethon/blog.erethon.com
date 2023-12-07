@@ -1,0 +1,42 @@
+
+#+TITLE: My tiny archivemail alternative in Rust
+#+DATE: 2023-11-30
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: rust mail
+#+KEYWORDS: archivemail rust
+
+Almost ten years ago, I blogged about my email setup ([[{{% ref 2015-02-27-my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters.org %}}][1]], [[{{% ref 2015-03-11-my-email-server-setup.org %}}][2]], [[{{% ref 2015-03-17-notmuch-is-awesome.org %}}][3]]). Since then, not
+a lot has changed. I still download my emails locally with mbsync, use mutt to
+view and compose emails, msmtp to actually send emails, and finally notmuch to
+index emails. A crucial part of the setup that I didn't mention, was
+archivemail.
+
+Archivemail is a Python 2 application that archives older emails and cleans up
+mailboxes. I used it to prune my big public mailboxes such as mailing lists,
+forum updates (lobste.rs), etc.
+
+As I mentioned, archivemail is written for Python 2, which isn't supported by
+Debian anymore and thus, I had to look for an alternative. I found [[https://github.com/zedinosaur/chewmail][Chewmail]],
+which looks like a potential Perl option, but instead, I decided to write a
+small replacement in Rust for fun.
+
+# more
+
+Archivemail is a CLI utility that reads emails from various sources (IMAP,
+(mbox|maildir) mailboxes), then filters them based on their date and either
+deletes them or moves them to a different mailbox. It also compresses the
+archived mails and appends them to any previously archived mails.
+
+Personally, I only use the maildir format, so my version only supports
+that. Also, since modern hard drives provide so much storage capacity,
+implementing compression didn't feel like a necessity. Instead, I opted to move
+archived mails to a maildir mailbox elsewhere on the filesystem. This has the
+added benefit of being able to use [[https://www.djcbsoftware.nl/code/mu/][mu/maildir-utils]] directly on the maildir,
+without having to decrompress it first.
+
+With the above in mind, the Rust program I developed only supports deleting or
+archiving emails based on their date. It's using the same argument names as
+archivemail, so it is a drop-in replacement for me, but lacks support for any of
+the fancier features. If time permits, I might add support for compression.
+
+You can find the source on [[https://github.com/Erethon/archivemail_rs][GitHub]] or [[https://git.sr.ht/~erethon/archivemail_rs][Sourcehut]].
