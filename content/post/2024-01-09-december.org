@@ -1,0 +1,74 @@
+#+TITLE: December 2023 updates
+#+DATE: 2024-01-09
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: log
+#+KEYWORDS: monthly updates
+#+comments: https://libretooth.gr/@erethon/111727581381871541
+
+In December, I didn't have much time to work on tech things since I spent a
+large part of it away from home. Still, here are some interesting things that
+happened.
+
+# more
+
+* 37C3
+I attended [[https://events.ccc.de/congress/2023/infos/index.html][37C3]] in Hamburg at the end of December. I haven't been in Hamburg
+since 2013, at my first CCC event, 30C3. Between CCH in Hamburg and CCL in
+Leipzig, I think I prefer the venue of Leipzig as it is much larger and spacey,
+however the CCH feels more cosy. I attribute this feeling to the fact that
+the venue is much smaller and everything is tightly packed together.
+
+This was the fourth CCC event I attended and I think it was my favorite so far.
+The main reason is the fact that I was more socially active and had more
+discussions with people that I both knew online or met for the first time. My
+highlight was organizing a [[https://github.com/markqvist/Reticulum/discussions/386][small meetup for Reticulum users]] where we got
+together and discussed Reticulum/LoRa/Meshtastic and other radio related
+technologies. We also setup a small Reticulum network over LoRa while the
+congress was taking place, with most people being mobile and running [[https://github.com/markqvist/Sideband/][Sideband]] on
+their phones tethered via Bluetooth on Lilygo based devices.
+
+I'm definitely looking forward to the next Congress, with plans to organize a
+proper assembly for Reticulum and other radio projects! I view the community
+bonds that are created and enhanced during CCC to be the most important takeaway
+from such events.
+
+* Personal projects and infra
+I got [[https://xkcd.com/356/][nerd snipped]] early in December when a friend wanted to find out what the
+current state of self-hosted LLMs is. I ended up doing a somewhat deep dive into
+the world of local and "open" LLMs. I use quotations because my understanding is
+that for a lot of the open models, it's not easy to verify the dataset(s) the
+model was trained. Furthermore, it's not always clear if they're licensed in way
+that allows training models on them. This becomes an issue when various open
+models mention they're finetuned against GPT4 generated content, which obviously
+is a black box.
+
+Learning more about the inner workings of these models, their limitations and
+how to overcome them, how to host and run them in an efficient way, and so on
+has been a lot of fun. I still haven't found good usecases for them, a lot of
+the common examples people use (proofreading, summarizing, etc) are things that
+I either prefer to do myself or have a fellow human help me with. Nonetheless,
+I'm afraid they're here to stay as a technology and as such I need to get
+familiar with it.
+
+In other news, I gave [[https://pi-hole.net/][pi-hole]] a try at home. I ran it for a couple of days as a
+pod in my k3s raspberry node, but in the end I didn't like the extra complexity
+and depending on another device besides my router. So, I moved back to using the
+[[https://openwrt.org/packages/pkgdata/adblock][adblock OpenWrt package]] directly on my OpenWrt router and calling it a day.
+
+I also updated my aging [[https://en.wikipedia.org/wiki/Asus_Eee_PC#Eee_PC_1000_series][Eee PC 1000H]] server from OpenBSD 7.1 all the way to
+OpenBSD 7.4, the latest stable version. It's my one and only remaining x86
+machine and I often use it to test changes in software and verify it still
+works in an x86 machine.
+
+* 2023 going to 2024
+
+2023 was a year that I was able to rekindle my connection with technology. I
+rediscovered my passion for all things RF, got licensed as an amateur radio
+operator, tinkered with a lot of hardware projects, made some contributions to
+FOSS projects and I was more active on this blog. It was my best year in term
+of number of blog posts, six in fact, totalling about 5100 words.
+
+Looking forward to what 2024 will bring, I have a backlog of exciting
+things I want to experiment with, so keep an eye out for upcoming posts ;)
+
+I hope 2024 turns out to be a better year for more people than 2023 was.
