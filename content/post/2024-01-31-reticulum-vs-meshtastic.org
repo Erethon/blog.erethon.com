@@ -1,0 +1,72 @@
+#+TITLE: Comparing Reticulum and Meshtastic
+#+DATE: 2024-01-31
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: lora reticulum meshtastic
+#+KEYWORDS: reticulum lora reticulum
+#+comments: https://libretooth.gr/@erethon/111852813887955698
+
+I've blogged about both Reticulum and Meshtastic before ([[{{% ref 2023-05-19-reticulum.org %}}][1]], [[{{% ref 2023-01-08-meshtastic-part-2.org %}}][2]], [[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][3]], [[{{% ref 2023-11-01-october-lora.org %}}][4]]) and I've
+even given a [[https://f.erethon.com/mesh2023.pdf][presentation about both of them]]. The past few months, I started
+getting more involved with Reticulum, however I'm still reading the Meshtastic
+Discord to keep up with the project. In both communities, I see one question
+that comes up often: "Which one is better?". I want to try to answer this
+question and hopefully help people understand these projects better.
+
+# more
+
+* Apples and Oranges
+The truth is that trying to compare Reticulum and Meshtastic, is like trying to
+compare apples and oranges as the expression goes. While they have some
+similarities, their end goals are completely different. Let's start by comparing
+the first sentence on each project's website:
+
+[[https://meshtastic.org/][Meshtastic]]:
+#+BEGIN_SRC
+An open source, off-grid, decentralized, mesh network built to run on
+affordable, low-power devices
+#+END_SRC
+
+[[https://reticulum.network/][Reticulum]]:
+#+BEGIN_SRC
+Reticulum is the cryptography-based networking stack for building local and
+wide-area networks with readily available hardware.
+#+END_SRC
+
+Again, on the surface these read in a very similar manner, however there are
+four words in the Reticulum tagline that clearly define the project's goal:
+*cryptography-based networking stack*. Reticulum aims to be a *network stack*
+that uses *cryptography* at its core for routing information.
+
+On the other hand, Meshtastic is a long range off-grid communication platform
+as described [[https://meshtastic.org/docs/introduction][in the introduction page]].
+
+So, we have a network stack vs a communication platform.
+
+* Both apples and oranges are fruits
+Having said the above, the two projects do have some similarities, so it does
+make some sense that people try to compare them.
+
+First of all, both projects make use of cheap LoRa devices to achieve their very
+long-range communications. I think a lot of people stumble upon both projects
+when they search for usecases of these cheap LoRa boards. This is how I found
+out about both of them and from what I've seen this holds truth for others as
+well.
+
+Second, both projects create a mesh network with the connected devices. The
+way routing in the two mesh implementations works is drastically different, but
+this is an implementation detail that most users will not initially look at.
+
+Finally, both are Free and Open Source Software. The Reticulum ecosystem is
+mostly using the MIT license, while Meshtastic is mostly GPLv3. Meshtastic does
+require contributors to sign a CLA however, which is something I'm firmly
+opposed to.
+
+* Right fruit for the job
+Each project is better suited towards a certain use case. Identify what your
+needs are and pick the one that works best for you.
+
+Reticulum is meant to create networks over non-homogeneous devices (LoRa, [[https://en.wikipedia.org/wiki/Packet_radio][Packet
+Radio]], TCP/IP, I2P, even [[https://github.com/markqvist/Reticulum/discussions/421][Wi-Fi HaLow]]) from the ground up, while Meshtastic is
+meant as a platform for end users to exchange messages over LoRa.
+
+I hope the above helps shed some light in the two projects.
