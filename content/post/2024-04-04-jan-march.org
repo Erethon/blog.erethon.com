@@ -1,0 +1,79 @@
+#+TITLE: Early 2024 updates
+#+DATE: 2024-04-04
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: log nixos reticulum
+#+KEYWORDS: reticulum nixos
+#+comments: https://libretooth.gr/@erethon/112218114685013190
+
+Since I didn't post monthly updates so far in 2024, here's a 2024 Q1 update on
+what I've been up to.
+
+# more
+
+* Reticulum
+I've already mentioned [[https://reticulum.network/][Reticulum]] multiple times in my posts and so far in 2024
+I've spent quite some time working on things around the Reticulum project. From
+small bug fixes ([[https://github.com/markqvist/RNode_Firmware/pull/54][1]], [[https://github.com/markqvist/Reticulum/pull/426][2]], [[https://github.com/markqvist/reticulum_website/pull/10][3]]) to contributing more to the community and replying
+more in Matrix and discussion threads.
+
+One major thing I'm working on however is a [[https://github.com/markqvist/Reticulum/discussions/471][browser based flasher]] for RNode
+devices. This is something that comes up often in the community as a thing
+that's missing and will provide a better user experience for new users, so I'm
+happy to spearhead this effort. I've learned a lot while developing this, from
+specifics about [[https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API][webserial]] and TypeScript to [[https://docs.espressif.com/projects/esptool/en/latest/esp32/esptool/flasher-stub.html][ESP internals]] and RNode details.
+
+The proof-of-concept can be found [[https://rnode-flasher.erethon.com/][here]], I'll soon be publishing the source of
+all it too.
+
+* NixOS
+In previous posts I hinted at the fact that I was trying out NixOS to see if it
+had a place in my digital infrastructure. What was holding me back from using it
+full time was a fear that maybe the NixOS infrastructure is backdoored or in
+general that it might be less secure than Debian. This changed somewhat when I
+joined all of the NixOS Matrix rooms and saw how open and transparent some of
+the communications of the project is.
+
+This happened to coincide with NixCon NA, a conference about Nix in North
+America, where a company from the [[https://en.wikipedia.org/wiki/Military%E2%80%93industrial_complex][Military-industrial complex]] happened to be a
+sponsor in the event. When the community got wind of this, an [[https://nixos-users-against-mic-sponsorship.github.io/][open letter]] was
+drafted and published stating how people were uneasy and against this
+sponsorship. Many prominent members of the community signed it and one person
+even resigned from their position in the infrastructure team as a means of
+protest. This showed to me that even if the NixOS Foundation doesn't care about
+this, the users and the community -which is the important part of a project-
+do. Seeing as how I'm aligned with the community, this boosted my confidence
+in the project.
+
+Another point on my transparency claim, I packaged [[https://github.com/NixOS/nixpkgs/pull/289391][loramon for NixOS]] and it was
+very easy to get this accepted upstream and into nixpkgs. I'm now also regularly
+looking at PRs to see if there's any other places I can help with, but I'm still
+a bit over my head on some Nix workflows.
+
+I understand that most distros are also transparent with a lot of communication
+happening in the open over mailing lists, but NixOS was the first time I felt
+the community being so welcoming. OpenBSD comes close to this, which is a
+project I've been reading its mailing lists for years, so maybe it comes down to
+community/contributor size/count?
+
+For now, I'm running NixOS on two machines, my personal laptop and an old laptop
+that's cosplaying as a server under my desk. All of my NixOS configuration lives
+in a git repo and is reproducible so far. I still have some things to clean up,
+but soon I'll publish everything in GitHub and SourceHut.
+
+* Writing and other projects
+Reticulum has started becoming more popular lately and some people came into the
+community trying to compare it to Meshtastic. I don't think that comparison is
+fair to either project, so at the end of January I [[{{< ref 2024-01-31-reticulum-vs-meshtastic.org >}}][wrote a small post about
+this]].
+
+I also have a draft post in the works about the history of Matrix (the protocol)
+and privacy. It's still a work in progress, but I hope to publish it soon as
+things around Matrix are changing lately and I don't want the information on it
+to go stale.
+
+On the hardware side of things, I've delved deeper into RF projects, getting
+more use out of my [[https://nanovna.com/][NanoVNA]], so maybe there will be a related post soon. I'm also
+building a [[https://docs.pikvm.org/v2/][DIY PiKVM]] for a friend to help with remote management of some
+computers, another project to document here?
+
+That's all the updates for now, see you next time!
