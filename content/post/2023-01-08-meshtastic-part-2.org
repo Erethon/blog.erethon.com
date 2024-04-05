@@ -4,7 +4,7 @@
 #+TAGS[]: hardware offgrid lora
 #+KEYWORDS: meshtastic offgrid lora messenger reticulum
 
-In a [[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][previous post]] I documented my experience with the [[https://meshtastic.org/][Meshtastic]] project and
+In a [[{{< ref 2022-08-05-meshtastic-some-notes.org >}}][previous post]] I documented my experience with the [[https://meshtastic.org/][Meshtastic]] project and
 one of the TTGO T-Beam boards. Since then, I've experimented more with meshtastic
 and its capabilities, while the new version 2.0 of the project got released, so
 some updated notes are in order!

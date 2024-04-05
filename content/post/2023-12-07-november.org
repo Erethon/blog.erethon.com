@@ -60,7 +60,7 @@ updates over email instead of RSS.
 Moreover, I setup [[https://www.home-assistant.io/][Home Assistant]] in my in-house [[https://k3s.io/][k3s]] cluster to serve as the
 playground for all the ZigBee experiments I'm working on. The user experience of
 Home Assistant, and the simplicity of it, is amazing. Exporting ZigBee data to
-the Prometheus format is so effortless, it even replaced my [[{{% ref 2018-07-22-plotting-room-temperature.org %}}][old custom solution
+the Prometheus format is so effortless, it even replaced my [[{{< ref 2018-07-22-plotting-room-temperature.org >}}][old custom solution
 for reading sensor data]].
 
 In other news, I [[https://github.com/Erethon/ansible-debops-infrastructure/commit/dd2a9011c6dd8137a7e1b129dc0f7358b0f206a1#diff-b4277ebbb6ed05c6a4328dcbe59e8afb6a8286a0bc48f4db6c3a7b1ac820a27dR19-R27][added support]] for [[https://github.com/matrix-org/matrix-spec-proposals/pull/1929][MSC1929]] in my matrix homeserver and [[https://github.com/Erethon/hugo-HackThePlanet-theme/commit/71f413ac908d0b2b5434f61be478d58b340afa1b][updated

@@ -1,4 +1,3 @@
-
 #+TITLE: What happens when a Matrix server disappears?
 #+DATE: 2023-06-21
 #+AUTHOR: Dionysis Grigoropoulos
@@ -19,7 +18,7 @@ Well, that is until the hardware node that hosted my Matrix database died.
 I've been renting a dedicated server from online.net since 2016, using their
 cheapest offering. I then spun up multiple KVM based virtual machines via
 Terraform for my various usecases, while having everything defined as
-Infrastructure as Code in a git repo. This is documented in an [[{{% ref 2019-11-06-infrastructure-as-code-minus-the-cloud.org %}}][older post of
+Infrastructure as Code in a git repo. This is documented in an [[{{< ref 2019-11-06-infrastructure-as-code-minus-the-cloud.org >}}][older post of
 mine]] alongside my [[https://github.com/erethon/ansible-debops-infrastructure/][IaC repo]]. You should check them out ;)
 
 I had setup two VMs for Matrix. One was hosting Element-web and the Synapse
@@ -176,7 +175,7 @@ can take full control of the domain and, from there, can easily impersonate
 their target on any of the above protocols.
 
 From a user's perspective this is no different than using a homeserver run by a
-malicious admin. I explored this scenario in [[{{% ref 2022-07-13-matrix-homeserver-admin.org %}}][a previous blog post]] and I believe
+malicious admin. I explored this scenario in [[{{< ref 2022-07-13-matrix-homeserver-admin.org >}}][a previous blog post]] and I believe
 the same safeguard applies here as well. In order to be safe from bad actors
 that have control over the DNS infrastructure, the only option is to set your
 client to never send messages to unverified devices. This is a huge PITA and I

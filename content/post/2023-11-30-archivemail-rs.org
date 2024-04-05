@@ -5,7 +5,7 @@
 #+tags[]: rust mail
 #+KEYWORDS: archivemail rust
 
-Almost ten years ago, I blogged about my email setup ([[{{% ref 2015-02-27-my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters.org %}}][1]], [[{{% ref 2015-03-11-my-email-server-setup.org %}}][2]], [[{{% ref 2015-03-17-notmuch-is-awesome.org %}}][3]]). Since then, not
+Almost ten years ago, I blogged about my email setup ([[{{< ref 2015-02-27-my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters.org >}}][1]], [[{{< ref 2015-03-11-my-email-server-setup.org >}}][2]], [[{{< ref 2015-03-17-notmuch-is-awesome.org >}}][3]]). Since then, not
 a lot has changed. I still download my emails locally with mbsync, use mutt to
 view and compose emails, msmtp to actually send emails, and finally notmuch to
 index emails. A crucial part of the setup that I didn't mention, was

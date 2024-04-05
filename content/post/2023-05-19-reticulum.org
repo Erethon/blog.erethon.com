@@ -4,7 +4,7 @@
 #+TAGS[]: hardware offgrid lora reticulum
 #+KEYWORDS: reticulum offgrid lora rnode
 
-In my last two posts [[[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][1]], [[{{% ref 2023-01-08-meshtastic-part-2.org %}}][2]]] about Meshtastic, I mentioned how I wanted to
+In my last two posts [[[{{< ref 2022-08-05-meshtastic-some-notes.org >}}][1]], [[{{< ref 2023-01-08-meshtastic-part-2.org >}}][2]]] about Meshtastic, I mentioned how I wanted to
 experiment with [[https://reticulum.network][Reticulum]]. Now, I'm excited to share my experience and provide
 an introduction to the project!
 

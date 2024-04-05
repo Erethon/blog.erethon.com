@@ -5,7 +5,7 @@
 #+KEYWORDS: reticulum lora reticulum
 #+comments: https://libretooth.gr/@erethon/111852813887955698
 
-I've blogged about both Reticulum and Meshtastic before ([[{{% ref 2023-05-19-reticulum.org %}}][1]], [[{{% ref 2023-01-08-meshtastic-part-2.org %}}][2]], [[{{% ref 2022-08-05-meshtastic-some-notes.org %}}][3]], [[{{% ref 2023-11-01-october-lora.org %}}][4]]) and I've
+I've blogged about both Reticulum and Meshtastic before ([[{{< ref 2023-05-19-reticulum.org >}}][1]], [[{{< ref 2023-01-08-meshtastic-part-2.org >}}][2]], [[{{< ref 2022-08-05-meshtastic-some-notes.org >}}][3]], [[{{< ref 2023-11-01-october-lora.org >}}][4]]) and I've
 even given a [[https://f.erethon.com/mesh2023.pdf][presentation about both of them]]. The past few months, I started
 getting more involved with Reticulum, however I'm still reading the Meshtastic
 Discord to keep up with the project. In both communities, I see one question
