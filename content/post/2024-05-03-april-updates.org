@@ -1,0 +1,75 @@
+#+TITLE: April 2024 updates
+#+DATE: 2024-05-03
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: nixos log
+#+KEYWORDS: nixos log
+
+I spent a big part of April on moving parts of my infrastructure and computers
+to NixOS. As part of this, I devoted some time to better understand NixOS and
+get a grip on how things work upstream. I also kept up to date with the ongoing
+situation in the community, a good summary of which can be found [[https://github.com/KFearsoff/nix-drama-explained][here]]. I don't
+like the word drama, as I think it downplays the importance of it, but it is
+what people call it currently. Let's dive in the details of what I was up to!
+
+# more
+
+* NixOS on my computers
+I moved my home server to use NixOS in late 2023, but after the initial setup, I
+didn't get to interact with the system daily. As such, I didn't feel I was
+learning much about Nix, so I moved my laptop to NixOS last month as well. My
+laptop setup is still a work in progress. There are some things I haven't setup
+in a declarative way yet, such as:
+
+- automatic backups with Borg or syncing files (i.e. the [[https://github.com/newsboat/newsboat][newsboat database]])
+  across devices
+- have all of the root filesystem setup as a tmpfs so it's erased on every
+  boot. For now, I only have `/home` setup this way and I use [[https://github.com/nix-community/impermanence][impermanence]] to
+  persist certain files and directories
+- configure Firefox entirely with Nix (plugins included)
+
+In the process, I decided to create a new repo for my NixOS configs instead of
+using my existing ansible-debops-terraform combination. You can find this repo
+[[https://github.com/Erethon/hesperidOS][in GitHub]] or [[https://git.sr.ht/~erethon/hesperidOS][in SourceHut]].
+
+I'm experimenting with spawning VMs running NixOS right now, and the fact that I
+can go from NixOS configuration to a QCOW image with a single command feels like
+magic. This will make my [[https://github.com/Erethon/packer-images/][packer based workflow]] obsolete.
+
+* Contributing to NixOS upstream
+As [[{{< ref 2024-04-04-jan-march.org >}}][mentioned previously]], in the beginning of the year, I packaged loramon in
+nixpkgs. This got me excited about contributing more upstream, but I wasn't sure
+where to start, since most of the packages I cared about were already maintained
+by other people. Since my Nix specific knowledge is still lacking, I looked at
+the one area I'm already very familiar with and doesn't require Nix
+know-how. Infrastructure.
+
+I started out by commenting on PRs in the [[https://github.com/NixOS/infra][NixOS infrastructure repo]],
+specifically in software I'm familiar with, namely Synapse and Jitsi ([[https://github.com/NixOS/infra/pull/336#issuecomment-2064752263][1]], [[https://github.com/NixOS/infra/pull/404/files/9b62cda8c0fa81ca74212e1d3d9a9d0f7d94f54e#r1571282131][2]],
+[[https://github.com/NixOS/infra/issues/410#issuecomment-2051705824][3]]). From there, I noticed that some nixos.org subdomains didn't redirect HTTP to
+HTTPS, so I opened a [[https://github.com/NixOS/infra/pull/415][PR]] to change this after discussing it in a Matrix room with
+the people responsible for the NixOS infra. As one would expect when applying a
+"harmless" infrastructure change, some things broke. It was very interesting
+watching from the sidelines the NixOS infra team trying to figure out what
+broke, how they could quickly fix it without reverting the change and the final
+outcome. In the end, two issues ([[https://github.com/nix-community/nix-index/issues/249][1]], [[https://github.com/nix-community/nix-index/issues/248][2]]) and some PRs were the result of this
+breakage, in an attempt to move things forward and make the infra more robust.
+
+During the "outage", I got to see one of NixOS' strenghts: its ability to
+circumvent upstream sources and packages. I'm comparing this to similar outages
+I had in the past with Kubernetes, where in order to bypass an issue upstream I
+had to create a custom container image, upload it to a registry, update
+Kubernetes manifests, redeploy, etc. NixOS in comparison, makes the Kubernetes
+process seem overcomplicated. As an example, [[https://github.com/NixOS/nixos-channel-scripts/pull/70/][here's]] a diff applied during the
+incident that's patching an upstream package.
+
+Once the dust settled, I kept looking at the infra repo and the infra related
+Matrix rooms and noticed that some alerts in the alerting room were a bit
+malformed, so I opened a [[https://github.com/NixOS/infra/pull/418][PR]] to fix this.
+
+Every time I contribute to the NixOS infra repo, the infra team is very
+welcoming and quick to review and discuss changes (thanks [[https://delroth.net/][delroth]]!).
+
+* Wrap up
+That was my April pretty much when it comes to FOSS work. The NixOS community is
+still in somewhat of a turmoil and I'm keeping an eye in the [[https://discourse.nixos.org/][project discourse]]
+and all the discussions taking place.
