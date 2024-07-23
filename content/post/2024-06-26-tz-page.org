@@ -1,0 +1,47 @@
+#+TITLE: A web page to display my time zone
+#+DATE: 2024-06-25
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: CGI software workflow
+#+KEYWORDS: CGI timezone nginx
+#+comments: https://libretooth.gr/@erethon/112679691024310385
+
+I recently had to share my time zone information with a group of people
+online. While it's easy to say "My time zone is XYZ", I thought it would be
+better if I had a web page that was easy to remember and had this information
+available for everyone to see. So, I created [[https://tz.erethon.com][tz.erethon.com]].
+
+# more
+
+* Original idea source
+This isn't an original idea of mine. I ran into [[https://nwex.de/][networkException's]] site and
+noticed they had [[https://timezone.nwex.de][a similar page]]. The moment I saw it, I +needed+ wanted a
+similar page, so I shamelessly copied their idea ^_^. Thank you for the
+inspiration!
+
+I was, also, curious to see how long it would take me to implement it and
+release it publicly.
+
+* Implementation
+Since I don't want my websites to use JavaScript, the generation of the page
+needed to be done serverside. My initial approach was to write a small app in
+Rust that would serve the page. It would be overkill to have a HTTP server in
+Rust just to serve a single GET request, so I thought it would make more sense
+to have Nginx call the Rust app via [[https://en.wikipedia.org/wiki/Common_Gateway_Interface][CGI]]. And then, I realized that if I was
+gonna use CGI, it would be simpler to just use a shell script and call that via
+CGI. I'm fascinated by the fact that I always come up with complex solutions at
+first, when a simpler solution is a couple of minutes and a few tweaks away.
+
+In total, it took me ~75 minutes from the moment I started thinking about this
+project to publishing it online. Most of the time was spent on figuring out how
+to interface [[https://en.wikipedia.org/wiki/FastCGI][FastCGI]] with Nginx and if I wanted to reuse the [[https://docs.debops.org/en/master/ansible/roles/fcgiwrap/index.html][fastcgi DebOps
+role]]. I also spent around 15 minutes making sure that this endpoint is
+somewhat rate-limited as it's easy to abuse it and increase the load on the host
+it's running on. Finally, as one would expect when writing shell scripts, I spent
+more than five minutes on getting the right invocation of [[https://man7.org/linux/man-pages/man1/date.1.html][date]] to return the
+date and time in the format I wanted.
+
+All in all, this feature is implemented in [[https://github.com/Erethon/ansible-debops-infrastructure/commit/4742081c978f8211f5403447274b3bd62f1cd7a1][this commit]], and I'm happy with how
+simple and portable it ended up being.
+
+PS. This blog post took longer to write than creating the actual tz.erethon.com
+web page...
