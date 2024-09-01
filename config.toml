@@ -2,20 +2,21 @@ baseURL = "https://blog.erethon.com/"
 languageCode = "en-us"
 title = "Erethon's Corner"
 theme = "hugo-htp"
-paginate = 30
+paginate = 300
 
 [params]
 author = "Dionysis Grigoropoulos"
 description = "Sharing my thoughts on Decentralization, Security and Operations."
 avatar = "/images/avatar.webp"
 avataralt = "A photo of the author where the face has been replaced with an xD smiley"
-footer = '<a xmlns:cc="http://creativecommons.org/ns#" href="https://erethon.com" property="cc:attributionName" rel="cc:attributionURL">Dionysis Grigoropoulos</a> - Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. <p><p>Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and the <a target="_blank" href="https://github.com/erethon/hugo-HackThePlanet-theme/">Hugo-HackThePlanet</a> theme.</p>'
+sidebar_footer = '<a xmlns:cc="http://creativecommons.org/ns#" href="https://erethon.com" property="cc:attributionName" rel="cc:attributionURL">Dionysis Grigoropoulos</a> - Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. <p><p>Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and the <a target="_blank" href="https://github.com/erethon/hugo-HackThePlanet-theme/">Hugo-HackThePlanet</a> theme.</p>'
 disablereferrer = true
+enableComments = true
+footer = 'If you enjoy my work you can <a target="_blank" href="https://ko-fi.com/erethon"><img src="/images/kofi_button_blue.webp" style="height:25px;vertical-align:bottom"></a>'
 
 [permalinks]
 post = "/blog/:year/:month/:day/:title/"
 blog = "/blog/:year/:month/:day/:title/"
-log = "/log/:year/:month/:day/:title/"
 
 [[menu.main]]
         Name = "Blog"
@@ -42,19 +43,24 @@ log = "/log/:year/:month/:day/:title/"
         URL = "https://blog.erethon.com/index.xml"
         weight = 40
 
-[mediaTypes]
-  [mediaTypes.'text/micron']
-    suffixes = ['mu']
+[[menu.main]]
+        Name = "Ko-fi"
+        URL = "https://ko-fi.com/erethon"
+        weight = 50
 
-[outputs]
-  home = ['HTML', 'RSS', 'MICRON']
-  page = ['HTML', 'MICRON']
-
-[outputFormats]
-  [outputFormats.Micron]
-    name = 'MICRON'
-    isPlainText = true
-    isHTML = false
-    mediaType = 'text/micron'
-    path = '/micron/'
-    permalinkable = true
+#[mediaTypes]
+#  [mediaTypes.'text/micron']
+#    suffixes = ['mu']
+#
+#[outputs]
+#  home = ['HTML', 'RSS', 'MICRON']
+#  page = ['HTML', 'MICRON']
+#
+#[outputFormats]
+#  [outputFormats.Micron]
+#    name = 'MICRON'
+#    isPlainText = true
+#    isHTML = false
+#    mediaType = 'text/micron'
+#    path = '/micron/'
+#    permalinkable = true
