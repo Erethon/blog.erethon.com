@@ -27,7 +27,7 @@ I created thirteen VMs (droplets in DO terms) using the [[http://docs.anskble.co
 ansible module]], twelve for the Kippo hosts and one for the logging
 database. I, also, ran a couple of ad-hoc Ansible commands to further
 configure some settings inside the VMs, and finally used [[https://github.com/Erethon/dotfiles/blob/master/bin/ssh-mult][ssh-multi]]
-(which I've talked about in my [[/blog/2014/11/13/my-tmux-config/][tmux config post]]) to make sure
+(which I've talked about in my [[/blog/2014/11/13/my-tmux-config-and-a-small-tmux-primer/][tmux config post]]) to make sure
 everything was configured properly.
 
 ** Results

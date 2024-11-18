@@ -1,7 +1,7 @@
 #+TITLE: A web page to display my time zone
 #+DATE: 2024-06-25
 #+AUTHOR: Dionysis Grigoropoulos
-#+tags[]: CGI software workflow
+#+tags[]: cgi software workflow
 #+KEYWORDS: CGI timezone nginx
 #+comments: https://libretooth.gr/@erethon/112679691024310385
 

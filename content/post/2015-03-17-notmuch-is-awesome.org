@@ -4,7 +4,7 @@
 #+TAGS: software workflow mail
 #+KEYWORDS: email notmuch mutt
 
-In one of my previous posts, I explained my [[https://blog.erethon.com/blog/2015/02/27/my-mail-setup-using-mutt-slash-offlineimap-slash-imapfilters/][email setup in
+In one of my previous posts, I explained my [[https://blog.erethon.com/blog/2015/02/27/my-mail-setup-using-mutt/offlineimap/imapfilter/][email setup in
 detail]]. Since then I've added one more piece of software on the
 "stack". It's called [[http://notmuchmail.org/][NotMuch]] and it's an email indexer.
 

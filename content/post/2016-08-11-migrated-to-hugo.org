@@ -2,7 +2,7 @@
 #+DATE: 2016-08-11
 #+AUTHOR: Dionysis Grigoropoulos
 #+TAGS: software workflow
-#+KEYWORDS: hugo octropress
+#+KEYWORDS: hugo octopress
 
 A bit over two years ago I [[https://blog.erethon.com/blog/2014/05/28/octopress-here-i-come/][blogged about migrating to Octopress]] from
 Wordpress, this time I'll blog about migrating to [[https://gohugo.io/][Hugo]] from Octopress.
