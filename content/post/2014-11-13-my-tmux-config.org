@@ -1,7 +1,7 @@
 #+TITLE: My tmux config and a small tmux primer
 #+DATE: 2014-11-13 23:48:20 +0200
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software workflow
+#+TAGS[]: software workflow
 #+KEYWORDS: tmux primer config clusterssh pdf status bar
 
 It's been a little over a month since I started using tmux. Below,

@@ -1,7 +1,7 @@
 #+TITLE: Cryptopals Set 1 reading list (spoilers ahead)
 #+DATE: 2018-06-26
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: cryptopals
+#+TAGS[]: cryptopals
 #+KEYWORDS: cryptopals
 
 I've decided to Go through (this will make sense in a bit) the

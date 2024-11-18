@@ -1,7 +1,7 @@
 #+TITLE: Updating tmux without killing active sessions
 #+DATE: 2014-10-10 17:53:02 +0300
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software
+#+TAGS[]: software
 #+KEYWORDS: tmux tmuxninator reptyr
 
 I've been using [[http://tmux.sourceforge.net/][tmux]] for a while, and even though I didn't like it at

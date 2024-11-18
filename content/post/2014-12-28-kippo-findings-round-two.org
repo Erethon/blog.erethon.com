@@ -1,7 +1,7 @@
 #+TITLE: Kippo findings round two
 #+DATE: 2014-12-28 13:46:23 +0200
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: honeypot software security
+#+TAGS[]: honeypot software security
 
 It's been [[http://blog.erethon.com/blog/2014/11/25/deploying-kippo-with-ansible/][over a month since I set up twelve Kippo hosts]] using my
 [[https://github.com/erethon/kippo-ansible][Ansible playbook]], time to get some stats.

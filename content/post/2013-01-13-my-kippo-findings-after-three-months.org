@@ -1,7 +1,7 @@
 #+TITLE: My Kippo findings after three months
 #+DATE: 2013-01-13 01:30:42 +0300
 #+AUTHOR Dionysis Grigoropoulos
-#+TAGS: honeypot security
+#+TAGS[]: honeypot security
 #+KEYWORDS: kippo ssh honeypot
 
 Three months ago I installed Kippo in a low end VPS of mine. About a

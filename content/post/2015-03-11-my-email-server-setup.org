@@ -1,7 +1,7 @@
 #+TITLE: My email Server Setup
 #+DATE: 2015-03-11 20:52:37 +0200
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software workflow mail
+#+TAGS[]: software workflow mail
 #+KEYWORDS: postfix dovecot mail server sieve spf txt dns
 
 Wanting to have more control over my email, I decided to setup my own

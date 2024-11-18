@@ -1,7 +1,7 @@
 #+TITLE: On proper git commit messages and frequent git pushes
 #+DATE: 2015-03-28 15:37:51 +0200
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: rant software
+#+TAGS[]: rant software
 #+KEYWORDS: git commit message
 
 =Edit: This post was written many years ago. Back then I was a lot more=

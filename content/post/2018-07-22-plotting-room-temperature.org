@@ -1,7 +1,7 @@
 #+TITLE: Plotting room temperature and humidity using Prometheus, Grafana and a DHT11 sensor
 #+DATE: 2018-07-22
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software metrics
+#+TAGS[]: software metrics
 #+KEYWORKDS: prometheus raspi dht11 dht22
 
 Last week we installed an airconditioning unit in our house and

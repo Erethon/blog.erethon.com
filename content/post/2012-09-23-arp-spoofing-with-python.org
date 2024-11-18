@@ -1,7 +1,7 @@
 #+TITLE: Arp spoofing with Python
 #+DATE: 2012-09-23 21:32:43 +0300
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software security
+#+TAGS[]: software security
 #+KEYWORDS: python arp arp spoofing arp poisoning
 
 I decided to reinvent the wheel by making an ARP spoofer in python

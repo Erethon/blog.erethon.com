@@ -1,7 +1,7 @@
 #+TITLE: Can we really trust the official Docker images?
 #+DATE: 2015-09-03 03:53:22 +0300
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: rant security software
+#+TAGS[]: rant security software
 #+KEYWORDS: docker security images official
 
 Yeap, this is another rant on the security practices of Docker users.

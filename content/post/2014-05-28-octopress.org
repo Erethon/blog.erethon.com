@@ -1,6 +1,6 @@
 #+TITLE: Octopress here I come!
 #+DATE: 2014-05-28 01:31:11 +0300
-#+TAGS: octopress static-site-generator
+#+TAGS[]: octopress static-site-generator
 #+KEYWORDS: octopress
 
 I decided to port my blog to [[http://octopress.org/][Octopress]] and move away from Wordpress

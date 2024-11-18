@@ -1,7 +1,7 @@
 #+TITLE: Making a RS-232/UART adaptor
 #+DATE: 2014-05-28 22:54:33 +0300
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: hardware
+#+TAGS[]: hardware
 #+Keywords: rs232 max232 max3232 serial console
 
 A couple of months ago I wanted to experiment with the serial console

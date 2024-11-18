@@ -1,7 +1,7 @@
 #+TITLE: LS32 LCD name badge + Rust
 #+DATE: 2020-12-13
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software
+#+TAGS[]: software
 #+KEYWORDS: rust ls32 lcd name badge 36c3
 
 During [[https://events.ccc.de/congress/2019/wiki/index.php/Main_Page][36c3 last year]] the [[https://fossasia.org/][FOSSASIA]] assembly was selling some cheap bluetooth LCD

@@ -1,7 +1,7 @@
 #+TITLE: Infrastructure as Code without using the cloud
 #+DATE: 2019-11-06
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software infrastructure
+#+TAGS[]: software infrastructure
 #+KEYWORDS: terraform packer ansible DebOps qemu kvm
 
 One of my favorite conversations I had with a colleague back in early

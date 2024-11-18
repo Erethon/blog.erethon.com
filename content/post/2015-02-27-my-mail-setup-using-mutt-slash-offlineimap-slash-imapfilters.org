@@ -1,7 +1,7 @@
 #+TITLE: My mail setup using Mutt/OfflineIMAP/imapfilter
 #+DATE: 2015-02-27 19:46:52 +0200
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software workflow email
+#+TAGS[]: software workflow email
 #+KEYWORDS: mutt offlineimap imapfilter mail
 
 =Update 17/03/2015:= I'm also using NotMuch now, for more info check

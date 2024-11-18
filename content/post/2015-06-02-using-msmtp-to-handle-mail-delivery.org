@@ -1,7 +1,7 @@
 #+TITLE: Using msmtp to handle mail delivery
 #+DATE: 2015-06-02 03:53:22 +0300
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software workflow mail
+#+TAGS[]: software workflow mail
 #+KEYWORDS: email msmtp mutt
 
 Following the example of [[http://greg.kh.usesthis.com/][GKH]] and others, I've added one more piece of

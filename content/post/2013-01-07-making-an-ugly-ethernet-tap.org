@@ -1,7 +1,7 @@
 #+TITLE: Making an ugly Ethernet tap
 #+DATE: 2013-01-07 00:12:56 +0300
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: hardware security
+#+TAGS[]: hardware security
 #+KEYWORDS: hardware "Ethernet tap"
 
 A long time ago, I saw [[http://hakshop.myshopify.com/products/throwing-star-lan-tap][this in the Hak5 store]]. After reading about it

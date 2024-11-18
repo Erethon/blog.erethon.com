@@ -1,7 +1,7 @@
 #+TITLE: How I do my Computing
 #+DATE: 2017-02-19
 #+AUTHOR: Dionysis Grigoropoulos
-#+TAGS: software workflow
+#+TAGS[]: software workflow
 #+KEYWORDS: workflow
 
 This is a long time coming post that I've kept postponing (pun
