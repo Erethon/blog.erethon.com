@@ -1,0 +1,17 @@
+#+TITLE: NixOS /tmp is not a tmpfs
+#+DATE: 2024-12-02
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: nixos til log
+#+KEYWORDS: nixos tmpfs
+
+The other day I realized that =/tmp/= on my NixOS installations is not a tmpfs
+as I'm used to from other distros. Instead, NixOS relies on [[https://github.com/systemd/systemd/blob/main/units/systemd-tmpfiles-clean.service][this systemd timer]]
+that cleans up old files from =/tmp/=. This is not NixOS specific, other systemd
+based distros also run this timer.
+
+Looking at the [[https://github.com/NixOS/nixpkgs/blob/006b124d5c6fedb9f748ea19d0ab85db94cf3e80/nixos/modules/system/boot/tmp.nix][NixOS boot.tmp]] related options, we see there's an option
+(=cleanOnBoot=) that clears files on boot and is disabled by default. I enabled
+it for my setup because I'm used to =/tmp/= being cleared on boot and I think it
+makes sense. Moreover, there's a [[https://github.com/NixOS/nixpkgs/blob/006b124d5c6fedb9f748ea19d0ab85db94cf3e80/nixos/modules/system/boot/tmp.nix#L37-L40][note]] about why it's not a tmpfs by default,
+it's used during nix builds and it's possible that a build will fail if the
+tmpfs runs out of space due to memory constraints.

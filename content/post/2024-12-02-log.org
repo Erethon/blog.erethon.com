@@ -1,0 +1,33 @@
+#+TITLE: Trying out logs and TILs
+#+DATE: 2024-12-03
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: workflow til log
+#+KEYWORDS: workflow blog til
+
+I often find myself wanting to blog about something, but I get stuck on trying
+to write a blog post that's /perfect/, which is a big mental barrier. The longer
+it takes me to publish something, the harder it gets, hence why I haven't posted
+about my updates since May. I'm also guilty of having multiple long essay-like
+posts, that are half-finished for years now, which apply a constant pressure in
+my posts backlog, making the situation worse.
+
+As an attempt to fix this, I'm giving TILs and log entries a try.
+
+# more
+
+* TIL, log entries, /now pages, etc
+For a long time I've been fascinated by the idea of [[https://indieweb.org/now][now pages]], weekly or monthly
+notes pages and [[https://til.simonwillison.net/][TILs]]. I already keep a personal journal of what I'm doing daily
+and my [[https://www.orgroam.com/][org-roam]] directory keeps growing, so I think it's time I started
+publishing more of these for people that might be interested. Some people use
+social media for this and while I browse the fediverse daily and even [[https://libretooth.gr/@erethon][post
+sometimes]], it's not a medium I feel comfortable with. It feels too personal to
+share something on the fediverse for me.
+
+So, I've added a =/log/= section in my blog that will contain my log and TIL
+entries that I think are worth sharing. There's a new RSS feed just for those
+entries available at https://blog.erethon.com/log/index.xml, while my main feed
+contains both regular posts and these new log entries. If you only care about
+the longer form posts, the feed is at https://blog.erethon.com/post/index.xml.
+
+Let's see how this experiment goes. As a demo, here's the [[{{< ref 2024-12-02-nixos-tmp.org >}}][first log/til entry]]!
