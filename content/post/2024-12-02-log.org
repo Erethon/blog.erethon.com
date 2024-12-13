@@ -26,8 +26,8 @@ share something on the fediverse for me.
 
 So, I've added a =/log/= section in my blog that will contain my log and TIL
 entries that I think are worth sharing. There's a new RSS feed just for those
-entries available at https://blog.erethon.com/log/index.xml, while my main feed
-contains both regular posts and these new log entries. If you only care about
-the longer form posts, the feed is at https://blog.erethon.com/post/index.xml.
+entries available [[https://blog.erethon.com/log/index.xml][here]], while my main feed contains both regular posts and these
+new log entries. If you only care about the longer form posts, the feed is [[https://blog.erethon.com/post/index.xml][this
+one]].
 
 Let's see how this experiment goes. As a demo, here's the [[{{< ref 2024-12-02-nixos-tmp.org >}}][first log/til entry]]!

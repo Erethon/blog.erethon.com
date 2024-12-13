@@ -1,4 +1,4 @@
-#+TITLE: NixOS /tmp is not a tmpfs
+#+TITLE: /tmp is not a tmpfs on NixOS
 #+DATE: 2024-12-02
 #+AUTHOR: Dionysis Grigoropoulos
 #+tags[]: nixos til log
