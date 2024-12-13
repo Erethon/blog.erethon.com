@@ -1,0 +1,17 @@
+#+TITLE: TIL: Zizmor and GitHub Actions security
+#+DATE: 2024-12-13
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: nixos til log
+#+KEYWORDS: nixos zizmor gha
+
+I was reading up on the [[https://github.com/ultralytics/ultralytics/issues/18027][recent Ultralytics GitHub Action compromise]] and I
+stumbled upon [[https://blog.yossarian.net/2024/12/06/zizmor-ultralytics-injection][this great analysis of the situation]]. In it, [[https://github.com/woodruffw/zizmor][zizmor]] is introduced,
+which is a static analysis tool for GitHub Actions.
+
+I experimented with it a bit and I have to say it's working great. It correctly
+identified misconfigured GitHub Actions on some repositories I was working
+on. It's another tool that's worth having as part of your CI.
+
+Another interesting resource about GitHub Actions and security is [[https://github.com/nikitastupin/pwnhub][pwnhub]], a
+repository with writeups and information on various security issues around
+Actions.
