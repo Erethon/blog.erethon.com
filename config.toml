@@ -3,6 +3,7 @@ languageCode = "en-us"
 title = "Erethon's Corner"
 theme = "hugo-htp"
 paginate = 300
+enableGitInfo = true
 
 [params]
 author = "Dionysis Grigoropoulos"
@@ -13,6 +14,7 @@ sidebar_footer = '<a xmlns:cc="http://creativecommons.org/ns#" href="https://ere
 disablereferrer = true
 enableComments = true
 footer = 'If you enjoy my work you can <a target="_blank" href="https://ko-fi.com/erethon"><img src="/images/kofi_button_blue.webp" style="height:25px;vertical-align:bottom"></a>'
+source = { url = "https://github.com/Erethon/blog.erethon.com/commit/", description = "GitHub" }
 
 [permalinks]
 post = "/blog/:year/:month/:day/:title/"
