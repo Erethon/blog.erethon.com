@@ -1,0 +1,292 @@
+#+TITLE: My Nix(OS) notes
+#+DATE: 2025-02-21
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: nix nixos
+#+KEYWORDS: nix nixos
+#+comments: https://libretooth.gr/@erethon/114047911662291643
+
+A [[https://blog.lgian.com/][friend]] recently asked me to document some of my Nix(OS) workflows and any tips
+I might have about Nix and NixOS. This page will be structured more like a wiki
+page and less like a blog post. These notes come from me using Nix in NixOS and
+aren't meant as a "Nix 101". They are things that I find noteworthy and might be
+useful to newcomers.
+
+# more
+
+Table of contents:
+
+#+TOC: headlines 2 local
+
+* Glossary
+In order to make sure we're on the same page, here's some common terms. When
+people refer to Nix they might be referring to a couple of things:
+
+- Nix(-lang), the [[https://nix.dev/manual/nix/latest/language/][Nix language]], a functional, pure, dynamically typed, domain
+  specific language.
+- Nix the [[https://github.com/NixOS/nix][package manager]]. Referred to as Nixcpp, both because it's written in
+  C++ and is a way to differentiate with other uses of the word Nix. Nixcpp
+  implements the Nix language.
+- NixOS, a Linux distribution that uses Nix (the package manager) as the basis
+  to configure the system. Configuring the system is done by writing modules in
+  the Nix language.
+- [[https://github.com/NixOS/nixpkgs/][Nixpkgs]], a collection of software packaged as Nix packages. It also implements
+  all the necessary modules for NixOS to function, again written in the Nix language.
+
+* Learning Nix and figuring things out
+** Joining the community and staying up to date
+There are a couple of places where community members are gathering. The three
+most prominent ones are:
+- [[https://github.com/NixOS/][GitHub]], hosts all the NixOS official repositories.
+- The [[https://discourse.nixos.org/][NixOS Discourse]] is the official forum. [[https://discourse.nixos.org/c/announcements/8][Announcements]] is the section where
+  news and new projects are announced and the [[https://discourse.nixos.org/c/learn/9][help category]] is useful if you
+  want to ask questions regarding Nix.
+- The [[https://matrix.to/#/#community:nixos.org][Matrix space]] is a collection of Matrix rooms, where discussions are taking
+  place in real time or async and covers different topics.
+
+There are also some unofficial places, like the [[https://www.reddit.com/r/NixOS/][/r/NixOS subreddit]] and an
+unofficial Discord instance, but I don't follow those so can't comment on what's
+going on there.
+
+** Wiki
+The official and most up to date wiki is available at [[https://wiki.nixos.org/wiki/NixOS_Wiki][wiki.nixos.org]]. There's
+also an unofficial wiki that was used in the past and still comes up in search
+engine searches at nixos.wiki, but the content there isn't updated by the
+community anymore.
+
+** Nix Hour
+[[https://github.com/infinisil][Infinisil]] hosts a weekly session called [[https://www.youtube.com/watch?v=VkkUzggJejo&list=PLyzwHTVJlRc8yjlx4VR4LU5A5O44og9in][The Nix Hour]], where they discuss
+various Nix related topics over multiple sessions (81 so far!). I have watched a
+few and they are a great resource to learn something new about Nix.
+
+** In person events
+Multiple in person events take place every year about Nix and NixOS. These are
+announced in the [[https://discourse.nixos.org/c/events/13][Discourse Events]] category. The big one is [[https://nixcon.org][Nixcon]], which happens
+yearly in Europe.
+
+Smaller community organized sprints for people to hack on Nix are:
+- [[https://oceansprint.org/][Ocean Sprint]], a week long gathering for people to work on Nix from the Canary
+  islands.
+- [[https://thaigersprint.org/][Thaiger Sprint]], similar to Ocean Sprint but based on Thailand.
+- [[https://zurich.nix.ug/][ZHF sprint in Zürich]], a weekend sprint in Zürich around the [[https://github.com/NixOS/release-wiki/blob/master/src/Zero-Hydra-Failures.md][Zero Hydra
+  Failures]] initiative.
+
+* Code repositories
+** NixOS Foundation
+GitHub is the forge that's currently used to host the [[https://github.com/NixOS/][NixOS
+repositories]]. There's a lot of automated actions taking place via GitHub
+Actions and other software outside of GitHub, so I don't think moving to a
+different forge is an easy task if there's ever the need.
+
+** Community repositories
+Parallel to the foundation owned repositories, there is [[https://github.com/nix-community][Nix Community]], a
+separate GitHub org that functions as a project incubator for community spawned
+software. When a project gets traction and is used more widely, people might
+"donate" the projects to the Nix community so that it becomes more communal,
+new maintainers are added, etc.
+
+Projects might also be "promoted" into the foundation org if they become mission
+critical for running NixOS in theory, but I haven't seen this happen outside
+of some discussions.
+
+** Repositories not on GitHub
+Of course, there are a lot of Nix(OS)-adjacent projects outside of GitHub. Most
+notably, the [[https://lix.systems][Lix project]] have their own [[https://git.lix.systems/lix-project][Forgejo instance]].
+
+* Alternative implementations, the Nix Store, build systems
+** Nix vs Lix vs Tvix
+Besides Nixcpp, there are two other software implementations of the Nix
+language. One is [[https://tvix.dev/][Tvix]], written in Rust, and the other is [[https://lix.systems][Lix]], a fork of Nixcpp.
+
+When [[https://github.com/NixOS/nix/security/advisories/GHSA-h4vv-h3jq-v493][CVE-2024-45593]] was discovered by people in the Lix community, I switched to
+using Lix on my systems as it gave me more confidence in their practices. I
+haven't interacted much with either Nixccp or Lix developers, but I think that
+the Lix community is more welcoming and seem to be more responsive on issues.
+
+I haven't tried Tvix, so I can't comment on it, but I'm curious to see what will
+come out of it.
+
+** The Nix store
+A core concept of Nix is the Nix store. The Nix store is a directory in the
+filesystem where the Nix daemon saves all the packages and artifacts it needs
+and uses. By default, it resides at =/nix/store/=. The contents of the store are
+meant to be immutable, which is achieved by mounting the store as read-only for
+all users except for the Nix daemon. More info [[https://discourse.nixos.org/t/how-does-nix-write-in-the-read-only-store/21928/3][here]].
+
+*** Cleaning and optimizing the store
+The wiki has an [[https://wiki.nixos.org/wiki/Storage_optimization][excellent article on optimizing store usage]] and keeping the
+store free of garbage.
+
+The important parts are:
+- You can "optimise" the store, which will replace identical files with hard
+  links saving space. This can have a big impact on how much space the store
+  takes depending on your usage.
+- You can run =nix-store --gc= to garbage collect older files that aren't needed
+  anymore. Similarly, you can run =nix-store --delete /path/to/store/example= to
+  manually delete files from the store.
+
+If you know a bit about [[https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)][garbage collecting]] then you know you need to keep track
+of what to collect and what not. The roots for garbage collection are saved
+under =/nix/var/nix/gcroots/=. More info [[https://nix.dev/manual/nix/latest/package-management/garbage-collector-roots][here]].
+
+** Build systems
+*** Hydra
+I previously mentioned the [[https://github.com/NixOS/release-wiki/blob/master/src/Zero-Hydra-Failures.md][Zero Hydra Failures]] initiative. [[https://hydra.nixos.org/][Hydra]] is the
+NixOS.org CI system for testing and building packages. It's [[https://github.com/NixOS/hydra/][written in Perl]]
+(which scares me a bit) and I haven't interacted with it much, apart from being
+an end user trying to see why a build fails.
+
+I don't know if any other entities are running a public Hydra instance besides
+some contributors and the NixOS foundation.
+
+*** Buildbot-nix
+An alternative option to Hydra is to use [[https://github.com/nix-community/buildbot-nix/][Buildbot-nix]], a module to
+setup [[https://www.buildbot.net/][Buildbot]] (the old Python based CI system) to work with Nix. I've setup
+buildbot-nix for a production environment and it worked for my usecase.
+
+There are a few public buildbot-nix instances that I know of. Notably, the Lix
+project uses [[https://buildbot.lix.systems/][buildbot-nix for their CI]].
+
+* Navigating nixpkgs and module options
+** Searching for packages
+In order to search for packages and module options, I have found that the best
+option is to use [[https://search.nixos.org][search.nixos.org]]. This is a service that runs an ElasticSearch
+instance together with [[https://github.com/nixos/nixos-search][nixos-search]] to display packages and options.
+
+** Nixpkgs
+[[https://github.com/NixOS/nixpkgs][Nixpkgs]] is quite the beast of a repo. At the time of writing (Feb 2025), it
+contains ~38 thousand .nix files, has ~760 thousand commits, includes
+contributions from eight thousand people and ~6.6 thousand open pull requests.
+
+*** Structure
+There are three main components in nixpkgs:
+- pkgs
+- nixos
+- lib
+
+**** pkgs
+=pkgs= as one would expect contains the packaged software. I believe that the
+structure of the pkgs directory has changed over the years. It has settled in a
+format that I find to be pretty intuitive. Nix definitions of applications live
+in the =pkgs/by-name= directory, under a subdirectory based on the first two
+letters of the package name. As an example, package =zizmor= is packaged under
+=pkgs/by-name/zi/zizmor= with [[https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/zi/zizmor/package.nix][this Nix file]]. The structure looks like this:
+
+#+begin_src
+pkgs
+└── by-name
+      ├─ zi
+      ┊  ├─ zizmor
+      ┊  ┊   └─ package.nix
+#+end_src
+
+On the other hand, development libraries go in =pkgs/development=. As an
+example, for the requests python library we have
+=pkgs/development/python-modules/requests=. The tree for that looks like:
+
+#+begin_src
+pkgs
+└── development
+      ├─ python-modules
+      ┊  ├─ requests
+      ┊  ┊   └─ default.nix
+#+end_src
+
+**** nixos
+=nixos= contains all the NixOS modules. These modules are the part of NixOS that
+setups the systemd definitions for running a service (say caddy or nginx). Apart
+from the modules, there are also automated tests for testing said modules
+end-to-end.
+
+These tests are one of the killer features of nixpkgs and NixOS! They allow us
+to spawn a number of QEMU VMs, configure services in the VMs and then run
+scripts that test these services against various conditions. [[https://bmcgee.ie/posts/2025/02/nixos-the-power-of-vm-tests/][Brian McGee
+recently blogged]] more about this feature.
+
+**** lib
+=lib= contains a "standard" library that's used throughout nixpkgs. There's
+currently [[https://github.com/NixOS/nixpkgs/issues/381862][a long discussion]] about moving this part to a separate repository.
+
+*** Maintainers, committers and bots
+Anyone can become a maintainer in nixpkgs as long as they contribute some code
+to the repository. There's a [[https://github.com/NixOS/nixpkgs/blob/5567326f950b743e1c6e0bc0b15fbd359264d26b/maintainers/maintainer-list.nix][file that contains all the contact information]] for
+each maintainer. Maintainers can't merge PRs directly on nixpkgs, but they can
+review and approve PRs that committers can merge.
+
+Committers are people that can merge PRs. Currently, there are more than 200
+people with commit access. Access is given via [[https://github.com/NixOS/nixpkgs/issues/321665][this issue]] where you can either
+nominate yourself or nominate another person to become a committer. [[https://lorenz.leutgeb.xyz/][Lorenz]] has
+published a [[https://gist.github.com/lorenzleutgeb/239214f1d60b1cf8c79e7b0dc0483deb][script]] that makes it easy to see how many contributions a person
+has.
+
+There are some bots that also open PRs in nixpkgs. The biggest one is [[https://github.com/r-ryantm][r-ryantm]]
+which, depending on the day, might have upwards of 100 contributions to the
+repo! It automatically open PRs that bump package versions, once a package
+builds correctly. PRs that are opened by r-ryantm are eligible to be merged by
+maintainers of the package without the need to involve a committer. This is done
+through another bot that [[https://github.com/NixOS/nixpkgs/blob/5567326f950b743e1c6e0bc0b15fbd359264d26b/CONTRIBUTING.md#how-to-merge-pull-requests-yourself][merges PRs]] based on specific conditions.
+
+*** Creating packages, reviewing PRs and staying up to date
+The [[https://github.com/NixOS/nixpkgs/blob/648a374b8b88ecccecafc73a89e0a6386649b7fd/CONTRIBUTING.md#contributing-to-nixpkgs][nixpkgs documentation]] covers the basics on how to create PRs to update a
+package or add a new one. I recommend reading it at least once.
+
+Various tools help with reviewing PRs and creating packages. For reviewing
+packages, the golden standard that a lot of people use (and is even mentioned in
+the [[https://github.com/NixOS/nixpkgs/blob/648a374b8b88ecccecafc73a89e0a6386649b7fd/.github/PULL_REQUEST_TEMPLATE.md][PR creation checklist]]) is [[https://github.com/Mic92/nixpkgs-review][nixpkgs-review]]. It outputs the results of a
+package-build in a simple markdown format that can be copy pasted to a PR
+directly. It can also integrate with GitHub, automatically pull built packages,
+build NixOS tests, etc.
+
+[[https://github.com/eljamm/][Fedi Jamoussi]] recently told me about [[https://github.com/nix-community/nix-init][nix-init]] which is a *huge* help when it
+comes to creating new packages. It automatically creates a nix file with
+the sections needed to build a package prefilled. For example it downloads the latest
+version of the source, calculates the hash for it, detects the license used in
+the package, the build process and depenencies, etc. It saves contributors a lot
+of time and prevents simple mistakes that are easy to miss.
+
+* Managing systems
+** Channels vs Flakes vs npins
+There are a lot of heated discussions online about this specific topic, about
+how flakes are good or how they're bad, about the advantages of one solution or
+the other. Flakes seemed like the easiest option when I got started, since most
+examples I found online were built around them. Their git model aligns with how
+I expect a project to be structured, so I still use them today.
+
+However, I don't have strong opinions on them and I wish there was a clear page
+that showed all the pros and cons of each option and how a project would be
+structured with each one. If there's such a page, please let me know ;).
+
+** Colmena, Nixops, deploy-rs, nixos-rebuild, nixos-anywhere
+In typical Nix fashion, there are multiple ways to deploy your NixOS
+systems. I'm currently using what I consider to be the simplest option,
+=nixos-rebuild --flake= with a =--target-host hostname= to update remote hosts.
+
+I've only read the documentation of [[https://github.com/zhaofengli/colmena][colmena]], [[https://github.com/nixops4/nixops4][nixops]], [[https://github.com/serokell/deploy-rs][deploy-rs]]. Colmena and
+deploy-rs are the two tools that I see mentioned most often.
+
+To bootstrap remote hosts when I don't have the option to use a NixOS iso image
+to boot the installer (for example in weird/old cloud providers), I've used
+[[https://github.com/nix-community/nixos-anywhere][nixos-anywhere]] with great results. Nixos-anywhere connects over SSH to any linux
+host that supports [[https://en.wikipedia.org/wiki/Kexec][kexec]], downloads the NixOS installer, kexec into it and takes
+over the current system transforming it into a NixOS system. It's one of those
+things that you know that in theory could work, but when you actually see it
+work for the first time it feels like magic.
+
+** Binary cache, Attic and reproducibility
+Nix, by default, uses cache.nixos.org which is a binary cache with prebuilt
+packages. It's the equivalent of an APT cache for .deb packages. As far as I
+know, only hydra.nixos.org can upload packages to cache.nixos.org. These
+binaries are signed with a key to verify their authenticity. Based on [[https://github.com/NixOS/rfcs/pull/149/files#diff-ac4cc42774897d03700afa5e998e676b494ee685860d9ee08dfa2b14d7566273R22][this
+comment]], I understand that this key hasn't been rotated since 2015 (!), which
+to me, is one of the scariest parts about using NixOS.
+
+You can self-host your own binary cache in multiple ways, but [[https://github.com/zhaofengli/attic][attic]] is a
+complete solution to this problem which supports multi-tenancy, S3 as a storage
+backend, deduplication, signing on the fly and other cool features.
+
+There are also some efforts about tracking and making [[https://reproducible.nixos.org/][NixOS
+reproducible]]. There's a [[https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A%226.topic%3A%20reproducible%20builds%22%20][label on GitHub]] to track issues relates to
+reproducibility.
+
+As a personal project, I want to combine buildbot-nix with attic to have my own
+cache containing packages built from source. The plan is to track if they're
+reproducible as well, to help with upstream efforts.
