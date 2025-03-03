@@ -1,0 +1,22 @@
+#+TITLE: TIL: Hugo's GitInfo
+#+DATE: 2025-03-03
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: til log hugo
+#+KEYWORDS: hugo log
+
+While catching up with my [[https://github.com/Erethon/dotfiles/blob/main/.newsboat/urls][RSS feed]], I ran into this [[https://fzakaria.com/2025/02/28/jekyll-git-commit][post by Farid Zakaria]] which
+describes how they automatically add the latest git commit hash to their
+statically generated blog. This gave me the idea to do something similar on my
+Hugo theme and blog, as I frequently look for a source link when reading other
+people's blogs.
+
+# more
+
+Hugo has built-in support for this with the [[https://gohugo.io/methods/page/gitinfo/][GitInfo option]]. It exports metadata
+about the commit that last changed a particular page and it automatically
+updates the last modified date of a post based on the git commit date as well.
+
+To achieve this, I enabled GitInfo on my Hugo configuration and then [[https://github.com/Erethon/hugo-HackThePlanet-theme/commit/a998b197f09d6b71cf452dfb9b7ab902eea6afe3][updated my
+theme]] to add support for this feature at the bottom of every post. Now, there's
+an extra link at the end of each post that takes you to the source of the last
+commit for this file. You should be seeing this at the end of this page ;)
