@@ -1,0 +1,32 @@
+#+TITLE: Zero Hydra Failures filtering
+#+DATE: 2025-05-16
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: til log
+#+KEYWORDS: zhf ublock origin
+#+comments: https://libretooth.gr/@erethon/114519788998491610
+
+I've been participating in the [[https://discourse.nixos.org/t/zero-hydra-failures-25-05-edition/][NixOS 25.05 Zero Hydra Failures]] event where
+people are encouraged to fix build failures in [[https://github.com/NixOS/nixpkgs/][Nixpkgs]]. The website for the
+event is [[https://zh.fail][zh.fail]] (clever use of the =fail= tld!) and [[https://zh.fail/failed/all.html][here's the current list]] of
+all failing packages and tests.
+
+I looked around in the website but I didn't find any way to filter failures only
+for Linux or architecture (x86_64/aarch64). This feature [[https://discourse.nixos.org/t/feedback-about-zh-fail/19053/3][was requested]] when the
+zh.fail website was first introduced, but I believe is currently missing. The
+source for the website is [[https://git.helsinki.tools/janne.hess/zhf][here]], if I get the time I'm interested to see if it's
+easy to implement this feature.
+
+In the meantime, I came up with a quick hack to filter only the entries I'm
+interested in. I'm using [[https://github.com/gorhill/uBlock][uBlock Origin]] to block ads and trackers in my browser
+and uBlock supports custom rules to hide parts of pages. So, I added this custom
+rule:
+
+#+begin_src
+zh.fail##tr:not(:has(td:contains(x86_64-linux)))
+#+end_src>
+
+which translates to: on the zh.fail domain hide table rows that don't contain
+=x86_64-linux=. You can specify =-linux= if you care for all architectures or
+you can specify =-darwin= if you want to show only Darwin builds.
+
+It's a simple hack, but a big quality of life upgrade for me!
