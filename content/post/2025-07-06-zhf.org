@@ -1,0 +1,83 @@
+#+TITLE: 25.05 Zero Hydra Failures
+#+DATE: 2025-07-06
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: nix nixos
+#+KEYWORDS: nix nixos nixpkgs zhf
+#+comments: https://libretooth.gr/@erethon/114807720936654640
+
+In a [[{{< ref 2025-05-17-zhfail-ublock-origin-hack.org >}}][previous post]], I mentioned how I participated in the [[https://discourse.nixos.org/t/zero-hydra-failures-25-05-edition/][25.05 Zero Hydra
+Failures]] event, where participants aim to fix build failures in [[https://github.com/NixOS/nixpkgs/][Nixpkgs]] before
+the release date of the next NixOS version. In this post, I'll document the few
+fixes I managed to land and what I learned in the process.
+
+# more
+
+* ZHF activity
+I opened five PRs and reviewed three PRs related to ZHF fixes. Let's take a
+closer look at what I fixed.
+
+** GCC 14
+At some point nixpkgs defaulted to using GCC 14 to build software, which
+resulted in quite a few build failures. This is [[https://discourse.nixos.org/t/fixing-gcc-14-related-build-failures-in-nixpkgs/][a discourse thread]] about the
+build failures and here's [[https://github.com/NixOS/nixpkgs/issues/388196][a GitHub issue]] tracking the broken packages.
+
+I fixed two packages related to GCC 14 failures, [[https://github.com/NixOS/nixpkgs/pull/406441][ecopcr]] and [[https://github.com/NixOS/nixpkgs/pull/404305][p0f3]] (yes, that
+[[https://lcamtuf.coredump.cx/p0f3/][p0f3]]!). The p0f one was funny, because I was [[https://github.com/NixOS/nixpkgs/pull/404305#issuecomment-2850898122][asked if I could upstream the patch]]
+which resulted in me sending an email to lcamtuf with a patch, something
+(mailing patches) I haven't done in years. I don't know if the patch will ever
+be applied upstream, because p0f3 hasn't been updated since 2016.
+
+Software that hasn't been updated in years was a recurring issue for GCC 14
+related failures. I tried fixing some other GCC 14 failures, but the packages
+that were failing were often extremely old and I wasn't sure if it was worth the
+effort. In hindsight, I see that people [[https://github.com/NixOS/nixpkgs/pull/407993][actually dropped old packages]] and maybe
+that's what I should have done too, but I didn't know what the procedure for
+dropping packages was back then.
+
+** Other fixes and reviews
+My other fixes were simple as well. A [[https://github.com/NixOS/nixpkgs/pull/405636][version upgrade for autotrace]], a [[https://github.com/NixOS/nixpkgs/pull/404223][build fix
+for fnllm]] using the new [[https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/python-modules/pytest-cov-stub][pytest-cov-stub]] and a [[https://github.com/NixOS/nixpkgs/pull/404607][fix for ripe-atlas-tools]] for
+newer Python versions. This last one was interesting because:
+
+- It required looking at [[https://github.com/python/cpython/pull/124578/][changes at argparse itself]] to figure out what was
+  going on.
+- Resulted in an upstream [[https://github.com/RIPE-NCC/ripe-atlas-tools/pull/248][draft PR]] to documented why tests break with a newer
+  Python.
+
+As for reviews, I only reviewed three PRs [[[https://github.com/NixOS/nixpkgs/pull/407141][1]], [[https://github.com/NixOS/nixpkgs/pull/405196][2]], [[https://github.com/NixOS/nixpkgs/pull/411084][3]]]. On the third one, I missed
+a version styling issue, but it was caught by another reviewer. I don't know if
+there's a tool to automatically catch these formatting issues, if anyone knows
+of one, please let me know.
+
+* Challenges and recommendations
+While the ZHF website is good enough at displaying which packages fail to build,
+it often took [[https://hydra.nixos.org/][Hydra]] a couple of days to build everything, so there were cases
+where packages were marked as broken on zh.fail, but PRs fixing them were
+already merged. As such, I recommend you double check that a PR isn't open or
+already merged before looking at hydra logs and trying to fix a package.
+
+As I [[{{< ref 2025-05-17-zhfail-ublock-origin-hack.org >}}][mentioned previously]], I had to come up with a custom solution to filter out
+Darwin based failures on the zh.fail website, since I don't care about
+them. Maybe this hack will come in handy to you.
+
+Some packages, and especially NixOS tests, can require a lot of CPU/RAM to
+build. Lack of compute resources wasn't an issue for me this time, but if you
+don't have access to a beefy machine, you can [[https://nix-community.org/community-builders/][request access to the
+nix-community builder infrastructure]].
+
+* Closing thoughts
+While my fixes weren't anything hard technically, I still had fun while patching
+things, mainly because I got to see other areas of Nixpkgs I hadn't already
+interacted with. I would have never learned about the change in GCC 14 if it
+wasn't for ZHF or the argparse changes in Python. It was also a nice reminder of
+how maintaining software to work with the latest changes in compilers,
+libraries, etc. is a constant effort and a moving target.
+
+My patches were simple enough that a LLM agent could easily replicate. Nixpkgs
+already has [[https://github.com/r-ryantm][r-ryantm]] that opens ~38 thousand PRs per year in Nixpkgs to bump
+package versions. I don't think it's that far fetched of an idea that we'll
+soon have a similar bot to fix simple build failures like the ones I fixed.
+
+I look forward to the 25.11 ZHF event, with the aim to fix more and harder
+failures now that I have more experience. If you're looking for an easy way to
+get started with contributing to Nixpkgs and NixOS, ZHF is a great event!
