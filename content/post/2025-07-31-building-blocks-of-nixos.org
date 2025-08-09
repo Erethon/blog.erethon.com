@@ -4,12 +4,12 @@
 #+tags[]: nix nixos
 #+KEYWORDS: nix nixos nixpkgs
 #+MACRO: githash 56d10c3825de7590fd03bd22aedcfe69ab3928ee
+#+comments: https://libretooth.gr/@erethon/114951068056865285
 
 I recently got the urge to better understand how NixOS is built and how secure
-the build pipeline is. So, I started looking at all of the build systems
-involved, the infrastructure they run on, how everything is managed and which
-build jobs are running in these systems. This is my attempt at documenting the
-above.
+the build pipeline is. So, I started looking at all the build systems involved,
+the infrastructure they run on, how everything is managed and which build jobs
+are running in these systems. This is my attempt at documenting the above.
 
 # more
 
@@ -25,33 +25,34 @@ the NixOS foundation.
 
 Anyone with a GitHub account can contribute to Nixpkgs, there are no special
 groups one needs to belong in to open a PR. There are about [[https://github.com/NixOS/org/blob/032bc97089ba537e345793b6374e796c6462348c/doc/nixpkgs-committers.md][200 committers]]
-currently that have access to merge PRs.
+currently with access to merge PRs.
 
 The infra repository contains Terraform/OpenTofu files that define the cloud
 infrastructure used and nix expressions for configuring the hosts. The two main
-cloud services used in infra are S3 for object storage and Fastly that acts as a
-CDN and a cache for the S3 buckets.  Again, anyone can contribute to the infra
-repository, but it's generally managed by the [[https://nixos.org/community/teams/infrastructure/][Infra team]].
+cloud services used in infra are AWS S3 for object storage and Fastly that acts
+as a CDN and a cache for the S3 buckets. Again, anyone can contribute to the
+infra repository, but it's generally managed by the [[https://nixos.org/community/teams/infrastructure/][Infra team]].
 
 * Getting the NixOS ISO
 Let's start from the beginning of a user's journey to installing NixOS. We first
-need to download the nixos ISO, so we visit the [[https://nixos.org/download/][download page]], scroll to the
+need to download the NixOS ISO, so we visit the [[https://nixos.org/download/][download page]], scroll to the
 bottom of the page and find the link for the ISO. Right now this is:
-https://channels.nixos.org/nixos-25.05/latest-nixos-minimal-x86_64-linux.iso.
+[[https://channels.nixos.org/nixos-25.05/latest-nixos-minimal-x86_64-linux.iso][https://channels.nixos.org/nixos-25.05/latest-nixos-minimal-x86_64-linux.iso]].
 
-What is this channels.nixos.org website and where is it defined and configured?
+What is this =channels.nixos.org= website and where is it defined and configured?
 
-** Defining domains, buckets and CDN
+** Defining domains, S3 buckets and CDN
 *** Domains
 We can use =dig= to figure out where the nixos.org [[https://en.wikipedia.org/wiki/Name_server][nameservers]] are hosted.
 #+begin_src
-dig NS nixos.org +short
+$ dig NS nixos.org +short
 ns-61-b.gandi.net.
 ns-161-c.gandi.net.
 ns-177-a.gandi.net.
 #+end_src
 
-Turns out they're hosted on gandi.net, let's move on to see where this is defined.
+Turns out they're hosted on =gandi.net=. Let's move on to see where this is
+defined.
 
 On NixOS/infra there's a =dns= directory with a [[https://github.com/NixOS/infra/blob/7200c14e37c2670f1ff22593d95df5c12753b608/dns/flake-module.nix][flake-module.nix]] in it, where we
 see that [[https://dnscontrol.org/][DNSControl]] is used to configure domains. Looking at [[https://github.com/NixOS/infra/blob/7200c14e37c2670f1ff22593d95df5c12753b608/dns/creds.json][creds.json]] there's
@@ -69,11 +70,11 @@ is defined as a [[https://en.wikipedia.org/wiki/CNAME_record][CNAME]] to a Fastl
 =cache.nixos.org=, the NixOS binary cache from where users download prebuilt
 binaries.
 
-*** S3 and CDN
+*** S3 buckets and CDN
 In [[https://github.com/NixOS/infra/tree/7200c14e37c2670f1ff22593d95df5c12753b608/terraform][infra/terraform]] we find the Terraform files for managing the S3 buckets and
 the Fastly CDN setup. For [[https://github.com/NixOS/infra/blob/7200c14e37c2670f1ff22593d95df5c12753b608/terraform/channels.tf][channels]] in particular, we [[https://github.com/NixOS/infra/blob/7200c14e37c2670f1ff22593d95df5c12753b608/terraform/channels.tf#L18-L113][define a S3 bucket]] with a
 website endpoint enabled which we can view in
-[[nix-channels.s3-website-us-east-1.amazonaws.com][nix-channels.s3-website-us-east-1.amazonaws.com]].
+[[http://nix-channels.s3-website-us-east-1.amazonaws.com][nix-channels.s3-website-us-east-1.amazonaws.com]].
 
 Further down the file, there's a [[https://github.com/NixOS/infra/blob/7200c14e37c2670f1ff22593d95df5c12753b608/terraform/channels.tf#L115-L291][definition for a Fastly Service]] which uses the
 public website endpoint of the [[https://github.com/NixOS/infra/blob/7200c14e37c2670f1ff22593d95df5c12753b608/terraform/channels.tf#L119-L127][bucket as a backend]]. Again, we have a [[https://github.com/NixOS/infra/blob/7200c14e37c2670f1ff22593d95df5c12753b608/terraform/cache.tf][similar
@@ -107,7 +108,8 @@ Some actions run on a periodic schedule, while others run each time someone
 opens or updates a PR.
 
 *** Periodic actions
-There are two main actions that run on a schedule. The first one is [[https://github.com/NixOS/nixpkgs/blob/7f35dc79bd0e6ff2c5b2ac72cfcbb935fbdd4f19/.github/workflows/periodic-merge-24h.yml][periodic
+There are two main actions that run on a schedule. The first one is
+[[https://github.com/NixOS/nixpkgs/blob/7f35dc79bd0e6ff2c5b2ac72cfcbb935fbdd4f19/.github/workflows/periodic-merge-24h.yml][periodic
 merges]] which merges the master branch into staging every few hours. The other
 one is [[https://github.com/NixOS/nixpkgs/blob/7f35dc79bd0e6ff2c5b2ac72cfcbb935fbdd4f19/.github/workflows/labels.yml][labels]] which runs every ten minutes and automatically applies labels to
 PRs and issues via [[https://github.com/NixOS/nixpkgs/blob/9453e3adfa232da775bd0d731df47174b38a7ece/ci/github-script/labels.js][this script]].
@@ -121,7 +123,8 @@ maintainers of a package to get a review.
 The [[https://github.com/NixOS/nixpkgs/blob/f8de8add748d049e9a8bdc0c549db74412ca28c2/.github/workflows/lint.yml][lint workflow]] lints the changes and also calls [[https://github.com/NixOS/nixpkgs-vet][nixpkgs-vet]] which is a
 software specifically made to enforce [[https://github.com/NixOS/rfcs/blob/c655bdaab40f7a467f75dbb5af4325d991874e44/rfcs/0140-simple-package-paths.md][NixOS RFC 140]].
 
-[[https://github.com/NixOS/nixpkgs/blob/0de8eb337a888217c81c40447520834d3a8672e1/.github/workflows/eval.yml][Eval]] as the name suggests evaluates the derivations (in all supported systems),
+[[https://github.com/NixOS/nixpkgs/blob/0de8eb337a888217c81c40447520834d3a8672e1/.github/workflows/eval.yml][Eval]], as the name suggests, evaluates the derivations (in all supported
+systems),
 calculates some statistics for later use and verifies things still
 evaluate. These statistics might include what paths were added or changed in a
 PR. Using [[https://github.com/NixOS/nixpkgs/pull/429664][PR #429664]] as an example, we get the following artifact out of the
@@ -139,19 +142,18 @@ diff between the PR and the previous master branch for x86_64.
 }
 #+end_src
 
-This information is then later used by the previously mentioned labels workflow
-to add related labels to a PR.
+This information is later used by the previously mentioned labels workflow to
+add related labels to a PR.
 
-[[https://github.com/NixOS/nixpkgs/blob/37107401e59b720aa9a6855bd34ae020e0e5e663/.github/workflows/build.yml][Build]], as the name suggests, builds some things (docs, shell, lib, tarball) but
+[[https://github.com/NixOS/nixpkgs/blob/37107401e59b720aa9a6855bd34ae020e0e5e663/.github/workflows/build.yml][Build]], as the name suggests, builds =docs=, =shell=, =lib=, =tarball= but
 doesn't actually build the package. A point of interest here is the fact that
 the build action [[https://github.com/NixOS/nixpkgs/blob/a95c742e589f84ac437d2305e7af4f1554dd8a7d/.github/workflows/build.yml#L60-L64][uses Cachix]], a [[https://www.cachix.org/][hosted Nix binary cache]]. This cache is only
 meant to be used by the Nixpkgs CI and shouldn't be trusted.
 
 [[https://github.com/NixOS/nixpkgs/blob/a95c742e589f84ac437d2305e7af4f1554dd8a7d/.github/workflows/reviewers.yml][Reviewers]] figures out which contributors should get a ping to review the PR.
 
-
 ** Nixpkgs and OfBorg
-You might have noticed, that we never actually build any packages or ran any
+You might have noticed that we never actually build any packages or ran any
 NixOS VM tests in the GitHub Actions previously. This is because these actions
 happen on a different system, [[https://github.com/nixos/ofborg][OfBorg]]. The name [[https://wiki.nixos.org/wiki/OfBorg#Trivia][comes from Star Trek]].
 
@@ -160,9 +162,9 @@ scheme]] or you can [[https://github.com/NixOS/ofborg?tab=readme-ov-file#command
 actions then get reported back to GitHub.
 
 Up until the end of 2024, [[https://discourse.nixos.org/t/infrastructure-announcement-the-future-of-ofborg-your-help-needed/][OfBorg was the main CI for Nixpkgs]], however the
-company that was sponsoring the hosts decided to end the sponsorship. This was
-the event that triggered the creation of a big part of the previously mentioned
-GitHub Actions workflows.
+company was sponsoring the hosts decided to end the sponsorship. This event
+triggered the creation of a big part of the previously mentioned GitHub Actions
+workflows.
 
 Nowadays, the OfBorg x86-64 builders are hosted in [[https://tetaneutral.net/][tetaneutral]], while the Darwin
 builders are hosted in MacStadium. The core/orchestrator service
@@ -187,6 +189,8 @@ recreated at the end of 2024. Nowadays, the builders and the machine that hosts
 the actual Hydra application are [[https://github.com/NixOS/foundation/issues/176][Hetzner dedicated machines]]. You can see a list
 of all the current and past builders [[https://hydra.nixos.org/machines][here]].
 
+Hydra only builds packages /after/ a PR has been reviewed and merged.
+
 *** Projects, jobsets and jobs
 Builds in Hydra are organized in the following structure:
 
@@ -195,14 +199,14 @@ Project -> Jobset -> Job
 #+end_src
 
 To get back to the initial question of how the ISO is built, let's look at the
-[[https://hydra.nixos.org/project/nixos][NixOS project]]. We see we have a jobset for each release (release-25.05, staging,
-unstable-small, etc). Next, if we search for iso we see there's a job called
-[[https://hydra.nixos.org/job/nixos/release-25.05/nixos.iso_minimal.x86_64-linux][nixos_iso_minimal]]. Looking at the [[https://hydra.nixos.org/jobset/nixos/release-25.05#tabs-configuration][configuration]] of the `release-25.05` jobset,
-we see that it calls [[https://github.com/NixOS/nixpkgs/blob/e5d656c2ecefcf943abe6f765e532123ac9ad93f/nixos/release-combined.nix][nixos/release-combined.nix]] from Nixpkgs.
+[[https://hydra.nixos.org/project/nixos][NixOS project]]. We have a jobset for each release (release-25.05, staging,
+unstable-small, etc). Next, if we search for iso there's a job called
+[[https://hydra.nixos.org/job/nixos/release-25.05/nixos.iso_minimal.x86_64-linux][nixos_iso_minimal]]. The [[https://hydra.nixos.org/jobset/nixos/release-25.05#tabs-configuration][configuration]] of the `release-25.05` jobset calls
+[[https://github.com/NixOS/nixpkgs/blob/e5d656c2ecefcf943abe6f765e532123ac9ad93f/nixos/release-combined.nix][nixos/release-combined.nix]] from Nixpkgs.
 
 This nix file specifies all the jobs that Hydra should build for this
 jobset. One of these jobs is [[https://github.com/NixOS/nixpkgs/blob/e5d656c2ecefcf943abe6f765e532123ac9ad93f/nixos/release-combined.nix#L72][nixos.iso_minimal]], which is our entry point for
-figuring out how the ISO is built.
+building the ISO.
 
 Similarly, for Nixpkgs there's a Nixpkgs project with a jobset called =trunk=
 that builds the latest committed version of a package.
@@ -244,11 +248,11 @@ ongoing [[https://github.com/NixOS/rfcs/pull/149][effort]] to support multiple k
 the old key.
 
 *** My security fears
-I don't mind Perl that much, but I think Hydra shows its age because it's
-littered with practices that today are considered antipatterns. A simple
-example, here's a [[https://github.com/NixOS/hydra/blob/95f5d331ee629071e7d0d0f2d7c4ded07b825dcf/src/lib/Hydra/Controller/API.pm#L201-L221][remote endpoint]] that shells out to git. If that =die()= line
-that validates the two revs was missing, it would be a command injection
-vector. This pattern can be seen all over Hydra.
+I don't mind Perl that much, but I think Hydra shows its age since it's littered
+with practices that today are considered antipatterns. A simple example, here's
+a [[https://github.com/NixOS/hydra/blob/95f5d331ee629071e7d0d0f2d7c4ded07b825dcf/src/lib/Hydra/Controller/API.pm#L201-L221][remote endpoint]] that shells out to git. If that =die()= line that validates
+the two revs was missing, it would be a command injection vector. This pattern
+can be seen all over Hydra.
 
 It took me a couple of hours to find a (minor?) security issue in Hydra when I
 started looking. I reported it upstream, but it was already reported by someone
@@ -265,12 +269,12 @@ fact that the signing key hasn't been rotated in ten years (how many people had
 access to it?) and the general vibes I get from the Hydra source code are
 creeping me out.
 
-I **love** the fact that it's possible to figure out all of the above by just
+I /love/ the fact that it's possible to figure out all of the above by just
 looking at the code in GitHub, past issues and discourse threads. Ideally, I
-would prefer if things were documented better, but I feel I need to emphasize
-how transparent everything is, **if** you're willing to invest the
+would prefer if things were documented better, but I feel the need to emphasize
+how transparent everything is, /if/ you're willing to invest the
 time. Improvements can definitely be made, but even the state we're in is a
 great starting point.
 
-I'm not sure what the next steps in this journey of understanding the security
-of NixOS is gonna be, but I'm sure there's a lot more things to discover.
+I'm looking forward to the next steps in this journey of better understanding
+the security of NixOS. I'm sure there's a lot more things to discover.
