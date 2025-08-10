@@ -1,0 +1,61 @@
+#+TITLE: This Week in NixOS, Week 32 2025
+#+DATE: 2025-08-10
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: this-week-in-nixos nixos til log
+#+KEYWORDS: nixos twin
+
+I often send to friends links about the NixOS ecosystem that I find interesting.
+I figured it's better if I write about it so I have an easily accessible archive
+of these links. Keep in mind, these links are based on my personal preferences
+and my observations.
+
+# more
+
+While the name is a reference to [[https://matrix.org/category/this-week-in-matrix/][This Week in Matrix]], this won't necessarily be
+a weekly occurence. In the past, there were two different efforts to provide a
+weekly NixOS newsletter. The first was the official [[https://weekly.nixos.org/][NixOS Weekly]], that was
+published on and off for a few years. The [[https://github.com/NixOS/nixos-weekly/][GitHub repository]] was archived and
+there was a [[https://github.com/NixOS/nixos-weekly/issues/170][discussion]] about attempts at reviving the newsletter. The second was
+[[https://nixpkgs.news/][nixpkgs.news]] which has 21 entries covering from February until the beginning of
+July 2024.
+
+* Conferences
+** Nix Vegas during Defcon
+This weekend (7-10 August) [[https://defcon.org/html/defcon-33/dc-33-index.html][Defcon 33]] is taking place in Las Vegas and so is [[https://nix.vegas/][Nix
+Vegas]] as part of it! Check out the [[https://hackertracker.app/schedule/?conf=DEFCON33&tag=48148][schedule]] and also take a look at the
+[[https://github.com/NixVegas/systems][repository]] powering the local builders and cache they setup for the event.
+
+I only managed to catch a few talks during the second day on the livestream, but
+the recordings should be available in the Defcon Youtube account later on. I
+look forward to watching some of the ones I missed. It was fun and a good
+learning experience seeing people review nixpkgs PRs on the livestream during
+one of the =Maybe A Few Hydra Failures= sessions.
+
+** Nixcon 2025
+[[https://2025.nixcon.org/][NixCon 2025]] will take place between the 5th and 7th of September in Switzerland
+and the [[https://talks.nixcon.org/nixcon-2025/schedule/][schedule for it is now published]]. There's lots of interesting talks in
+there. I'll be attending NixCon and I'll also be [[https://talks.nixcon.org/nixcon-2025/talk/RF93ZE/][presenting on the second day]],
+so I'm looking forward to this event!
+
+Customized NixOS [[https://discourse.nixos.org/t/nixcon-2025-name-plates-anyone/][name plates]] are available to buy until the 20th of August, so
+if you want some beautiful NixOS merch get it while it's still available. It's
+only possible to pick these up in NixCon.
+
+* Infrastructure
+** S3 Binary cache size
+[[https://discourse.nixos.org/u/hexa/summary][@hexa]] [[https://discourse.nixos.org/t/2025-s3-sponsorship-more-resources-for-a-sustainable-nix/67019/10][shared some numbers]] about the NixOS binary cache size. Turns out the cache
+is currently 705 Terabytes and growing at a rate of ~280 GB per day. About
+100 of those TB are in S3 Infrequent Access storage class.
+
+** Signing packages with multiple keys (RFC 0149)
+[[https://github.com/picnoir][@picnoir]] opened a [[https://github.com/NixOS/infra/pull/796][PR]] with a proof of concept for signing binary packages in the
+staging Hydra using multiple keys! This is a step forward to finally changing
+the old signing key of Hydra. It's currently blocked on the [[https://discourse.nixos.org/t/pre-disclosure-announcement-security-advisory-for-hydra-on-august-12-2025/][upcoming Hydra
+security advisory]] that's scheduled for the 12th of August.
+
+* Nixpkgs
+** Modular services
+[[https://github.com/roberth][@roberth]] created a [[https://github.com/NixOS/nixpkgs/issues/428084][meta issue]] for tracking [[https://nixos.org/manual/nixos/unstable/#modular-services][modular services]]. I haven't read or
+understood all of the details of it yet, but it aligns with [[https://github.com/NixOS/rfcs/pull/189][RFC 0189]] which is
+something that I think is currently missing from the way services are defined in
+NixOS.
