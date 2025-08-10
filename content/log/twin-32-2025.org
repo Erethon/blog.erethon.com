@@ -3,6 +3,7 @@
 #+AUTHOR: Dionysis Grigoropoulos
 #+tags[]: this-week-in-nixos nixos til log
 #+KEYWORDS: nixos twin
+#+comments: https://libretooth.gr/@erethon/115005613997410832
 
 I often send to friends links about the NixOS ecosystem that I find interesting.
 I figured it's better if I write about it so I have an easily accessible archive
@@ -59,3 +60,9 @@ security advisory]] that's scheduled for the 12th of August.
 understood all of the details of it yet, but it aligns with [[https://github.com/NixOS/rfcs/pull/189][RFC 0189]] which is
 something that I think is currently missing from the way services are defined in
 NixOS.
+
+** Documentation for commit prefixes
+[[https://github.com/doronbehar][@doronbehar]] [[https://github.com/NixOS/nixpkgs/pull/431688][documented on nixpkgs]] the automatic builds that happen on OfBorg
+based on commit prefixes. This is mentioned on the [[https://github.com/NixOS/ofborg/?tab=readme-ov-file#automatic-building][OfBorg README]], but it makes
+more sense to have it as part of nixpkgs as well. It's something that
+tripped me up too when I first contributed to nixpkgs.
