@@ -1,0 +1,56 @@
+#+TITLE: This Week in NixOS, Week 34 2025
+#+DATE: 2025-08-24
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: this-week-in-nixos nixos til log
+#+KEYWORDS: nixos twin
+#+comments: https://libretooth.gr/@erethon/115085778912897293
+
+Lots of interesting things happened this week in the NixOS ecosystem. Here are
+my highlights.
+
+# more
+
+** Bootstrapping go from source
+[[https://github.com/pyrox0][@pyrox0]] opened a pull request to [[https://github.com/NixOS/nixpkgs/pull/435345][bootstrap Go from source]]. I'm not familiar with
+how many compilers are bootstrapped from source in nixpkgs, but the more the merrier.
+
+** No more calls to shell in Hydra
+In my [[{{< ref 2025-07-31-building-blocks-of-nixos.org >}}][How NixOS is built post]], one of the things I raised concerns about is
+Hydra often calling external programs using the shell. [[https://github.com/Mic92][@Mic92]] opened a [[https://github.com/NixOS/hydra/pull/1506][pull
+request]] in the Hydra codebase that fixes this! This happened three weeks ago,
+but I only now found out about it.
+
+** Nix database isn't auto vacuumed
+This week I learned the [[https://github.com/Nix-Security-WG/nix-security-tracker/issues/223#issuecomment-3197296562][hard way]] that the Nix database, this is the SQLite
+database usually located at =/nix/var/nix/db/db.sqlite=, is not [[https://github.com/NixOS/nix/issues/5319][vacuumed
+automatically]] anymore. [[https://www.sqlite.org/lang_vacuum.html][Vacuum]] compacts the database, reclaiming space on the
+disk, so it's an operation that needs to be performed periodically.
+
+Not vacuuming the database automatically came as a surprise to me. I believe it
+won't be a problem for most usecases of NixOS, but under certain circumstances
+it can become a headache. This will mostly be a problem for hosts that are used
+as Nix build hosts, as these create a lot of entries in the database.
+
+[[https://github.com/trofi][@trofi]] already provided a workaround for this in the original report, so I
+opened a [[https://github.com/NixOS/nixpkgs/pull/435438][pull request in nixpkgs]] based on that workaround. The more I use
+NixOS, the more I run into these small papercuts. The good thing is that it's
+both easy to research why things are the way they are and open pull requests to
+fix things.
+
+** Secret management with sops-nix
+Michael Stapelberg wrote [[https://michael.stapelberg.ch/posts/2025-08-24-secret-management-with-sops-nix/][a thorough post]] on managing secrets on NixOS using
+[[https://github.com/Mic92/sops-nix][sops-nix]].
+
+** The 2025 election committee has been decided
+The election committee that will administer the next Steering Committee election
+[[https://discourse.nixos.org/t/2025-election-committee/68239][has been decided]].
+
+** Call for 25.11 Release manager and editor
+The next version of NixOS is 25.11 and November is fast approaching, as such,
+the [[https://discourse.nixos.org/t/25-11-call-for-release-manager-editors/68351][call for release managers and editors]] is live. On a similar note, the
+[[https://discourse.nixos.org/t/25-05-release-retrospective/68350][retrospective for 25.05 is out]]!
+
+** Nix team nixpkgs write privileges revoked
+The Nix team had [[https://github.com/NixOS/org/issues/24][write access to Nixpkgs]] in the past, but this has now been
+[[https://github.com/NixOS/org/issues/152][reverted]]. With the removal of CODEOWNERS this access wasn't needed anymore and
+it was a deviation from the [[https://github.com/NixOS/org/blob/09b6c21458ac208959683a0886433c51d876d26b/doc/nixpkgs-committers.md][rules around getting write access]] to nixpkgs.
