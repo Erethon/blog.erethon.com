@@ -1,0 +1,32 @@
+#+TITLE: This Week in NixOS, Week 33 2025
+#+DATE: 2025-08-17
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: this-week-in-nixos nixos til log
+#+KEYWORDS: nixos twin
+
+Second week of my NixOS notes on what happened in the community or that I
+learned that I found interesting.
+
+# more
+
+* Nixpkgs
+** Bashless Activation
+This week I learned about [[https://discourse.nixos.org/t/transforming-global-software-distribution-with-nixpkgs/64989/19#p-223029-bashless-activation-prototype-in-progress-2][bashless activation]], an effort to create a boot setup
+that doesn't need any interpreted scripts. Here's a [[https://github.com/NixOS/nixpkgs/issues/428908][tracking issue in Nixpkgs]],
+with the core [[https://github.com/NixOS/nixpkgs/pull/433154][pull request]] that implements most of this. I'm not familiar with
+the stage 2 init script of NixOS, but this seems an interesting point to start
+reading more about it.
+
+* Infrastructure
+** Future migration of the Hydra database to a new host
+[[https://github.com/NixOS/infra/tree/731d9dc57526999a4a623cb8254b3aca07fd80db/build/haumea][Haumea]], the hardware host that hosts the hydra.nixos.org database, [[https://matrix.to/#/!QLQqibtFaVtDgurUAE:nixos.org/$EC0SBH8xVmM6UA0HXU1ESRfPVVxrwZAsKx0Z95MFPa8?via=nixos.org&via=matrix.org&via=nixos.dev][has been
+throwing correctable ECC errors]] for a while now, so the infra team discussed
+options to upgrade to a beefier host.
+
+* Misc
+** nix-topology
+I heard about [[https://github.com/oddlama/nix-topology][nix-topology]], a project that automatically generates
+infrastructure and network diagrams straight out of your NixOS
+configuration. Its documentation looks thorough and seems simple to use. I
+haven't tried it myself yet, but it's on my TODOs in order to replace my custom
+mermaid diagrams.
