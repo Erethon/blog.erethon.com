@@ -1,0 +1,43 @@
+#+TITLE: This Week in NixOS, Week 35 2025
+#+DATE: 2025-08-31
+#+AUTHOR: Dionysis Grigoropoulos
+#+tags[]: this-week-in-nixos nixos til log
+#+KEYWORDS: nixos twin
+
+Keeping the streak up, here's the fourth week of This Week In NixOS.
+
+# more
+
+* Lix Governance
+The Lix project has published a [[https://wiki.lix.systems/books/lix-organisation/page/lix-governance][new page detailing their governance model]]. This
+seems like a great way forward to formalize how the project works.
+
+* Cons
+** Nix Vegas talks are live!
+The Nix Vegas @ Def Con 33 talks are out now! You can find them on [[https://www.youtube.com/@NixVegasDEFCON][YouTube]] or
+[[https://relive.nix.vegas/share/qRwLI0HgaiPzArL2oPcD1iR64UY-U51EgdrBuUN3KA2tzuQN9TEFXHqhCL3LL761Cvw][self-hosted in an Immich]] instance along with some [[https://relive.nix.vegas/share/4X5iSIGNNoEahvsPfQmthoHCl5VKLKjAnpFdKWXluUea_WH_dodGtoDyvEk4osXlBYc][some pictures from the event]].
+
+** NixCon 2025
+[[https://2025.nixcon.org/][NixCon 2025]] is almost upon us! Together with NixCon, various side events/quests
+will also take place organized by the attendees. You can find more information
+on the [[https://github.com/nixcon/side-quests-2025][GitHub repo]].
+
+* Misc
+** Fetch from savannah
+[[https://github.com/normalcea][@normalcea]] opened a new [[https://github.com/NixOS/nixpkgs/pull/435964][PR in nixpkgs]] that deprecates =fetchFromSavannah=.
+
+** nix-manipulator
+[[https://github.com/hoh][@hoh]] [[https://discourse.nixos.org/t/announcing-nix-manipulator-nima-structured-edits-for-nix-that-keep-formatting/68513][announced a new project]], nix-manipulator, a python library and CLI to parse
+and modify Nix code files. You can find it on [[https://github.com/hoh/nix-manipulator][GitHub]].
+
+** Karl Voit's post about their issues with NixOS
+Karl [[https://karl-voit.at/2025/08/30/end-of-my-nixos/][wrote a blog post]] about their experience with NixOS and the things they
+didn't like about it and the parts of NixOS that failed them. I don't share most
+of their views, but I think it's a good idea to learn what doesn't work for
+other people and see if we can fix it.
+
+** No TWIN next week
+Since I'll be at NixCon 2025 next week, I won't have the time to post a TWIN on
+Sunday. If you're at NixCon, please say hi if you see me. Moreover, if you're
+interested in learning how NixOS is built, I have [[https://talks.nixcon.org/nixcon-2025/talk/RF93ZE/][a talk on Saturday]] about this
+topic!
